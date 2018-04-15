@@ -9,7 +9,7 @@ export default class StatsItem extends React.Component {
     return (
       <View>
         <View style={styles.row}>
-          <Text style={styles.title}>{campaign.name}</Text>
+          <Text style={styles.title}>{campaign.subject}</Text>
           <View style={styles.dataRow}>
             <DataColumn category="Delivered" data={campaign.sent} />
             <DataColumn category="Opens" data={campaign.opens} />

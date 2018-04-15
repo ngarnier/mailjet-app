@@ -1,17 +1,25 @@
 import React from 'react'
 import { StyleSheet, View, Text } from 'react-native'
+import { connect } from 'react-redux';
 import { SwipeRow, Button, Icon } from 'native-base'
-import { getKeyDetails, deleteKey } from '../../helpers/apikey'
+import { removeApiKey } from '../../actions/apikeys';
 
-export default class StatsItem extends React.Component {
+@connect(
+  state => ({
+    apikeys: state.apikeys
+  }),
+  {
+    removeApiKey
+  }
+)
+
+export default class ApiKeyItem extends React.Component {
   state = {
-    name: 'API Key name',
     secretKey: '********************************',
   }
 
-  showSecret = async (publicKey) => {
-    const { secretKey } = await getKeyDetails(publicKey)
-
+  showSecret = async () => {
+    const { secretKey } = this.props.apikey
     this.setState({
       secretKey,
       secretIsVisible: true,
@@ -25,23 +33,13 @@ export default class StatsItem extends React.Component {
     })
   }
 
-  handleDelete = async (publicKey) => {
-    await deleteKey(publicKey)
-  }
-
-  async componentDidMount() {
-    const { publicKey } = this.props
-    const { name } = await getKeyDetails(publicKey)
-
-    this.setState({
-      name,
-    })
+  handleDelete = async (apikey) => {
+    this.props.removeApiKey(apikey)
   }
 
   render() {
-    const { publicKey } = this.props
-
-    const { secretIsVisible, name, secretKey } = this.state
+    const { name, publicKey } = this.props.apikey
+    const { secretIsVisible, secretKey } = this.state
 
     return (
       <SwipeRow
@@ -70,7 +68,7 @@ export default class StatsItem extends React.Component {
         disableRightSwipe
         rightOpenValue={-110}
         right={
-          <Button danger onPress={() => this.handleDelete(publicKey)}>
+          <Button danger onPress={() => this.handleDelete(this.props.apikey)}>
             <Icon active name="md-trash" />
           </Button>
         }

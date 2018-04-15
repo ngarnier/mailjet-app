@@ -43,7 +43,8 @@
         "arrow-body-style": 0,
         "comma-dangle": ["error", "only-multiline"],
         "semi": 0,
-        "no-did-mount-set-state": 0,
-        "object-curly-newline": "off"
+        "react/no-did-mount-set-state": 0,
+        "object-curly-newline": "off",
+        "array-callback-return": 0
       }
 }

@@ -1,10 +1,18 @@
 import React from 'react';
 import { SafeAreaView, View, StyleSheet } from 'react-native'
 import { Form, Item, Input, Button, Text, Spinner } from 'native-base'
-import { storeKey } from '../helpers/apikey'
-import { checkAuth, getMailjetKeys } from '../helpers/mailjet';
+import { connect } from 'react-redux'
+import { checkAuth, getMailjetKeys } from '../../helpers/mailjet'
+import { addApiKey } from '../../actions/apikeys'
 
-export default class StatsList extends React.Component {
+@connect(
+  null,
+  {
+    addApiKey
+  },
+)
+
+export default class AddAPIKey extends React.Component {
   static navigationOptions = {
     title: 'Add API key',
   }
@@ -42,8 +50,8 @@ export default class StatsList extends React.Component {
         isLoading: false,
       })
     } else {
-      const mailjetKeys = await getMailjetKeys(publicKey, secretKey)
-      await storeKey(mailjetKeys)
+      const { name } = await getMailjetKeys(publicKey, secretKey)
+      this.props.addApiKey(name, publicKey, secretKey)
 
       this.setState({
         publicKey: '',
@@ -76,7 +84,7 @@ export default class StatsList extends React.Component {
         </Form>
         <View style={style.warning}>
           {invalidKeys && (
-            <Text style={style.warningText}>Invalid credentials</Text>
+            <Text style={style.warningText}>Invalid API keys</Text>
           )}
         </View>
         <View style={style.container}>

@@ -1,8 +1,13 @@
 import React from 'react';
 import { StackNavigator, DrawerNavigator } from 'react-navigation'
-import StatsList from './components/StatsList/StatsList'
-import APIKeysList from './components/APIKeysList/APIKeysList'
+import { Provider } from 'react-redux'
+import thunk from 'redux-thunk'
+import { createStore, applyMiddleware } from 'redux'
+import reducer from './reducers/index'
+import StatsList from './components/StatsList'
+import APIKeysList from './components/APIKeysList'
 import AddAPIKey from './components/AddAPIKey'
+import { loadApiKeys } from './actions/apikeys'
 
 const RootStack = StackNavigator(
   {
@@ -33,8 +38,19 @@ const MainNavigator = DrawerNavigator({
   },
 })
 
+const store = createStore(reducer, applyMiddleware(thunk))
+async function boot() {
+  await store.dispatch(loadApiKeys())
+}
+boot()
+
 export default class App extends React.Component {
   render() {
-    return <MainNavigator />
+    return (
+      <Provider store={store}>
+        <MainNavigator />
+      </Provider>
+
+    )
   }
 }

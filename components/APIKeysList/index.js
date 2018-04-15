@@ -1,9 +1,17 @@
 import React from 'react'
 import { ScrollView, SafeAreaView, View, Button } from 'react-native'
+import { connect } from 'react-redux'
 import APIKeyItem from './APIKeyItem'
-import { listKeys } from '../../helpers/apikey'
 import DrawerButton from '../navigation/DrawerButton'
 import EmptyState from '../EmptyState'
+
+@connect(
+  state => ({
+    apikeys: state.apikeys
+  }),
+  {
+  },
+)
 
 export default class APIKeysList extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -20,32 +28,22 @@ export default class APIKeysList extends React.Component {
     }
   }
 
-  state = {
-    publicKeys: []
-  }
-
-  async componentDidMount() {
-    const publicKeys = await listKeys()
-    this.setState({
-      publicKeys
-    })
-  }
-
   render() {
-    const { publicKeys } = this.state
+    const { apikeys } = this.props
 
     return (
       <SafeAreaView style={style.container}>
-        {publicKeys.length > 0 ?
-          publicKeys.map((e, i) => (
-            <ScrollView style={style.list}>
-              <APIKeyItem publicKey={e} key={i} />
-            </ScrollView>)) :
+        {apikeys.size && (
+          <ScrollView style={style.list}>
+            {apikeys.map(e => <APIKeyItem apikey={e} key={e.publicKey} />)}
+          </ScrollView>
+        )}
+        {!apikeys.size && (
           <View>
             <EmptyState state={'no-key'} navigation={this.props.navigation} />
           </View>
-        }
-      </SafeAreaView>
+        )}
+      </SafeAreaView >
     );
   }
 }

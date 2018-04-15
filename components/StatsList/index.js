@@ -1,10 +1,14 @@
 import React from 'react';
 import { SafeAreaView, ScrollView, View, StyleSheet } from 'react-native'
-import StatsItem from './StatsItem/StatsItem'
+import { connect } from 'react-redux'
+import StatsItem from './StatsItem'
 import EmptyState from '../EmptyState'
 import DrawerButton from '../navigation/DrawerButton'
-import { listKeys } from '../../helpers/apikey'
-import { getStats } from '../../helpers/mailjet'
+import { getAllCampaigns, getAllStats } from '../../helpers/mailjet'
+
+@connect(state => ({
+  apikeys: state.apikeys
+}))
 
 export default class StatsList extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -17,11 +21,14 @@ export default class StatsList extends React.Component {
   state = []
 
   componentDidMount = async () => {
+    const { apikeys } = this.props
+
     this.setState({
       isLoading: true,
     })
-    const publicKeys = await listKeys()
-    const stats = await getStats(publicKeys)
+
+    const campaigns = await getAllCampaigns(apikeys)
+    const stats = await getAllStats(campaigns)
     this.setState({
       stats: stats.length > 0 ? stats.reverse() : false,
       isLoading: false,
