@@ -16,3 +16,7 @@ yarn-error.log*
 
 # local config
 jsconfig.json
+.vscode
+
+# macOS
+.DS_Store

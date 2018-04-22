@@ -1,16 +1,25 @@
 import { storeKey, getLocalKeys } from '../helpers/storage'
 
-
 export const addApiKey = (name, publicKey, secretKey) => {
   return async (dispatch) => {
     let keys = await getLocalKeys()
     const key = { name, publicKey, secretKey }
-    keys = keys.push(key)
-    await storeKey(keys)
-    dispatch({
-      type: 'APIKEY_ADD',
-      key,
+    let duplicate = false
+    keys.map((key) => {
+      if (key.publicKey !== publicKey) {
+        duplicate = true
+      }
     })
+    if (!duplicate) {
+      keys = keys.push(key)
+      await storeKey(keys)
+      dispatch({
+        type: 'APIKEY_ADD',
+        key,
+      })
+    } else {
+      //dispatch()
+    }
   }
 }
 
