@@ -25,19 +25,19 @@ const CustomTabs = TabNavigator({
   Campaigns: {
     screen: Campaigns,
     navigationOptions: {
-      tabBarIcon: ({ tintColor }) => (<Icon name="mail" style={{ color: tintColor }} />)
+      tabBarIcon: ({ tintColor }) => <Icon name="mail" style={{ color: tintColor }} />
     }
   },
   Transactional: {
     screen: MessagesList,
     navigationOptions: {
-      tabBarIcon: ({ tintColor }) => (<Icon name="stats" style={{ color: tintColor }} />)
+      tabBarIcon: ({ tintColor }) => <Icon name="stats" style={{ color: tintColor }} />
     }
   },
   Contacts: {
     screen: ContactsScreen,
     navigationOptions: {
-      tabBarIcon: ({ tintColor }) => (<Icon name="contacts" style={{ color: tintColor }} />)
+      tabBarIcon: ({ tintColor }) => <Icon name="contacts" style={{ color: tintColor }} />
     }
   }
 }, {

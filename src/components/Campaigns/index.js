@@ -20,7 +20,7 @@ export default class Campaigns extends React.Component {
       isLoading: true,
     })
 
-    const campaigns = await getAllCampaigns(apikeys)
+    const campaigns = await getAllCampaigns(apikeys.get(0))
     this.setState({
       campaigns: campaigns.length > 0 ? campaigns.reverse() : false,
       isLoading: false,

@@ -1,32 +1,23 @@
 import React from 'react'
-import { StyleSheet, TouchableOpacity, View, Text } from 'react-native'
+import { StyleSheet, TouchableOpacity, Text } from 'react-native'
 
 export default class ContactListItem extends React.Component {
   render() {
-    const { id, name, total, active, unsub, delivered, opened, clicked } = this.props.list
+    const { ID, Name, SubscriberCount } = this.props.list
 
     return (
       <TouchableOpacity
         style={style.row}
         onPress={() => this.props.navigation.navigate('ContactList', {
-          id,
-          name,
-          total,
-          active,
-          unsub,
-          delivered,
-          opened,
-          clicked
+          ID,
+          Name,
+          SubscriberCount,
         })}
       >
-        <Text style={style.title}>{name}</Text>
+        <Text style={style.title}>{Name}</Text>
         <Text style={{ marginBottom: 5 }}>
-          {total} subscribers
+          {SubscriberCount} subscribers
         </Text>
-        <View>
-          <Text style={style.stats}>{opened} opened</Text>
-          <Text style={style.stats}>{clicked} clicked</Text>
-        </View>
       </TouchableOpacity>
     )
   }

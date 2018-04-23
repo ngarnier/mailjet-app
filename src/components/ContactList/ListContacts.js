@@ -14,15 +14,15 @@ export default class ListContact extends React.Component {
 
   componentDidMount = async () => {
     const { apikeys } = this.props
-    const { name } = this.props.navigation.state.params
+    const { Name } = this.props.navigation.state.params
 
     this.setState({
       isLoading: true,
     })
 
-    const contacts = await getListContacts(apikeys.get(0), name)
+    const contacts = await getListContacts(apikeys.get(0), Name)
     this.setState({
-      contacts,
+      contacts: contacts.length > 0 ? contacts : false,
       isLoading: false,
     })
   }
@@ -32,7 +32,7 @@ export default class ListContact extends React.Component {
 
     return (
       <Content>
-        {!!contacts && (
+        {contacts ? (
           <ScrollView>
             {contacts.map((e) => {
               return (
@@ -42,16 +42,10 @@ export default class ListContact extends React.Component {
               )
             })}
           </ScrollView>
-        )}
-        {!!isLoading && (
-          <View>
-            <EmptyState state={'loading'} context={'Contacts'} />
-          </View>
-        )}
-        {!contacts && !isLoading && (
-          <View>
-            <EmptyState state={'no-data'} context={'Contacts'} />
-          </View>
+        ) : isLoading ? (
+          <EmptyState state={'loading'} context={'Contacts'} />
+        ) : (
+          <EmptyState state={'no-data'} context={'Contacts'} />
         )}
       </Content>
     )

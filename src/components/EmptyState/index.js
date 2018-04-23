@@ -4,17 +4,18 @@ import { Spinner } from 'native-base'
 
 export default class EmptyState extends React.Component {
   render() {
+    const { state, context } = this.props
+
     return (
       <View contentContainerStyle={styles.container}>
-        {this.props.state === 'no-data' && (
+        {state === 'no-data' ? (
           <View style={styles.container}>
-            <Text>No {this.props.context} found</Text>
+            <Text>No {context} found</Text>
           </View>
-        )}
-        {this.props.state === 'loading' && (
+        ) : (
           <View style={styles.container}>
             <Spinner color="#FCAC2E" />
-            <Text>Loading {this.props.context}</Text>
+            <Text>Loading {context}</Text>
           </View>
         )}
       </View>

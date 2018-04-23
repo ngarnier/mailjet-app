@@ -49,46 +49,44 @@ export const mailjetGet = async (route, publicKey, secretKey, filters) => {
 const getCampaigns = async (apikey) => {
   const { publicKey, secretKey } = apikey
   const { Data } = await mailjetGet('campaigndraft', publicKey, secretKey, {
-    Limit: 5,
-    Status: '0, 1, 2, 3, 4'
+    Limit: 50,
+    Status: '0, 1, 2, 3, 4',
   })
   return Data
 }
 
 export const getAllCampaigns = async (apikeys) => {
   const campaigns = []
-  for (let i = 0; i < apikeys.size; i++) {
-    const { publicKey, secretKey } = apikeys.get(i)
-    const keyData = await getCampaigns(apikeys.get(i))
-    keyData.map((e) => {
-      let status = ''
-      switch (e.Status) {
-        case 0:
-          status = 'Draft'
-          break
-        case 1:
-          status = 'Scheduled'
-          break
-        case 2:
-        case 3:
-        case 4:
-          status = 'Sent'
-          break
-        default:
-          status = 'Unknown'
-      }
-      campaigns.push({
-        publicKey,
-        secretKey,
-        title: e.Title,
-        subject: e.Subject,
-        senderName: e.SenderName,
-        senderEmail: e.SenderEmail,
-        status,
-        id: e.ID,
-      })
+  const { publicKey, secretKey } = apikeys
+  const keyData = await getCampaigns(apikeys)
+  keyData.map((e) => {
+    let status = ''
+    switch (e.Status) {
+      case 0:
+        status = 'Draft'
+        break
+      case 1:
+        status = 'Scheduled'
+        break
+      case 2:
+      case 3:
+      case 4:
+        status = 'Sent'
+        break
+      default:
+        status = 'Unknown'
+    }
+    campaigns.push({
+      publicKey,
+      secretKey,
+      title: e.Title,
+      subject: e.Subject,
+      senderName: e.SenderName,
+      senderEmail: e.SenderEmail,
+      status,
+      id: e.ID,
     })
-  }
+  })
   return campaigns
 }
 
@@ -128,7 +126,7 @@ export const getAllMessageIDs = async (apikeys) => {
   const campaigns = []
   const contacts = []
   const { Data } = await mailjetGet('message', publicKey, secretKey, {
-    Limit: 100,
+    Limit: 50,
     FromType: 'Transactional',
     FromTS: d,
   })
@@ -175,16 +173,17 @@ export const getAllMessageIDs = async (apikeys) => {
   return messages
 }
 
-const getLists = async (apikey) => {
+export const getLists = async (apikey) => {
   const { publicKey, secretKey } = apikey
   const { Data } = await mailjetGet('contactslist', publicKey, secretKey, {
-    Limit: 5,
+    Limit: 50,
     isDeleted: false,
+    Sort: 'Name',
   })
   return Data
 }
 
-const getListStats = async (apikey, id) => {
+export const getListStats = async (apikey, id) => {
   const { publicKey, secretKey } = apikey
   const { Data } = await mailjetGet(`liststatistics/${id}`, publicKey, secretKey, {
     CalcActive: true,
@@ -206,32 +205,13 @@ const getListStats = async (apikey, id) => {
   }
 }
 
-export const getAllLists = async (apikeys) => {
-  const lists = []
-  for (let i = 0; i < apikeys.size; i++) {
-    const currentKeys = apikeys.get(i)
-    const keyData = await getLists(currentKeys)
-    const keyLists = keyData.filter(campaign => campaign.NewsLetterID !== 0)
-    for (let j = 0; j < keyLists.length; j++) {
-      const listStats = await getListStats(currentKeys, keyLists[j].ID)
-      const listsWithStats = Object.assign({}, {
-        id: keyLists[j].ID,
-        name: keyLists[j].Name,
-        total: keyLists[j].SubscriberCount,
-      }, listStats)
-      lists.push(listsWithStats)
-    }
-  }
-  return lists
-}
-
 export const getListContactIDs = async (apikeys, listName) => {
   const { publicKey, secretKey } = apikeys
   const { Data } = await mailjetGet('listrecipient', publicKey, secretKey, {
     ListName: listName,
-    Limit: 0,
+    Limit: 50,
     Unsub: false,
-    ignoreDeleted: true,
+    IgnoreDeleted: true,
   })
   return Data
 }

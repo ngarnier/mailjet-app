@@ -1,70 +1,92 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import { StyleSheet, View, Text } from 'react-native'
 import { Icon } from 'native-base'
+import EmptyState from '../EmptyState'
+import { getListStats } from '../../helpers/mailjet';
+
+@connect(state => ({
+  apikeys: state.apikeys
+}))
 
 export default class ContactList extends React.Component {
+  state = {}
+
+  componentDidMount = async () => {
+    const { apikeys } = this.props
+    const { ID } = this.props.navigation.state.params
+    this.setState({
+      isLoading: true,
+    })
+
+    const listStats = await getListStats(apikeys.get(0), ID)
+    this.setState({
+      listStats,
+      isLoading: false,
+    })
+  }
+
   render() {
-    const {
-      id,
-      name,
-      total,
-      active,
-      unsub,
-      delivered,
-      opened,
-      clicked } = this.props.navigation.state.params
+    const { Name, SubscriberCount } = this.props.navigation.state.params
+    const { listStats, isLoading } = this.state
 
     return (
       <View>
-        <View style={style.row}>
-          <Text style={style.title}>{name}</Text>
-        </View>
-        <View style={[style.row, style.columns]}>
+        {listStats ? (
           <View>
-            <Text style={style.label}>Contacts</Text>
-            <Text style={style.title}>{total}</Text>
-          </View>
-          <View>
-            <Icon
-              name="arrow-forward"
-              onPress={() => this.props.navigation.navigate('ListContacts', { id, name })}
-            />
-          </View>
-        </View>
-        <View style={style.row}>
-          <Text style={style.label}>Total emails sent</Text>
-          <Text style={style.title}>{delivered}</Text>
-          <View style={style.columns}>
-            <View style={{ width: '48%' }}>
-              <Text style={style.subtitle}>{opened}</Text>
-              <View style={style.emptyBar}>
-                <View style={[style.filledBar, { width: `${opened}` }]} />
-              </View>
-              <Text>Opens</Text>
+            <View style={style.row}>
+              <Text style={style.title}>{Name}</Text>
             </View>
-            <View style={{ width: '48%' }}>
-              <Text style={style.subtitle}>{clicked}</Text>
-              <View style={style.emptyBar}>
-                <View style={[style.filledBar, { width: `${opened}` }]} />
+            <View style={[style.row, style.columns]}>
+              <View>
+                <Text style={style.label}>Contacts</Text>
+                <Text style={style.title}>{SubscriberCount}</Text>
               </View>
-              <Text>Clicks</Text>
+              <View>
+                <Icon
+                  name="arrow-forward"
+                  onPress={() => this.props.navigation.navigate('ListContacts', { Name })}
+                />
+              </View>
             </View>
-          </View>
-        </View>
-        <View style={style.row}>
-          <View style={[style.columns, { paddingBottom: 5 }]}>
-            <Text style={style.label}>Total number of contacts</Text>
-            <Text style={style.figure}>{total}</Text>
-          </View>
-          <View style={[style.columns, { paddingBottom: 5 }]}>
-            <Text style={style.label}>Subscribed contacts</Text>
-            <Text style={style.figure}>{active}</Text>
-          </View>
-          <View style={[style.columns, { paddingBottom: 5 }]}>
-            <Text style={style.label}>Unsubscribed contacts</Text>
-            <Text style={style.figure}>{unsub}</Text>
-          </View>
-        </View>
+            <View style={style.row}>
+              <Text style={style.label}>Total emails sent</Text>
+              <Text style={style.title}>{listStats.delivered}</Text>
+              <View style={style.columns}>
+                <View style={{ width: '48%' }}>
+                  <Text style={style.subtitle}>{listStats.opened}</Text>
+                  <View style={style.emptyBar}>
+                    <View style={[style.filledBar, { width: `${listStats.opened}` }]} />
+                  </View>
+                  <Text>Opens</Text>
+                </View>
+                <View style={{ width: '48%' }}>
+                  <Text style={style.subtitle}>{listStats.clicked}</Text>
+                  <View style={style.emptyBar}>
+                    <View style={[style.filledBar, { width: `${listStats.clicked}` }]} />
+                  </View>
+                  <Text>Clicks</Text>
+                </View>
+              </View>
+            </View>
+            <View style={style.row}>
+              <View style={[style.columns, { paddingBottom: 5 }]}>
+                <Text style={style.label}>Total number of contacts</Text>
+                <Text style={style.figure}>{SubscriberCount}</Text>
+              </View>
+              <View style={[style.columns, { paddingBottom: 5 }]}>
+                <Text style={style.label}>Subscribed contacts</Text>
+                <Text style={style.figure}>{listStats.active}</Text>
+              </View>
+              <View style={[style.columns, { paddingBottom: 5 }]}>
+                <Text style={style.label}>Unsubscribed contacts</Text>
+                <Text style={style.figure}>{listStats.unsub}</Text>
+              </View>
+            </View>
+          </View>) : isLoading ? (
+            <EmptyState state="loading" context="List Information" />
+          ) : (<EmptyState state="no-data" context="List Information" />)
+          }
       </View>
     )
   }

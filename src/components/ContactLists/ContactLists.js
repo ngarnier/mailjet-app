@@ -4,7 +4,7 @@ import { Container, Header, Body, Title, Content } from 'native-base'
 import { connect } from 'react-redux'
 import ContactListItem from './ContactListItem'
 import EmptyState from '../EmptyState'
-import { getAllLists } from '../../helpers/mailjet'
+import { getLists } from '../../helpers/mailjet'
 
 @connect(state => ({
   apikeys: state.apikeys
@@ -20,9 +20,9 @@ export default class ContactLists extends React.Component {
       isLoading: true,
     })
 
-    const lists = await getAllLists(apikeys)
+    const lists = await getLists(apikeys.get(0))
     this.setState({
-      lists: lists.length > 0 ? lists.reverse() : false,
+      lists: lists.length > 0 ? lists : false,
       isLoading: false,
     })
   }
@@ -41,7 +41,7 @@ export default class ContactLists extends React.Component {
           {lists ? (
             <ScrollView>
               {lists.map((e) => {
-                return (<ContactListItem list={e} key={e.id} navigation={this.props.navigation} />)
+                return (<ContactListItem list={e} key={e.ID} navigation={this.props.navigation} />)
               })}
             </ScrollView>
           ) : isLoading ? (
