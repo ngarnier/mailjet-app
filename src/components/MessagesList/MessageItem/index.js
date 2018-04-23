@@ -63,6 +63,7 @@ const style = StyleSheet.create({
   title: {
     fontSize: 16,
     fontWeight: 'bold',
+    color: '#111',
   },
   information: {
     fontSize: 14,
@@ -102,8 +103,6 @@ const style = StyleSheet.create({
   },
   blocked: {
     backgroundColor: '#05172B',
-    color: '#DCDFE4',
-    fontWeight: 'bold',
     justifyContent: 'center',
     alignItems: 'center',
   },

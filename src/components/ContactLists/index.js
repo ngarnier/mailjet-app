@@ -4,32 +4,32 @@ import ContactLists from './ContactLists'
 import ContactList from '../ContactList'
 import ListContacts from '../ContactList/ListContacts'
 
-const StatsRouter = StackNavigator({
+const ListsNavigator = StackNavigator({
   ContactLists: {
     screen: ContactLists,
     navigationOptions: {
       header: 'none',
-      title: 'Contact Lists'
     },
   },
   ContactList: {
     screen: ContactList,
-    navigationOptions: {
-      title: 'List',
-    },
   },
   ListContacts: {
     screen: ListContacts,
     navigationOptions: ({ navigation }) => ({
       title: `${navigation.state.params.name}`,
-    })
-  }
-})
+    }),
+  },
+},
+{
+  initialRouteName: 'ContactLists'
+}
+)
 
-export default class StatsScreen extends React.Component {
+export default class ContactsScreen extends React.Component {
   render() {
     return (
-      <StatsRouter />
+      <ListsNavigator />
     )
   }
 }

@@ -5,7 +5,7 @@ import { TabNavigator, TabBarBottom } from 'react-navigation'
 import { Icon } from 'native-base'
 import MessagesList from '../MessagesList'
 import Campaigns from '../Campaigns'
-import StatsScreen from '../ContactLists'
+import ContactsScreen from '../ContactLists'
 
 @connect(state => ({
   apikeys: state.apikeys
@@ -35,7 +35,7 @@ const CustomTabs = TabNavigator({
     }
   },
   Contacts: {
-    screen: StatsScreen,
+    screen: ContactsScreen,
     navigationOptions: {
       tabBarIcon: ({ tintColor }) => (<Icon name="contacts" style={{ color: tintColor }} />)
     }

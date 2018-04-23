@@ -50,12 +50,13 @@ const style = StyleSheet.create({
   title: {
     fontSize: 16,
     fontWeight: 'bold',
+    color: '#333',
   },
   subject: {
     fontSize: 14,
     paddingTop: 5,
     paddingBottom: 10,
-    color: '#555',
+    color: '#111',
   },
   badge: {
     borderRadius: 5,
