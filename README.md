@@ -19,6 +19,6 @@ Here is what you can do with it so far:
 
 If you want to contribute:
 
-`git clone` this repo
-`npm install`
+`git clone` this repo  
+`npm install` to install dependencies  
 `npm start` to start the development server

@@ -36,8 +36,4 @@ const style = StyleSheet.create({
     color: '#333',
     paddingBottom: 5,
   },
-  stats: {
-    color: '#333',
-    fontWeight: 'bold',
-  }
 })

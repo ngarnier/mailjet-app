@@ -1,6 +1,8 @@
 import { Buffer } from 'buffer'
 import { getTS } from './util'
 
+const Limit = 50
+
 export const checkAuth = async (publicKey, secretKey) => {
   const auth = await mailjetGet('template', publicKey, secretKey)
   return auth
@@ -21,12 +23,8 @@ export const getMailjetKeys = async (publicKey, secretKey) => {
   return "Couldn't authenticate with those keys"
 }
 
-const getEncodedKeys = (publicKey, secretKey) => {
-  return Buffer.from(`${publicKey}:${secretKey}`).toString('base64')
-}
-
 export const mailjetGet = async (route, publicKey, secretKey, filters) => {
-  const encodedKeys = await getEncodedKeys(publicKey, secretKey)
+  const encodedKeys = await Buffer.from(`${publicKey}:${secretKey}`).toString('base64')
   let formattedFilters = ''
   if (filters) {
     formattedFilters = '?'
@@ -43,16 +41,19 @@ export const mailjetGet = async (route, publicKey, secretKey, filters) => {
     },
   })
   const res = await response.json()
-  return res
+  if (res.StatusCode) {
+    // should handle errors here
+  } else {
+    return res.Data
+  }
 }
 
 const getCampaigns = async (apikey) => {
   const { publicKey, secretKey } = apikey
-  const { Data } = await mailjetGet('campaigndraft', publicKey, secretKey, {
-    Limit: 50,
+  return mailjetGet('campaigndraft', publicKey, secretKey, {
+    Limit,
     Status: '0, 1, 2, 3, 4',
   })
-  return Data
 }
 
 export const getAllCampaigns = async (apikeys) => {
@@ -90,65 +91,36 @@ export const getAllCampaigns = async (apikeys) => {
   return campaigns
 }
 
-export const getCampaignStats = async (campaign) => {
-  const { publicKey, secretKey, id, subject } = campaign
-
-  const campaignStats = await mailjetGet('statcounters', publicKey, secretKey, {
-    CounterSource: 'Campaign',
-    SourceID: id,
-    CounterResolution: 'Lifetime',
-    CounterTiming: 'Message',
-  })
-  const counter = campaignStats.Data[0]
-  const stats = {
-    id,
-    subject,
-    sent: counter.MessageSentCount,
-    opens: `${Math.floor((counter.MessageOpenedCount / counter.MessageSentCount) * 100) || 0}%`,
-    clicks: `${Math.floor((counter.MessageClickedCount / counter.MessageOpenedCount) * 100) || 0}%`
-  }
-  return stats
-}
-
-export const getAllStats = async (campaigns) => {
-  const stats = []
-  for (let i = 0; i < campaigns.length; i++) {
-    const campaignStats = await getCampaignStats(campaigns[i])
-    stats.push(campaignStats)
-  }
-  return stats
-}
-
 export const getAllMessageIDs = async (apikeys) => {
   const { publicKey, secretKey } = apikeys
   const d = getTS()
-  const messages = []
+  const emails = []
   const campaigns = []
   const contacts = []
-  const { Data } = await mailjetGet('message', publicKey, secretKey, {
-    Limit: 50,
+  const messages = await mailjetGet('message', publicKey, secretKey, {
+    Limit,
     FromType: 'Transactional',
     FromTS: d,
   })
-  for (let i = 0; i < Data.length; i++) {
-    const messageID = Data[i].ID
-    const status = Data[i].Status
-    const campaignID = Data[i].CampaignID
-    const contactID = Data[i].ContactID
+  for (let i = 0; i < messages.length; i++) {
+    const messageID = messages[i].ID
+    const status = messages[i].Status
+    const campaignID = messages[i].CampaignID
+    const contactID = messages[i].ContactID
     let campaign
     let contact
     const campaignIndex = campaigns.findIndex(c => c.campaignID === campaignID)
     if (campaignIndex !== -1) {
       campaign = campaigns[campaignIndex]
     } else {
-      const { Data } = await mailjetGet(`campaign/${campaignID}`, publicKey, secretKey)
+      const campaigns = await mailjetGet(`campaign/${campaignID}`, publicKey, secretKey)
       campaign = {
         campaignID,
-        fromEmail: Data[0].FromEmail,
-        fromName: Data[0].FromName,
-        opened: Data[0].OpenTracked,
-        sentAt: Data[0].SendEndAt,
-        subject: Data[0].Subject,
+        fromEmail: campaigns[0].FromEmail,
+        fromName: campaigns[0].FromName,
+        opened: campaigns[0].OpenTracked,
+        sentAt: campaigns[0].SendEndAt,
+        subject: campaigns[0].Subject,
       }
       campaigns.push(campaign)
     }
@@ -156,36 +128,35 @@ export const getAllMessageIDs = async (apikeys) => {
     if (contactIndex !== -1) {
       contact = contacts[contactIndex]
     } else {
-      const { Data } = await mailjetGet(`contact/${contactID}`, publicKey, secretKey)
+      const contactData = await mailjetGet(`contact/${contactID}`, publicKey, secretKey)
       contact = {
         contactID,
-        email: Data[0].Email,
+        email: contactData[0].Email,
       }
       contacts.push(contact)
     }
-    messages.push({
+    emails.push({
       messageID,
       status,
       campaign,
       contact,
     })
   }
-  return messages
+  return emails
 }
 
 export const getLists = async (apikey) => {
   const { publicKey, secretKey } = apikey
-  const { Data } = await mailjetGet('contactslist', publicKey, secretKey, {
-    Limit: 50,
+  return mailjetGet('contactslist', publicKey, secretKey, {
+    Limit,
     isDeleted: false,
     Sort: 'Name',
   })
-  return Data
 }
 
 export const getListStats = async (apikey, id) => {
   const { publicKey, secretKey } = apikey
-  const { Data } = await mailjetGet(`liststatistics/${id}`, publicKey, secretKey, {
+  const lists = await mailjetGet(`liststatistics/${id}`, publicKey, secretKey, {
     CalcActive: true,
     CalcActiveUnsub: true,
   })
@@ -195,7 +166,7 @@ export const getListStats = async (apikey, id) => {
     ActiveUnsubscribedCount,
     DeliveredCount,
     OpenedCount,
-    ClickedCount } = Data[0]
+    ClickedCount } = lists[0]
   return {
     active: ActiveCount,
     unsub: ActiveUnsubscribedCount,
@@ -207,13 +178,12 @@ export const getListStats = async (apikey, id) => {
 
 export const getListContactIDs = async (apikeys, listName) => {
   const { publicKey, secretKey } = apikeys
-  const { Data } = await mailjetGet('listrecipient', publicKey, secretKey, {
+  return mailjetGet('listrecipient', publicKey, secretKey, {
     ListName: listName,
-    Limit: 50,
+    Limit,
     Unsub: false,
     IgnoreDeleted: true,
   })
-  return Data
 }
 
 export const getListContacts = async (apikeys, listName) => {
@@ -222,8 +192,8 @@ export const getListContacts = async (apikeys, listName) => {
   const contacts = []
   for (let i = 0; i < contactIDs.length; i++) {
     const contactID = contactIDs[i].ContactID
-    const { Data } = await mailjetGet(`contact/${contactID}`, publicKey, secretKey)
-    contacts.push(Data[0].Email)
+    const contact = await mailjetGet(`contact/${contactID}`, publicKey, secretKey)
+    contacts.push(contact[0].Email)
   }
   return contacts
 }
