@@ -1,26 +1,18 @@
 import React from 'react';
 import { ScrollView, View, StyleSheet, Platform, StatusBar } from 'react-native'
 import { Container, Header, Body, Title, Content } from 'native-base'
-import { connect } from 'react-redux'
 import CampaignItem from './CampaignItem'
 import EmptyState from '../EmptyState'
-import { getAllCampaigns } from '../../helpers/mailjet'
-
-@connect(state => ({
-  apikeys: state.apikeys
-}))
 
 export default class Campaigns extends React.Component {
   state = {}
 
   componentDidMount = async () => {
-    const { apikeys } = this.props
-
     this.setState({
       isLoading: true,
     })
 
-    const campaigns = await getAllCampaigns(apikeys.get(0))
+    const campaigns = [{ id: 1, name: 'hello', senderName: 'Bill', senderEmail: 'Bill@bill.com', status: 'draft' }]
     this.setState({
       campaigns: campaigns.length > 0 ? campaigns.reverse() : false,
       isLoading: false,

@@ -1,26 +1,18 @@
 import React from 'react';
 import { ScrollView, View, StyleSheet, Platform, StatusBar } from 'react-native'
 import { Container, Header, Body, Title, Content } from 'native-base'
-import { connect } from 'react-redux'
 import MessageItem from './MessageItem'
 import EmptyState from '../EmptyState'
-import { getAllMessageIDs } from '../../helpers/mailjet'
-
-@connect(state => ({
-  apikeys: state.apikeys
-}))
 
 export default class MessagesList extends React.Component {
   state = {}
 
   componentDidMount = async () => {
-    const { apikeys } = this.props
-
     this.setState({
       isLoading: true,
     })
 
-    const messages = await getAllMessageIDs(apikeys.get(0))
+    const messages = []
     this.setState({
       messages: messages.length > 0 ? messages.reverse() : false,
       isLoading: false,

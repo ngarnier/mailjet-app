@@ -1,26 +1,18 @@
 import React from 'react';
 import { ScrollView, View, StyleSheet } from 'react-native'
 import { Container, Header, Body, Title, Content } from 'native-base'
-import { connect } from 'react-redux'
 import ContactListItem from './ContactListItem'
 import EmptyState from '../EmptyState'
-import { getLists } from '../../helpers/mailjet'
-
-@connect(state => ({
-  apikeys: state.apikeys
-}))
 
 export default class ContactLists extends React.Component {
   state = {}
 
   componentDidMount = async () => {
-    const { apikeys } = this.props
-
     this.setState({
       isLoading: true,
     })
 
-    const lists = await getLists(apikeys.get(0))
+    const lists = [{ ID: 42, Name: 'Hello world', SubscriberCount: 1337 }]
     this.setState({
       lists: lists.length > 0 ? lists : false,
       isLoading: false,
