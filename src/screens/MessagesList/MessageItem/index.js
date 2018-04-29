@@ -12,41 +12,37 @@ export default class MessageItem extends React.Component {
           <Text style={style.title}>{campaign.subject}</Text>
           <Text style={style.information}>From: {campaign.fromName} ({campaign.fromEmail})</Text>
           <Text style={style.information}>To: {contact.email}</Text>
-          {status === 'sent' && (
+          {status === 'sent' ? (
             <Badge style={[style.badge, style.sent]}>
               <Text style={style.sentText}>
                 {status}
               </Text>
             </Badge>
-          )}
-          {status === 'opened' && (
+          ) : status === 'opened' ? (
             <Badge style={[style.badge, style.opened]}>
               <Text style={style.openedText}>
                 {status}
               </Text>
             </Badge>
-          )}
-          {status === 'clicked' && (
+          ) : status === 'clicked' ? (
             <Badge style={[style.badge, style.clicked]}>
               <Text style={style.clickedText}>
                 {status}
               </Text>
             </Badge>
-          )}
-          {status === 'blocked' && (
+          ) : status === 'blocked' ? (
             <Badge style={[style.badge, style.blocked]}>
               <Text style={style.blockedText}>
                 {status}
               </Text>
             </Badge>
-          )}
-          {status === 'bounce' && (
+          ) : status === 'bounce' ? (
             <Badge style={[style.badge, style.blocked]}>
               <Text style={style.blockedText}>
                 {status}
               </Text>
             </Badge>
-          )}
+          ) : ''}
         </View>
       </View>
     );

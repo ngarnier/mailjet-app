@@ -5,3 +5,10 @@ export const getTS = () => {
   d.setMilliseconds(0)
   return d / 1000 || 0
 }
+
+export const formatTime = (time) => {
+  if (time.toString().length < 2) {
+    return `0${time}`
+  }
+  return time
+}

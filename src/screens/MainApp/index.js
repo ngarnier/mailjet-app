@@ -3,8 +3,8 @@ import { connect } from 'react-redux'
 import { removeApiKey } from '../../actions/apikeys'
 import { TabNavigator, TabBarBottom } from 'react-navigation'
 import { Icon } from 'native-base'
-import MessagesList from '../MessagesList'
-import Campaigns from '../Campaigns'
+import MessagesNavigator from '../MessagesList'
+import CampaignsNavigator from '../Campaigns/'
 import ContactsScreen from '../ContactLists'
 
 @connect(state => ({
@@ -23,13 +23,13 @@ export default class MainApp extends React.Component {
 
 const CustomTabs = TabNavigator({
   Campaigns: {
-    screen: Campaigns,
+    screen: CampaignsNavigator,
     navigationOptions: {
       tabBarIcon: ({ tintColor }) => <Icon name="mail" style={{ color: tintColor }} />
     }
   },
   Transactional: {
-    screen: MessagesList,
+    screen: MessagesNavigator,
     navigationOptions: {
       tabBarIcon: ({ tintColor }) => <Icon name="stats" style={{ color: tintColor }} />
     }

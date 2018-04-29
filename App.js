@@ -3,7 +3,7 @@ import { Provider } from 'react-redux'
 import thunk from 'redux-thunk'
 import { createStore, applyMiddleware } from 'redux'
 import reducer from './src/reducers/index'
-import Home from './src/components/Home'
+import Home from './src/screens/Home'
 import { loadApiKeys } from './src/actions/apikeys'
 
 const store = createStore(reducer, applyMiddleware(thunk))

@@ -18,7 +18,7 @@ export const addApiKey = (name, publicKey, secretKey) => {
         key,
       })
     } else {
-      //dispatch()
+      // dispatch()
     }
   }
 }

@@ -2,8 +2,8 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { StyleSheet, ScrollView, View, Text } from 'react-native'
 import { Content } from 'native-base'
-import EmptyState from '../EmptyState'
-import { getListContacts } from '../../helpers/mailjet'
+import EmptyState from '../../EmptyState'
+import { getListContacts } from '../../../helpers/mailjet'
 
 @connect(state => ({
   apikeys: state.apikeys
@@ -36,8 +36,8 @@ export default class ListContact extends React.Component {
           <ScrollView>
             {contacts.map((e) => {
               return (
-                <View style={style.row}>
-                  <Text style={style.label}>{e}</Text>
+                <View style={style.row} key={e.id}>
+                  <Text style={style.label}>{e.email}</Text>
                 </View>
               )
             })}

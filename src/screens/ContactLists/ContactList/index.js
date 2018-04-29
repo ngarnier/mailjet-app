@@ -2,8 +2,9 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { StyleSheet, View, Text } from 'react-native'
 import { Icon } from 'native-base'
-import EmptyState from '../EmptyState'
-import { getListStats } from '../../helpers/mailjet';
+import EmptyState from '../../EmptyState'
+import StatsRow from '../../../components/StatsRow'
+import { getListStats } from '../../../helpers/mailjet';
 
 @connect(state => ({
   apikeys: state.apikeys
@@ -49,29 +50,14 @@ export default class ContactList extends React.Component {
                 />
               </View>
             </View>
-            <View style={style.row}>
-              <Text style={style.label}>Total emails sent</Text>
-              <Text style={style.title}>{listStats.delivered}</Text>
-              <View style={style.columns}>
-                <View style={{ width: '48%' }}>
-                  <Text style={style.subtitle}>{listStats.opened}</Text>
-                  <View style={style.emptyBar}>
-                    <View style={[style.filledBar, { width: `${listStats.opened}` }]} />
-                  </View>
-                  <Text>Opens</Text>
-                </View>
-                <View style={{ width: '48%' }}>
-                  <Text style={style.subtitle}>{listStats.clicked}</Text>
-                  <View style={style.emptyBar}>
-                    <View style={[style.filledBar, { width: `${listStats.clicked}` }]} />
-                  </View>
-                  <Text>Clicks</Text>
-                </View>
-              </View>
-            </View>
+            <StatsRow
+              delivered={listStats.delivered}
+              opened={listStats.opened}
+              clicked={listStats.clicked}
+            />
             <View style={style.row}>
               <View style={[style.columns, { paddingBottom: 5 }]}>
-                <Text style={style.label}>Total number of contacts</Text>
+                <Text style={style.label}>Contacts</Text>
                 <Text style={style.figure}>{SubscriberCount}</Text>
               </View>
               <View style={[style.columns, { paddingBottom: 5 }]}>
