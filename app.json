@@ -3,6 +3,10 @@
     "sdkVersion": "26.0.0",
     "androidStatusBar": {
       "barStyle": "light-content"
+    },
+    "splash": {
+      "image": "./src/img/splash.png",
+      "backgroundColor": "#f6f6f6"
     }
   }
 }

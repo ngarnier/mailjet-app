@@ -2,7 +2,7 @@ import React from 'react';
 import { ScrollView, View, StyleSheet } from 'react-native'
 import { connect } from 'react-redux'
 import MessageRow from '../../components/MessageRow'
-import EmptyState from '../EmptyState'
+import EmptyState from '../../components/EmptyState'
 import { getAllMessages } from '../../helpers/mailjet'
 
 @connect(state => ({

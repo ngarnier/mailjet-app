@@ -2,7 +2,7 @@ import React from 'react';
 import { ScrollView, SafeAreaView, TouchableOpacity, View, StyleSheet } from 'react-native'
 import { connect } from 'react-redux'
 import MessageRow from '../../components/MessageRow'
-import EmptyState from '../EmptyState'
+import EmptyState from '../../components/EmptyState'
 import { getAllCampaigns } from '../../helpers/mailjet'
 
 @connect(state => ({

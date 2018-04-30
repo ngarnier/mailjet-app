@@ -68,7 +68,7 @@ export default class Login extends React.Component {
           <Thumbnail
             large
             style={style.thumbnail}
-            source={require('../../img/logo.jpg')}
+            source={require('../../img/round-logo.png')}
           />
           <Form style={{ width: '100%' }}>
             <Item style={{ borderColor: publicBorder }} floatingLabel>
@@ -118,6 +118,7 @@ const style = StyleSheet.create({
     flex: 1,
     paddingTop: 100,
     alignItems: 'center',
+    backgroundColor: '#f6f6f6',
   },
   warning: {
     height: 40,

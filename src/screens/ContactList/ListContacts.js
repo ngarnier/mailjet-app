@@ -2,8 +2,8 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { StyleSheet, ScrollView, View, Text } from 'react-native'
 import { Content } from 'native-base'
-import EmptyState from '../../EmptyState'
-import { getListContacts } from '../../../helpers/mailjet'
+import EmptyState from '../../components/EmptyState'
+import { getListContacts } from '../../helpers/mailjet'
 
 @connect(state => ({
   apikeys: state.apikeys

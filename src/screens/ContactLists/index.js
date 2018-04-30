@@ -1,9 +1,9 @@
 import { StackNavigator } from 'react-navigation'
 import ContactLists from './ContactLists'
-import ContactList from './ContactList'
-import ListContacts from './ContactList/ListContacts'
+import ContactList from '../ContactList'
+import ListContacts from '../ContactList/ListContacts'
 
-const ListsNavigator = StackNavigator({
+const ContactsNavigator = StackNavigator({
   ContactLists: {
     screen: ContactLists,
     navigationOptions: {
@@ -35,4 +35,4 @@ const ListsNavigator = StackNavigator({
   },
 })
 
-export default ListsNavigator
+export default ContactsNavigator

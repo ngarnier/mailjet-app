@@ -1,26 +1,59 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { StyleProvider } from 'native-base'
-import getTheme from '../../native-base-theme/components'
-import commonColor from '../../native-base-theme/variables/commonColor'
-import MainApp from '../MainApp'
-import Login from '../Login'
+import { removeApiKey } from '../../actions/apikeys'
+import { TabNavigator, TabBarBottom } from 'react-navigation'
+import { Icon } from 'native-base'
+import MessagesNavigator from '../MessagesList'
+import CampaignsNavigator from '../Campaigns/'
+import ContactsNavigator from '../ContactLists'
 
 @connect(state => ({
   apikeys: state.apikeys
-}))
+}), {
+  removeApiKey
+})
 
 export default class Home extends React.Component {
   render() {
-    const { apikeys } = this.props
     return (
-      <StyleProvider style={getTheme(commonColor)}>
-        {apikeys.size ? (
-          <MainApp />
-        ) : (
-          <Login />
-          )}
-      </StyleProvider>
+      <CustomTabs />
     )
   }
 }
+
+const CustomTabs = TabNavigator({
+  Campaigns: {
+    screen: CampaignsNavigator,
+    navigationOptions: {
+      tabBarIcon: ({ tintColor }) => <Icon name="mail" style={{ color: tintColor }} />
+    }
+  },
+  Transactional: {
+    screen: MessagesNavigator,
+    navigationOptions: {
+      tabBarIcon: ({ tintColor }) => <Icon name="stats" style={{ color: tintColor }} />
+    }
+  },
+  Contacts: {
+    screen: ContactsNavigator,
+    navigationOptions: {
+      title: 'Contacts',
+      tabBarIcon: ({ tintColor }) => <Icon name="contacts" style={{ color: tintColor }} />
+    }
+  }
+}, {
+  swipeEnabled: true,
+  tabBarComponent: TabBarBottom,
+  tabBarPosition: 'bottom',
+  tabBarOptions: {
+    activeTintColor: '#de980f',
+    inactiveTintColor: '#747579',
+    showIcon: true,
+    labelStyle: {
+      fontSize: 12,
+    },
+    style: {
+      backgroundColor: '#fff',
+    },
+  },
+})

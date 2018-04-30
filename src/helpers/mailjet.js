@@ -56,9 +56,9 @@ export const mailjetGet = async (route, publicKey, secretKey, filters) => {
   const res = await response.json()
   if (res.StatusCode) {
     // should handle errors here
-  } else {
-    return res.Data
+    return res
   }
+  return res.Data
 }
 
 const getCampaigns = async (apikey) => {

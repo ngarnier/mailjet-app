@@ -1,6 +1,6 @@
 import React from 'react'
-import { StyleSheet, View } from 'react-native'
-import { Badge, Text } from 'native-base'
+import { StyleSheet, View, Text } from 'react-native'
+import { Badge } from 'native-base'
 
 export default class MessageRow extends React.Component {
   render() {

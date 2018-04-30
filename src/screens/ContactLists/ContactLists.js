@@ -2,7 +2,7 @@ import React from 'react';
 import { ScrollView, SafeAreaView, View, StyleSheet } from 'react-native'
 import { connect } from 'react-redux'
 import ContactListItem from './ContactListItem'
-import EmptyState from '../EmptyState'
+import EmptyState from '../../components/EmptyState'
 import { getLists } from '../../helpers/mailjet'
 
 @connect(state => ({

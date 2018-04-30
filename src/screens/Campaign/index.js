@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { View } from 'react-native'
 import CampaignDetails from './CampaignDetails'
-import EmptyState from '../EmptyState'
+import EmptyState from '../../components/EmptyState'
 import { getCampaignDetails } from '../../helpers/mailjet'
 
 @connect(state => ({

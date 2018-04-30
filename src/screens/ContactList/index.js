@@ -2,9 +2,9 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { StyleSheet, View, Text } from 'react-native'
 import { Icon } from 'native-base'
-import EmptyState from '../../EmptyState'
-import StatsRow from '../../../components/StatsRow'
-import { getListStats } from '../../../helpers/mailjet';
+import EmptyState from '../../components/EmptyState'
+import StatsRow from '../../components/StatsRow'
+import { getListStats } from '../../helpers/mailjet';
 
 @connect(state => ({
   apikeys: state.apikeys
