@@ -1,33 +1,36 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { StyleSheet, View, Text } from 'react-native'
 
-export default class StatsRow extends React.Component {
-  render() {
-    const { delivered, opened, clicked } = this.props
-
-    return (
-      <View style={style.row}>
-        <Text style={style.label}>Emails sent</Text>
-        <Text style={style.title}>{delivered}</Text>
-        <View style={style.columns}>
-          <View style={{ width: '48%' }}>
-            <Text style={style.subtitle}>{opened}</Text>
-            <View style={style.emptyBar}>
-              <View style={[style.filledBar, { width: `${opened}` }]} />
-            </View>
-            <Text>Opens</Text>
+export default function StatsRow({ delivered, opened, clicked }) {
+  return (
+    <View style={style.row}>
+      <Text style={style.label}>Emails sent</Text>
+      <Text style={style.title}>{delivered}</Text>
+      <View style={style.columns}>
+        <View style={{ width: '48%' }}>
+          <Text style={style.subtitle}>{opened}</Text>
+          <View style={style.emptyBar}>
+            <View style={[style.filledBar, { width: `${opened}` }]} />
           </View>
-          <View style={{ width: '48%' }}>
-            <Text style={style.subtitle}>{clicked}</Text>
-            <View style={style.emptyBar}>
-              <View style={[style.filledBar, { width: `${clicked}` }]} />
-            </View>
-            <Text>Clicks</Text>
+          <Text>Opens</Text>
+        </View>
+        <View style={{ width: '48%' }}>
+          <Text style={style.subtitle}>{clicked}</Text>
+          <View style={style.emptyBar}>
+            <View style={[style.filledBar, { width: `${clicked}` }]} />
           </View>
+          <Text>Clicks</Text>
         </View>
       </View>
-    )
-  }
+    </View>
+  )
+}
+
+StatsRow.propTypes = {
+  delivered: PropTypes.string.isRequired,
+  opened: PropTypes.string.isRequired,
+  clicked: PropTypes.string.isRequired,
 }
 
 const style = StyleSheet.create({
@@ -45,7 +48,7 @@ const style = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#222'
+    color: '#222',
   },
   subtitle: {
     fontSize: 16,
@@ -71,5 +74,5 @@ const style = StyleSheet.create({
   filledBar: {
     backgroundColor: '#55FDA3',
     height: '100%',
-  }
+  },
 })

@@ -7,9 +7,9 @@ const MessagesNavigator = StackNavigator({
     navigationOptions: {
       title: 'Transactional Activity',
       headerStyle: {
-        backgroundColor: '#ffbf40'
+        backgroundColor: '#ffbf40',
       },
-      headerTintColor: '#fff'
+      headerTintColor: '#fff',
     },
   },
 })

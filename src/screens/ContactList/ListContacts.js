@@ -5,8 +5,21 @@ import { Content } from 'native-base'
 import EmptyState from '../../components/EmptyState'
 import { getListContacts } from '../../helpers/mailjet'
 
+const style = StyleSheet.create({
+  row: {
+    backgroundColor: '#fff',
+    borderColor: '#ddd',
+    borderBottomWidth: 1,
+    padding: 20,
+  },
+  label: {
+    fontSize: 16,
+    color: '#444',
+  },
+})
+
 @connect(state => ({
-  apikeys: state.apikeys
+  apikeys: state.apikeys,
 }))
 
 export default class ListContact extends React.Component {
@@ -34,33 +47,19 @@ export default class ListContact extends React.Component {
       <Content>
         {contacts ? (
           <ScrollView>
-            {contacts.map((e) => {
-              return (
-                <View style={style.row} key={e.id}>
-                  <Text style={style.label}>{e.email}</Text>
-                </View>
-              )
-            })}
+            {contacts.map(e => (
+              <View style={style.row} key={e[0].ID}>
+                <Text style={style.label}>{e[0].Email}</Text>
+              </View>
+              ))}
           </ScrollView>
         ) : isLoading ? (
-          <EmptyState state={'loading'} context={'Contacts'} />
+          <EmptyState state="loading" context="Contacts" />
         ) : (
-          <EmptyState state={'no-data'} context={'Contacts'} />
+          <EmptyState state="no-data" context="Contacts" />
         )}
       </Content>
     )
   }
 }
 
-const style = StyleSheet.create({
-  row: {
-    backgroundColor: '#fff',
-    borderColor: '#ddd',
-    borderBottomWidth: 1,
-    padding: 20,
-  },
-  label: {
-    fontSize: 16,
-    color: '#444',
-  },
-})

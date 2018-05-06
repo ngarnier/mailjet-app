@@ -1,39 +1,49 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { StyleSheet, ScrollView } from 'react-native'
 import LabelRow from '../../components/LabelRow'
 import StatsRow from '../../components/StatsRow'
 import Preview from '../../components/Preview'
 
-export default class Campaign extends React.Component {
-  render() {
-    const {
-      title,
-      Subject,
-      FromName,
-      FromEmail,
-      ListName,
-      Permalink,
-      delivered,
-      opened,
-      clicked } = this.props.campaignDetails
+export default function CampaignDetails({
+  title,
+  subject,
+  fromName,
+  fromEmail,
+  listName,
+  permalink,
+  delivered,
+  opened,
+  clicked,
+}) {
+  return (
+    <ScrollView style={style.container}>
+      {permalink && (
+        <Preview permalink={permalink} />
+      )}
+      <LabelRow title="CAMPAIGN NAME" subtitle={title} />
+      <LabelRow title="SUBJECT" subtitle={subject} />
+      <LabelRow title="RECIPIENTS" subtitle={listName} />
+      <LabelRow title="FROM" subtitle={`${fromName} (${fromEmail})`} />
+      <StatsRow
+        delivered={delivered}
+        opened={opened}
+        clicked={clicked}
+      />
+    </ScrollView>
+  )
+}
 
-    return (
-      <ScrollView style={style.container}>
-        {Permalink && (
-          <Preview permalink={Permalink} />
-        )}
-        <LabelRow title="CAMPAIGN NAME" subtitle={title} />
-        <LabelRow title="SUBJECT" subtitle={Subject} />
-        <LabelRow title="RECIPIENTS" subtitle={ListName} />
-        <LabelRow title="FROM" subtitle={`${FromName} (${FromEmail})`} />
-        <StatsRow
-          delivered={delivered}
-          opened={opened}
-          clicked={clicked}
-        />
-      </ScrollView>
-    )
-  }
+CampaignDetails.propTypes = {
+  title: PropTypes.string.isRequired,
+  subject: PropTypes.string.isRequired,
+  fromName: PropTypes.string.isRequired,
+  fromEmail: PropTypes.string.isRequired,
+  listName: PropTypes.string.isRequired,
+  permalink: PropTypes.string.isRequired,
+  delivered: PropTypes.string.isRequired,
+  opened: PropTypes.string.isRequired,
+  clicked: PropTypes.string.isRequired,
 }
 
 const style = StyleSheet.create({
@@ -41,5 +51,5 @@ const style = StyleSheet.create({
     paddingTop: 10,
     backgroundColor: '#fff',
     height: '100%',
-  }
+  },
 })

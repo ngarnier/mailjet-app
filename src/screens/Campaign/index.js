@@ -6,7 +6,7 @@ import EmptyState from '../../components/EmptyState'
 import { getCampaignDetails } from '../../helpers/mailjet'
 
 @connect(state => ({
-  apikeys: state.apikeys
+  apikeys: state.apikeys,
 }))
 
 export default class Campaign extends React.Component {
@@ -14,7 +14,9 @@ export default class Campaign extends React.Component {
 
   componentDidMount = async () => {
     const { apikeys } = this.props
-    const { id, title, delivered, opened, clicked } = this.props.navigation.state.params
+    const {
+      id, title, delivered, opened, clicked,
+    } = this.props.navigation.state.params
 
     this.setState({
       isLoading: true,
@@ -22,7 +24,9 @@ export default class Campaign extends React.Component {
 
     const campaignDetails = await getCampaignDetails(apikeys.get(0), id)
     this.setState({
-      campaignDetails: { ...campaignDetails, title, delivered, opened, clicked },
+      campaignDetails: {
+        ...campaignDetails, title, delivered, opened, clicked,
+      },
       isLoading: false,
     })
   }
@@ -33,11 +37,22 @@ export default class Campaign extends React.Component {
     return (
       <View>
         {campaignDetails ? (
-          <CampaignDetails campaignDetails={campaignDetails} />
+          <CampaignDetails
+            campaignDetails={campaignDetails}
+            title={campaignDetails.title}
+            subject={campaignDetails.Subject}
+            fromName={campaignDetails.FromName}
+            fromEmail={campaignDetails.FromEmail}
+            listName={campaignDetails.ListName}
+            permalink={campaignDetails.Permalink}
+            delivered={campaignDetails.delivered}
+            opened={campaignDetails.opened}
+            clicked={campaignDetails.clicked}
+          />
         ) : isLoading ? (
-          <EmptyState state={'loading'} context={'Campaign details'} />
+          <EmptyState state="loading" context="Campaign details" />
         ) : (
-          <EmptyState state={'no-data'} context={'Campaign details'} />
+          <EmptyState state="no-data" context="Campaign details" />
         )}
       </View>
     )

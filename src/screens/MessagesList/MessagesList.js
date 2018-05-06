@@ -1,12 +1,19 @@
-import React from 'react';
+import React from 'react'
 import { ScrollView, View, StyleSheet } from 'react-native'
 import { connect } from 'react-redux'
 import MessageRow from '../../components/MessageRow'
 import EmptyState from '../../components/EmptyState'
 import { getAllMessages } from '../../helpers/mailjet'
 
+const style = StyleSheet.create({
+  container: {
+    height: '100%',
+    backgroundColor: '#f6f6f6',
+  },
+})
+
 @connect(state => ({
-  apikeys: state.apikeys
+  apikeys: state.apikeys,
 }))
 
 export default class MessagesList extends React.Component {
@@ -28,7 +35,6 @@ export default class MessagesList extends React.Component {
 
   render() {
     const { messages, isLoading } = this.state
-
     return (
       <ScrollView style={style.container}>
         {messages && (
@@ -44,22 +50,15 @@ export default class MessagesList extends React.Component {
         )}
         {isLoading && (
           <View>
-            <EmptyState state={'loading'} context={'Messages'} />
+            <EmptyState state="loading" context="Messages" />
           </View>
         )}
         {!messages && !isLoading && (
           <View>
-            <EmptyState state={'no-data'} context={'Messages'} navigation={this.props.navigation} />
+            <EmptyState state="no-data" context="Messages" navigation={this.props.navigation} />
           </View>
         )}
       </ScrollView>
     )
   }
 }
-
-const style = StyleSheet.create({
-  container: {
-    height: '100%',
-    backgroundColor: '#f6f6f6'
-  },
-})

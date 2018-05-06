@@ -9,18 +9,18 @@ const ContactsNavigator = StackNavigator({
     navigationOptions: {
       title: 'Contact Lists',
       headerStyle: {
-        backgroundColor: '#ffbf40'
+        backgroundColor: '#ffbf40',
       },
-      headerTintColor: '#fff'
+      headerTintColor: '#fff',
     },
   },
   ContactList: {
     screen: ContactList,
     navigationOptions: {
       headerStyle: {
-        backgroundColor: '#ffbf40'
+        backgroundColor: '#ffbf40',
       },
-      headerTintColor: '#fff'
+      headerTintColor: '#fff',
     },
   },
   ListContacts: {
@@ -28,9 +28,9 @@ const ContactsNavigator = StackNavigator({
     navigationOptions: ({ navigation }) => ({
       title: `${navigation.state.params.Name}`,
       headerStyle: {
-        backgroundColor: '#ffbf40'
+        backgroundColor: '#ffbf40',
       },
-      headerTintColor: '#fff'
+      headerTintColor: '#fff',
     }),
   },
 })

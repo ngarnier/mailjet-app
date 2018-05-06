@@ -1,26 +1,34 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { StyleSheet, TouchableOpacity, Text } from 'react-native'
 
-export default class ContactListItem extends React.Component {
-  render() {
-    const { ID, Name, SubscriberCount } = this.props.list
+export default function ContactListItem({
+  id,
+  name,
+  subscribers,
+  navigation,
+}) {
+  return (
+    <TouchableOpacity
+      style={style.row}
+      onPress={() => navigation.navigate('ContactList', {
+        ID: id,
+        Name: name,
+        SubscribersCount: subscribers,
+      })}
+    >
+      <Text style={style.title}>{name}</Text>
+      <Text style={{ marginBottom: 5 }}>
+        {subscribers} subscribers
+      </Text>
+    </TouchableOpacity>
+  )
+}
 
-    return (
-      <TouchableOpacity
-        style={style.row}
-        onPress={() => this.props.navigation.navigate('ContactList', {
-          ID,
-          Name,
-          SubscriberCount,
-        })}
-      >
-        <Text style={style.title}>{Name}</Text>
-        <Text style={{ marginBottom: 5 }}>
-          {SubscriberCount} subscribers
-        </Text>
-      </TouchableOpacity>
-    )
-  }
+ContactListItem.propTypes = {
+  id: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  subscribers: PropTypes.string.isRequired,
 }
 
 const style = StyleSheet.create({

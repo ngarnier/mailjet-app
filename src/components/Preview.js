@@ -1,7 +1,21 @@
 import React from 'react'
 import { View, WebView, StyleSheet } from 'react-native'
+import PropTypes from 'prop-types'
 import { Icon } from 'native-base'
 import LabelRow from './LabelRow'
+
+const style = StyleSheet.create({
+  icons: {
+    marginTop: -50,
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+  },
+  resize: {
+    fontSize: 36,
+    color: '#555',
+    marginRight: 10,
+  },
+})
 
 export default class Preview extends React.Component {
   state = {
@@ -21,7 +35,7 @@ export default class Preview extends React.Component {
 
     const handleNavigation = (e) => {
       this.setState({
-        canGoBack: e.canGoBack
+        canGoBack: e.canGoBack,
       })
     }
 
@@ -44,7 +58,9 @@ export default class Preview extends React.Component {
           <Icon
             name="arrow-back"
             onPress={goBack}
-            style={{ opacity: canGoBack ? '100' : '0', fontSize: 36, color: '#555', marginLeft: 10 }}
+            style={{
+ opacity: canGoBack ? '100' : '0', fontSize: 36, color: '#555', marginLeft: 10,
+}}
           />
           <Icon
             name={isFullSize ? 'fullscreen-exit' : 'fullscreen'}
@@ -58,15 +74,6 @@ export default class Preview extends React.Component {
   }
 }
 
-const style = StyleSheet.create({
-  icons: {
-    marginTop: -50,
-    justifyContent: 'space-between',
-    flexDirection: 'row'
-  },
-  resize: {
-    fontSize: 36,
-    color: '#555',
-    marginRight: 10
-  }
-})
+Preview.propTypes = {
+  permalink: PropTypes.string.isRequired,
+}

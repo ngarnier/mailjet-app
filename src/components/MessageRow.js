@@ -1,27 +1,34 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { StyleSheet, View, Text } from 'react-native'
 import { Badge } from 'native-base'
 
-export default class MessageRow extends React.Component {
-  render() {
-    const { title, subtitle, status, date } = this.props
-    const safeStatus = status.toLowerCase()
+export default function MessageRow({
+  title, subtitle, status, date,
+}) {
+  const safeStatus = status.toLowerCase()
 
-    return (
-      <View style={style.row}>
-        <Text style={style.title}>{title || 'Untitled'}</Text>
-        {subtitle && (<Text style={style.subtitle}>{subtitle}</Text>)}
-        <View style={style.date}>
-          <Badge style={[style.badge, style[safeStatus]]}>
-            <Text style={style[`${safeStatus}Text`]}>
-              {safeStatus}
-            </Text>
-          </Badge>
-          {date && (<Text>on {date}</Text>)}
-        </View>
+  return (
+    <View style={style.row}>
+      <Text style={style.title}>{title || 'Untitled'}</Text>
+      {subtitle && (<Text style={style.subtitle}>{subtitle}</Text>)}
+      <View style={style.date}>
+        <Badge style={[style.badge, style[safeStatus]]}>
+          <Text style={style[`${safeStatus}Text`]}>
+            {safeStatus}
+          </Text>
+        </Badge>
+        {date && (<Text>on {date}</Text>)}
       </View>
-    )
-  }
+    </View>
+  )
+}
+
+MessageRow.propTypes = {
+  title: PropTypes.string.isRequired,
+  subtitle: PropTypes.string.isRequired,
+  status: PropTypes.string.isRequired,
+  date: PropTypes.string.isRequired,
 }
 
 const style = StyleSheet.create({

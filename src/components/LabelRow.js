@@ -1,17 +1,23 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { StyleSheet, View, Text } from 'react-native'
 
-export default class LabelRow extends React.Component {
-  render() {
-    const { title, subtitle } = this.props
+export default function LabelRow({ title, subtitle }) {
+  return (
+    <View style={style.row}>
+      <Text style={style.title}>{title}</Text>
+      {subtitle && (<Text style={style.subtitle}>{subtitle}</Text>)}
+    </View>
+  )
+}
 
-    return (
-      <View style={style.row}>
-        <Text style={style.title}>{title}</Text>
-        {subtitle && (<Text style={style.subtitle}>{subtitle}</Text>)}
-      </View>
-    )
-  }
+LabelRow.propTypes = {
+  title: PropTypes.string.isRequired,
+  subtitle: PropTypes.string,
+}
+
+LabelRow.defaultProps = {
+  subtitle: null,
 }
 
 const style = StyleSheet.create({
@@ -30,5 +36,5 @@ const style = StyleSheet.create({
   subtitle: {
     fontSize: 15,
     paddingBottom: 10,
-  }
+  },
 })

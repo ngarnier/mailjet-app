@@ -21,16 +21,18 @@ export const mailjetGet = async (route, publicKey, secretKey, filters) => {
   let formattedFilters = ''
   if (filters) {
     formattedFilters = '?'
+    /* eslint-disable array-callback-return */
     Object.keys(filters).map((filter) => {
       formattedFilters += `${filter}=${filters[filter]}&`
     })
+    /* eslint-enable */
   }
   const response = await fetch(`https://api.mailjet.com/v3/REST/${route}${formattedFilters}`, {
     method: 'GET',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
-      Authorization: `Basic ${encodedKeys}`
+      Authorization: `Basic ${encodedKeys}`,
     },
   })
   const res = await response.json()
@@ -47,7 +49,7 @@ export const checkAuth = async (publicKey, secretKey) => {
 
 export const getMailjetKeys = async (publicKey, secretKey) => {
   const response = await mailjetGet('apikey', publicKey, secretKey)
-  for (let i = 0; i < response.length; i++) {
+  for (let i = 0; i < response.length; i += 1) {
     if (response[i].APIKey === publicKey) {
       return {
         name: response[i].Name,
@@ -71,6 +73,7 @@ export const getAllCampaigns = async (apikeys) => {
   const campaigns = []
   const keyData = await getCampaigns(apikeys)
   keyData.sort((a, b) => b.SendTimeStart - a.SendTimeStart)
+  /* eslint-disable array-callback-return */
   keyData.map((e) => {
     const status = e.SendTimeStart > 0 ? 'Sent' : 'Draft'
     const timestamp = e.SendTimeStart
@@ -90,6 +93,7 @@ export const getAllCampaigns = async (apikeys) => {
       clicked: `${Math.floor((e.ClickedCount / e.OpenedCount) * 100) || 0}%`,
     })
   })
+  /* eslint-enable */
   return campaigns
 }
 
@@ -101,48 +105,6 @@ export const getCampaignDetails = async (apikeys, id) => {
   details[0].ListName = listDetails[0].Name
   details[0].Permalink = content[0].Url
   return details[0]
-}
-
-export const getAllMessages = async (apikeys) => {
-  const { publicKey, secretKey } = apikeys
-  const d = getTS()
-  const messages = []
-  const campaigns = []
-  const contacts = []
-  const messagesList = await mailjetGet('message', publicKey, secretKey, {
-    Limit,
-    FromType: 'Transactional',
-    FromTS: d,
-  })
-  for (let i = 0; i < messagesList.length; i++) {
-    let campaignInformation = {}
-    let contactInformation = {}
-    const campaignIndex = campaigns.findIndex((campaign) => {
-      return campaign.campaignID === messagesList[i].CampaignID
-    })
-    if (campaignIndex === -1) {
-      campaignInformation = await getMessageCampaignInformation(apikeys, messagesList[i].CampaignID)
-      campaigns.push(campaignInformation)
-    } else {
-      campaignInformation = campaigns[campaignIndex]
-    }
-    const contactIndex = contacts.findIndex((contact) => {
-      return contact.contactID === messagesList[i].ContactID
-    })
-    if (campaignIndex === -1) {
-      contactInformation = await getMessageContactInformation(apikeys, messagesList[i].ContactID)
-      contacts.push(contactInformation)
-    } else {
-      contactInformation = contacts[contactIndex]
-    }
-    messages.push({
-      messageID: messagesList[i].ID,
-      status: messagesList[i].Status,
-      ...campaignInformation,
-      ...contactInformation
-    })
-  }
-  return messages
 }
 
 const getMessageCampaignInformation = async (apikeys, campaignID) => {
@@ -167,9 +129,53 @@ const getMessageContactInformation = async (apikeys, contactID) => {
   const contactData = await mailjetGet(`contact/${contactID}`, publicKey, secretKey)
   const information = {
     contactID,
-    toEmail: contactData[0].Email
+    toEmail: contactData[0].Email,
   }
   return information
+}
+
+export const getAllMessages = async (apikeys) => {
+  const { publicKey, secretKey } = apikeys
+  const d = getTS()
+  const messages = []
+  const campaigns = []
+  const contacts = []
+  const messagesList = await mailjetGet('message', publicKey, secretKey, {
+    Limit,
+    FromType: 'Transactional',
+    FromTS: d,
+  })
+  for (let i = 0; i < messagesList.length; i += 1) {
+    let campaignInformation = {}
+    let contactInformation = {}
+    const campaignIndex = campaigns.findIndex(campaign =>
+      campaign.campaignID === messagesList[i].CampaignID)
+    if (campaignIndex === -1) {
+      /* eslint-disable no-await-in-loop */
+      campaignInformation = await getMessageCampaignInformation(apikeys, messagesList[i].CampaignID)
+      /* eslint-enable */
+      campaigns.push(campaignInformation)
+    } else {
+      campaignInformation = campaigns[campaignIndex]
+    }
+    const contactIndex = contacts.findIndex(contact =>
+      contact.contactID === messagesList[i].ContactID)
+    if (campaignIndex === -1) {
+      /* eslint-disable no-await-in-loop */
+      contactInformation = await getMessageContactInformation(apikeys, messagesList[i].ContactID)
+      /* eslint-enable */
+      contacts.push(contactInformation)
+    } else {
+      contactInformation = contacts[contactIndex]
+    }
+    messages.push({
+      messageID: messagesList[i].ID,
+      status: messagesList[i].Status,
+      ...campaignInformation,
+      ...contactInformation,
+    })
+  }
+  return messages
 }
 
 export const getLists = async (apikey) => {
@@ -193,7 +199,8 @@ export const getListStats = async (apikey, id) => {
     ActiveUnsubscribedCount,
     DeliveredCount,
     OpenedCount,
-    ClickedCount } = lists[0]
+    ClickedCount,
+  } = lists[0]
   return {
     active: ActiveCount,
     unsub: ActiveUnsubscribedCount,
@@ -217,13 +224,10 @@ export const getListContacts = async (apikeys, listName) => {
   const { publicKey, secretKey } = apikeys
   const contactIDs = await getListContactIDs(apikeys, listName)
   const contacts = []
-  for (let i = 0; i < contactIDs.length; i++) {
+  for (let i = 0; i < contactIDs.length; i += 1) {
     const contactID = contactIDs[i].ContactID
-    const contact = await mailjetGet(`contact/${contactID}`, publicKey, secretKey)
-    contacts.push({
-      id: contact[0].ID,
-      email: contact[0].Email
-    })
+    contacts.push(mailjetGet(`contact/${contactID}`, publicKey, secretKey))
   }
-  return contacts
+  const resolved = await Promise.all(contacts)
+  return resolved
 }

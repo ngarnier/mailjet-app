@@ -4,10 +4,53 @@ import { StyleSheet, View, Text } from 'react-native'
 import { Icon } from 'native-base'
 import EmptyState from '../../components/EmptyState'
 import StatsRow from '../../components/StatsRow'
-import { getListStats } from '../../helpers/mailjet';
+import { getListStats } from '../../helpers/mailjet'
+
+const style = StyleSheet.create({
+  row: {
+    backgroundColor: '#fff',
+    borderColor: '#ddd',
+    borderBottomWidth: 1,
+    padding: 20,
+  },
+  columns: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#222',
+  },
+  subtitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#222',
+    paddingTop: 10,
+  },
+  label: {
+    fontSize: 16,
+    color: '#444',
+  },
+  figure: {
+    color: '#222',
+    fontWeight: 'bold',
+  },
+  emptyBar: {
+    backgroundColor: '#eee',
+    height: 4,
+    width: '100%',
+    marginBottom: 5,
+    marginTop: 5,
+  },
+  filledBar: {
+    backgroundColor: '#55FDA3',
+    height: '100%',
+  },
+})
 
 @connect(state => ({
-  apikeys: state.apikeys
+  apikeys: state.apikeys,
 }))
 
 export default class ContactList extends React.Component {
@@ -78,45 +121,3 @@ export default class ContactList extends React.Component {
   }
 }
 
-const style = StyleSheet.create({
-  row: {
-    backgroundColor: '#fff',
-    borderColor: '#ddd',
-    borderBottomWidth: 1,
-    padding: 20,
-  },
-  columns: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  title: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#222'
-  },
-  subtitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#222',
-    paddingTop: 10,
-  },
-  label: {
-    fontSize: 16,
-    color: '#444',
-  },
-  figure: {
-    color: '#222',
-    fontWeight: 'bold',
-  },
-  emptyBar: {
-    backgroundColor: '#eee',
-    height: 4,
-    width: '100%',
-    marginBottom: 5,
-    marginTop: 5,
-  },
-  filledBar: {
-    backgroundColor: '#55FDA3',
-    height: '100%',
-  }
-})

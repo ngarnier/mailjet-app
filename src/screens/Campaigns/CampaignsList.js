@@ -1,12 +1,19 @@
-import React from 'react';
+import React from 'react'
 import { ScrollView, SafeAreaView, TouchableOpacity, View, StyleSheet } from 'react-native'
 import { connect } from 'react-redux'
 import MessageRow from '../../components/MessageRow'
 import EmptyState from '../../components/EmptyState'
 import { getAllCampaigns } from '../../helpers/mailjet'
 
+const style = StyleSheet.create({
+  container: {
+    height: '100%',
+    backgroundColor: '#f6f6f6',
+  },
+})
+
 @connect(state => ({
-  apikeys: state.apikeys
+  apikeys: state.apikeys,
 }))
 
 export default class Campaigns extends React.Component {
@@ -36,45 +43,36 @@ export default class Campaigns extends React.Component {
       <SafeAreaView style={style.container}>
         {campaigns.length > 0 ? (
           <ScrollView>
-            {campaigns.map((e) => {
-              return (
-                <TouchableOpacity
-                  key={e.id}
-                  onPress={() => this.props.navigation.navigate('Campaign', {
+            {campaigns.map(e => (
+              <TouchableOpacity
+                key={e.id}
+                onPress={() => this.props.navigation.navigate('Campaign', {
                     id: e.id,
                     title: e.title,
                     delivered: e.delivered,
                     opened: e.opened,
                     clicked: e.clicked,
                   })}
-                >
-                  <MessageRow
-                    title={e.title}
-                    subtitle={e.subject}
-                    status={e.status}
-                    date={e.date}
-                    navigation={this.props.navigation}
-                  />
-                </TouchableOpacity>)
-            })}
+              >
+                <MessageRow
+                  title={e.title}
+                  subtitle={e.subject}
+                  status={e.status}
+                  date={e.date}
+                  navigation={this.props.navigation}
+                />
+              </TouchableOpacity>))}
           </ScrollView>
         ) : isLoading ? (
           <View>
-            <EmptyState state={'loading'} context={'Campaigns'} />
+            <EmptyState state="loading" context="Campaigns" />
           </View>
         ) : (
           <View>
-            <EmptyState state={'no-data'} context={'Campaigns'} navigation={this.props.navigation} />
+            <EmptyState state="no-data" context="Campaigns" navigation={this.props.navigation} />
           </View>
         )}
       </SafeAreaView>
     )
   }
 }
-
-const style = StyleSheet.create({
-  container: {
-    height: '100%',
-    backgroundColor: '#f6f6f6',
-  },
-})

@@ -1,15 +1,41 @@
-import React from 'react';
+import React from 'react'
+import PropTypes from 'prop-types'
 import { View, StyleSheet } from 'react-native'
 import { Container, Content, Thumbnail, Form, Item, Label, Input, Button, Text, Spinner } from 'native-base'
 import { connect } from 'react-redux'
 import { checkAuth, getMailjetKeys } from '../../helpers/mailjet'
 import { addApiKey } from '../../actions/apikeys'
 import commonColor from '../../native-base-theme/variables/commonColor'
+import logo from '../../img/round-logo.png'
+
+
+const style = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingTop: 100,
+    alignItems: 'center',
+    backgroundColor: '#f6f6f6',
+  },
+  warning: {
+    height: 40,
+    width: '100%',
+  },
+  warningText: {
+    margin: 10,
+    justifyContent: 'flex-start',
+    fontSize: 14,
+    color: 'red',
+  },
+  button: {
+    width: 150,
+    justifyContent: 'center',
+  },
+})
 
 @connect(
   null,
   {
-    addApiKey
+    addApiKey,
   },
 )
 
@@ -24,14 +50,14 @@ export default class Login extends React.Component {
   handlePublicInput = (publicKey) => {
     this.setState({
       invalidKeys: false,
-      publicKey
+      publicKey,
     })
   }
 
   handleSecretInput = (secretKey) => {
     this.setState({
       invalidKeys: false,
-      secretKey
+      secretKey,
     })
   }
 
@@ -39,7 +65,7 @@ export default class Login extends React.Component {
     const { publicKey, secretKey } = this.state
 
     this.setState({
-      isLoading: true
+      isLoading: true,
     })
 
     const auth = await checkAuth(publicKey, secretKey)
@@ -55,7 +81,9 @@ export default class Login extends React.Component {
   }
 
   render() {
-    const { publicKey, secretKey, invalidKeys, isLoading, publicBorder, secretBorder } = this.state
+    const {
+      publicKey, secretKey, invalidKeys, isLoading, publicBorder, secretBorder,
+    } = this.state
 
     return (
       <Container>
@@ -63,7 +91,7 @@ export default class Login extends React.Component {
           <Thumbnail
             large
             style={style.thumbnail}
-            source={require('../../img/round-logo.png')}
+            source={logo}
           />
           <Form style={{ width: '100%' }}>
             <Item style={{ borderColor: publicBorder }} floatingLabel>
@@ -72,8 +100,8 @@ export default class Login extends React.Component {
                 autofocus
                 onBlur={() => { this.setState({ publicBorder: commonColor.textColor }) }}
                 onFocus={() => { this.setState({ publicBorder: commonColor.brandPrimary }) }}
-                onChangeText={publicKey => this.handlePublicInput(publicKey)}
-                clearButtonMode={'while-editing'}
+                onChangeText={input => this.handlePublicInput(input)}
+                clearButtonMode="while-editing"
               />
             </Item>
             <Item style={{ borderColor: secretBorder }} floatingLabel>
@@ -81,8 +109,8 @@ export default class Login extends React.Component {
               <Input
                 onBlur={() => { this.setState({ secretBorder: commonColor.textColor }) }}
                 onFocus={() => { this.setState({ secretBorder: commonColor.brandPrimary }) }}
-                onChangeText={secretKey => this.handleSecretInput(secretKey)}
-                clearButtonMode={'while-editing'}
+                onChangeText={input => this.handleSecretInput(input)}
+                clearButtonMode="while-editing"
               />
             </Item>
           </Form>
@@ -108,25 +136,6 @@ export default class Login extends React.Component {
   }
 }
 
-const style = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingTop: 100,
-    alignItems: 'center',
-    backgroundColor: '#f6f6f6',
-  },
-  warning: {
-    height: 40,
-    width: '100%',
-  },
-  warningText: {
-    margin: 10,
-    justifyContent: 'flex-start',
-    fontSize: 14,
-    color: 'red',
-  },
-  button: {
-    width: 150,
-    justifyContent: 'center',
-  },
-})
+Login.propTypes = {
+  addApiKey: PropTypes.string.isRequired,
+}
