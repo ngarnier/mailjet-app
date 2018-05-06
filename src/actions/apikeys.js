@@ -8,6 +8,8 @@ export const addApiKey = (name, publicKey, secretKey) => {
     keys.map((key) => {
       if (key.publicKey !== publicKey) {
         duplicate = true
+      } else {
+        // handle the error
       }
     })
     if (!duplicate) {
@@ -17,8 +19,6 @@ export const addApiKey = (name, publicKey, secretKey) => {
         type: 'APIKEY_ADD',
         key,
       })
-    } else {
-      // dispatch()
     }
   }
 }

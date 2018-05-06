@@ -43,7 +43,7 @@ export default class Login extends React.Component {
     })
 
     const auth = await checkAuth(publicKey, secretKey)
-    if (auth.ErrorMessage) {
+    if (typeof auth === 'string') {
       this.setState({
         invalidKeys: true,
         isLoading: false,
@@ -51,11 +51,6 @@ export default class Login extends React.Component {
     } else {
       const { name } = await getMailjetKeys(publicKey, secretKey)
       this.props.addApiKey(name, publicKey, secretKey)
-
-      this.setState({
-        publicKey: '',
-        secretKey: '',
-      })
     }
   }
 
@@ -93,7 +88,7 @@ export default class Login extends React.Component {
           </Form>
           <View style={style.warning}>
             {invalidKeys && (
-              <Text style={style.warningText}>Failed to login, please check API keys</Text>
+              <Text style={style.warningText}>Failed to login, please check your API keys</Text>
             )}
           </View>
           <View>

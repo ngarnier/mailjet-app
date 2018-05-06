@@ -2,6 +2,7 @@ import React from 'react'
 import { StyleSheet, ScrollView } from 'react-native'
 import LabelRow from '../../components/LabelRow'
 import StatsRow from '../../components/StatsRow'
+import Preview from '../../components/Preview'
 
 export default class Campaign extends React.Component {
   render() {
@@ -11,11 +12,16 @@ export default class Campaign extends React.Component {
       FromName,
       FromEmail,
       ListName,
+      Permalink,
       delivered,
       opened,
       clicked } = this.props.campaignDetails
+
     return (
       <ScrollView style={style.container}>
+        {Permalink && (
+          <Preview permalink={Permalink} />
+        )}
         <LabelRow title="CAMPAIGN NAME" subtitle={title} />
         <LabelRow title="SUBJECT" subtitle={Subject} />
         <LabelRow title="RECIPIENTS" subtitle={ListName} />

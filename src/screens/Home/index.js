@@ -1,16 +1,16 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { removeApiKey } from '../../actions/apikeys'
 import { TabNavigator, TabBarBottom } from 'react-navigation'
 import { Icon } from 'native-base'
 import MessagesNavigator from '../MessagesList'
 import CampaignsNavigator from '../Campaigns/'
 import ContactsNavigator from '../ContactLists'
+import { removeApiKey } from '../../actions/apikeys'
 
 @connect(state => ({
-  apikeys: state.apikeys
+  apikeys: state.apikeys,
 }), {
-  removeApiKey
+  removeApiKey,
 })
 
 export default class Home extends React.Component {
@@ -51,9 +51,6 @@ const CustomTabs = TabNavigator({
     showIcon: true,
     labelStyle: {
       fontSize: 12,
-    },
-    style: {
-      backgroundColor: '#fff',
     },
   },
 })

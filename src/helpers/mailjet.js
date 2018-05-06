@@ -16,26 +16,6 @@ const months = [
   'November',
   'December']
 
-export const checkAuth = async (publicKey, secretKey) => {
-  const auth = await mailjetGet('template', publicKey, secretKey)
-  return auth
-}
-
-export const getMailjetKeys = async (publicKey, secretKey) => {
-  const response = await mailjetGet('apikey', publicKey, secretKey)
-  const data = response.Data
-  for (let i = 0; i < data.length; i++) {
-    if (data[i].APIKey === publicKey) {
-      return {
-        name: data[i].Name,
-        publicKey: data[i].APIKey,
-        secretKey: data[i].SecretKey,
-      }
-    }
-  }
-  return "Couldn't authenticate with those keys"
-}
-
 export const mailjetGet = async (route, publicKey, secretKey, filters) => {
   const encodedKeys = await Buffer.from(`${publicKey}:${secretKey}`).toString('base64')
   let formattedFilters = ''
@@ -54,11 +34,29 @@ export const mailjetGet = async (route, publicKey, secretKey, filters) => {
     },
   })
   const res = await response.json()
-  if (res.StatusCode) {
-    // should handle errors here
-    return res
+  if (res.ErrorMessage) {
+    return res.ErrorMessage
   }
   return res.Data
+}
+
+export const checkAuth = async (publicKey, secretKey) => {
+  const auth = await mailjetGet('template', publicKey, secretKey)
+  return auth
+}
+
+export const getMailjetKeys = async (publicKey, secretKey) => {
+  const response = await mailjetGet('apikey', publicKey, secretKey)
+  for (let i = 0; i < response.length; i++) {
+    if (response[i].APIKey === publicKey) {
+      return {
+        name: response[i].Name,
+        publicKey: response[i].APIKey,
+        secretKey: response[i].SecretKey,
+      }
+    }
+  }
+  return "Couldn't authenticate with those keys"
 }
 
 const getCampaigns = async (apikey) => {
@@ -98,8 +96,10 @@ export const getAllCampaigns = async (apikeys) => {
 export const getCampaignDetails = async (apikeys, id) => {
   const { publicKey, secretKey } = apikeys
   const details = await mailjetGet(`campaign/${id}`, publicKey, secretKey)
+  const content = await mailjetGet(`campaigndraft/${details[0].NewsLetterID}`, publicKey, secretKey)
   const listDetails = await mailjetGet(`contactslist/${details[0].ListID}`, publicKey, secretKey)
   details[0].ListName = listDetails[0].Name
+  details[0].Permalink = content[0].Url
   return details[0]
 }
 
@@ -139,7 +139,8 @@ export const getAllMessages = async (apikeys) => {
       messageID: messagesList[i].ID,
       status: messagesList[i].Status,
       ...campaignInformation,
-      ...contactInformation })
+      ...contactInformation
+    })
   }
   return messages
 }

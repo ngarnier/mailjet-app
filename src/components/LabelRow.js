@@ -8,7 +8,7 @@ export default class LabelRow extends React.Component {
     return (
       <View style={style.row}>
         <Text style={style.title}>{title}</Text>
-        <Text style={style.subtitle}>{subtitle}</Text>
+        {subtitle && (<Text style={style.subtitle}>{subtitle}</Text>)}
       </View>
     )
   }
@@ -19,7 +19,6 @@ const style = StyleSheet.create({
     backgroundColor: '#fff',
     paddingTop: 10,
     paddingRight: 20,
-    paddingBottom: 10,
     paddingLeft: 20,
   },
   title: {
@@ -30,5 +29,6 @@ const style = StyleSheet.create({
   },
   subtitle: {
     fontSize: 15,
+    paddingBottom: 10,
   }
 })
