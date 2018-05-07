@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { StyleSheet, ScrollView } from 'react-native'
+import { StyleSheet, ScrollView, View } from 'react-native'
 import LabelRow from '../../components/LabelRow'
 import StatsRow from '../../components/StatsRow'
 import Preview from '../../components/Preview'
@@ -25,6 +25,7 @@ export default function CampaignDetails({
       <LabelRow title="SUBJECT" subtitle={subject} />
       <LabelRow title="RECIPIENTS" subtitle={listName} />
       <LabelRow title="FROM" subtitle={`${fromName} (${fromEmail})`} />
+      <View style={{ borderBottomColor: '#ddd', borderBottomWidth: 1 }} />
       <StatsRow
         delivered={delivered}
         opened={opened}

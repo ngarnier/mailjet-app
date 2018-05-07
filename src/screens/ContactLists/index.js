@@ -26,7 +26,7 @@ const ContactsNavigator = StackNavigator({
   ListContacts: {
     screen: ListContacts,
     navigationOptions: ({ navigation }) => ({
-      title: `${navigation.state.params.Name}`,
+      title: `${navigation.state.params.name}`,
       headerStyle: {
         backgroundColor: '#ffbf40',
       },

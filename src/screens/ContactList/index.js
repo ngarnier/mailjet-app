@@ -55,7 +55,7 @@ export default class ContactList extends React.Component {
               opened={listStats.opened}
               clicked={listStats.clicked}
             />
-            <View style={style.row}>
+            <View style={[style.row, { borderTopColor: '#ddd', borderTopWidth: 1 }]}>
               <View style={[style.columns, { paddingBottom: 5 }]}>
                 <Text style={style.label}>Contacts</Text>
                 <Text style={style.figure}>{subscribers}</Text>

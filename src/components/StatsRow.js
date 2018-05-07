@@ -36,9 +36,6 @@ StatsRow.propTypes = {
 const style = StyleSheet.create({
   row: {
     backgroundColor: '#fff',
-    borderColor: '#ddd',
-    borderBottomWidth: 1,
-    borderTopWidth: 1,
     padding: 20,
   },
   columns: {

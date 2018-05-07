@@ -1,6 +1,8 @@
 import React from 'react'
 import { ScrollView, SafeAreaView, TouchableOpacity, View, StyleSheet } from 'react-native'
 import { connect } from 'react-redux'
+import FilterRow from '../../components/FilterRow'
+import CustomPicker from '../../components/Picker'
 import MessageRow from '../../components/MessageRow'
 import EmptyState from '../../components/EmptyState'
 import { getAllCampaigns } from '../../helpers/mailjet'
@@ -41,6 +43,7 @@ export default class Campaigns extends React.Component {
 
     return (
       <SafeAreaView style={style.container}>
+        <FilterRow />
         {campaigns.length > 0 ? (
           <ScrollView>
             {campaigns.map(e => (
@@ -72,6 +75,7 @@ export default class Campaigns extends React.Component {
             <EmptyState state="no-data" context="Campaigns" navigation={this.props.navigation} />
           </View>
         )}
+        <CustomPicker items={['sent', 'draft']} />
       </SafeAreaView>
     )
   }

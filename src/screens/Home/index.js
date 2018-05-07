@@ -5,13 +5,10 @@ import { Icon } from 'native-base'
 import MessagesNavigator from '../MessagesList'
 import CampaignsNavigator from '../Campaigns/'
 import ContactsNavigator from '../ContactLists'
-import { removeApiKey } from '../../actions/apikeys'
 
 @connect(state => ({
   apikeys: state.apikeys,
-}), {
-  removeApiKey,
-})
+}))
 
 export default class Home extends React.Component {
   render() {
