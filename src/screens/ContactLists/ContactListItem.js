@@ -12,9 +12,9 @@ export default function ContactListItem({
     <TouchableOpacity
       style={style.row}
       onPress={() => navigation.navigate('ContactList', {
-        ID: id,
-        Name: name,
-        SubscribersCount: subscribers,
+        id,
+        name,
+        subscribers,
       })}
     >
       <Text style={style.title}>{name}</Text>

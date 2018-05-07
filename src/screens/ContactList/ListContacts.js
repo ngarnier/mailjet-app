@@ -5,19 +5,6 @@ import { Content } from 'native-base'
 import EmptyState from '../../components/EmptyState'
 import { getListContacts } from '../../helpers/mailjet'
 
-const style = StyleSheet.create({
-  row: {
-    backgroundColor: '#fff',
-    borderColor: '#ddd',
-    borderBottomWidth: 1,
-    padding: 20,
-  },
-  label: {
-    fontSize: 16,
-    color: '#444',
-  },
-})
-
 @connect(state => ({
   apikeys: state.apikeys,
 }))
@@ -27,13 +14,13 @@ export default class ListContact extends React.Component {
 
   componentDidMount = async () => {
     const { apikeys } = this.props
-    const { Name } = this.props.navigation.state.params
+    const { name } = this.props.navigation.state.params
 
     this.setState({
       isLoading: true,
     })
 
-    const contacts = await getListContacts(apikeys.get(0), Name)
+    const contacts = await getListContacts(apikeys.get(0), name)
     this.setState({
       contacts: contacts.length > 0 ? contacts : false,
       isLoading: false,
@@ -63,3 +50,15 @@ export default class ListContact extends React.Component {
   }
 }
 
+const style = StyleSheet.create({
+  row: {
+    backgroundColor: '#fff',
+    borderColor: '#ddd',
+    borderBottomWidth: 1,
+    padding: 20,
+  },
+  label: {
+    fontSize: 16,
+    color: '#444',
+  },
+})

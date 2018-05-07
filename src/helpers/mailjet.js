@@ -138,6 +138,8 @@ export const getAllMessages = async (apikeys) => {
   const { publicKey, secretKey } = apikeys
   const d = getTS()
   const messages = []
+  const campaignIDs = []
+  const contactIDs = []
   const campaigns = []
   const contacts = []
   const messagesList = await mailjetGet('message', publicKey, secretKey, {
@@ -146,28 +148,26 @@ export const getAllMessages = async (apikeys) => {
     FromTS: d,
   })
   for (let i = 0; i < messagesList.length; i += 1) {
-    let campaignInformation = {}
-    let contactInformation = {}
-    const campaignIndex = campaigns.findIndex(campaign =>
+    const campaignID = messagesList[i].CampaignID
+    const contactID = messagesList[i].ContactID
+    const campaignAlreadyFetched = campaignIDs.find(id => id === campaignID)
+    if (!campaignAlreadyFetched) {
+      campaignIDs.push(campaignID)
+      campaigns.push(getMessageCampaignInformation(apikeys, messagesList[i].CampaignID))
+    }
+    const contactAlreadyFetched = contactIDs.find(id => id === contactID)
+    if (!contactAlreadyFetched) {
+      contactIDs.push(contactID)
+      contacts.push(getMessageContactInformation(apikeys, messagesList[i].ContactID))
+    }
+  }
+  const resolvedCampaigns = await Promise.all(campaigns)
+  const resolvedContacts = await Promise.all(contacts)
+  for (let i = 0; i < messagesList.length; i += 1) {
+    const campaignInformation = resolvedCampaigns.find(campaign =>
       campaign.campaignID === messagesList[i].CampaignID)
-    if (campaignIndex === -1) {
-      /* eslint-disable no-await-in-loop */
-      campaignInformation = await getMessageCampaignInformation(apikeys, messagesList[i].CampaignID)
-      /* eslint-enable */
-      campaigns.push(campaignInformation)
-    } else {
-      campaignInformation = campaigns[campaignIndex]
-    }
-    const contactIndex = contacts.findIndex(contact =>
+    const contactInformation = resolvedContacts.find(contact =>
       contact.contactID === messagesList[i].ContactID)
-    if (campaignIndex === -1) {
-      /* eslint-disable no-await-in-loop */
-      contactInformation = await getMessageContactInformation(apikeys, messagesList[i].ContactID)
-      /* eslint-enable */
-      contacts.push(contactInformation)
-    } else {
-      contactInformation = contacts[contactIndex]
-    }
     messages.push({
       messageID: messagesList[i].ID,
       status: messagesList[i].Status,
