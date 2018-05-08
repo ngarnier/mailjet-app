@@ -106,7 +106,34 @@ export const getAllCampaigns = async (apikeys, filter) => {
   return campaigns
 }
 
-export const getCampaignDetails = async (apikeys, id) => {
+export const getCampaignDetails = async (apikeys, id, status) => {
+  const { publicKey, secretKey } = apikeys
+  if (status === 'Sent') {
+    const details = await mailjetGet(`campaign/${id}`, publicKey, secretKey)
+    const content = await mailjetGet(`campaigndraft/${details[0].NewsLetterID}`, publicKey, secretKey)
+    const listDetails = await mailjetGet(`contactslist/${details[0].ListID}`, publicKey, secretKey)
+    return {
+      title: details[0].Title,
+      FromName: details[0].FromName,
+      FromEmail: details[0].FromEmail,
+      Subject: details[0].Subject,
+      ListName: listDetails[0].Name,
+      Permalink: content[0].Url,
+    }
+  }
+  const content = await mailjetGet(`campaigndraft/${id}`, publicKey, secretKey)
+  const listDetails = await mailjetGet(`contactslist/${content[0].ContactsListID}`, publicKey, secretKey)
+  return {
+    title: content[0].Title,
+    FromName: content[0].SenderName,
+    FromEmail: content[0].SenderEmail,
+    Subject: content[0].Subject,
+    ListName: listDetails[0].Name,
+    Permalink: content[0].Url,
+  }
+}
+
+export const getDraftCampaignDetails = async (apikeys, id) => {
   const { publicKey, secretKey } = apikeys
   const details = await mailjetGet(`campaign/${id}`, publicKey, secretKey)
   const content = await mailjetGet(`campaigndraft/${details[0].NewsLetterID}`, publicKey, secretKey)

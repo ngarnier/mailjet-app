@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { StyleSheet, ScrollView, View } from 'react-native'
+import { StyleSheet, ScrollView } from 'react-native'
 import LabelRow from '../../components/LabelRow'
 import StatsRow from '../../components/StatsRow'
 import Preview from '../../components/Preview'
@@ -15,22 +15,24 @@ export default function CampaignDetails({
   delivered,
   opened,
   clicked,
+  status,
 }) {
   return (
     <ScrollView style={style.container}>
       {permalink && (
         <Preview permalink={permalink} />
       )}
-      <LabelRow title="CAMPAIGN NAME" subtitle={title} />
-      <LabelRow title="SUBJECT" subtitle={subject} />
-      <LabelRow title="RECIPIENTS" subtitle={listName} />
-      <LabelRow title="FROM" subtitle={`${fromName} (${fromEmail})`} />
-      <View style={{ borderBottomColor: '#ddd', borderBottomWidth: 1 }} />
+      <LabelRow title="CAMPAIGN NAME" subtitle={title || 'Untitled Campaign'} />
+      <LabelRow title="SUBJECT" subtitle={subject || 'No subject specified'} />
+      <LabelRow title="RECIPIENTS" subtitle={listName || 'No list specified'} />
+      <LabelRow title="FROM" subtitle={fromEmail ? `${fromName} (${fromEmail})` : 'No sender specified'} />
+      {status === 'Sent' && (
       <StatsRow
         delivered={delivered}
         opened={opened}
         clicked={clicked}
       />
+      )}
     </ScrollView>
   )
 }
@@ -45,6 +47,7 @@ CampaignDetails.propTypes = {
   delivered: PropTypes.string.isRequired,
   opened: PropTypes.string.isRequired,
   clicked: PropTypes.string.isRequired,
+  status: PropTypes.string.isRequired,
 }
 
 const style = StyleSheet.create({

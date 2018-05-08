@@ -32,7 +32,6 @@ export default class FilterRow extends React.Component {
 }
 
 FilterRow.propTypes = {
-  modals: PropTypes.arrayOf.isRequired,
   showModalConnected: PropTypes.func.isRequired,
   filter: PropTypes.string.isRequired,
 }

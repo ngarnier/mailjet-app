@@ -15,17 +15,17 @@ export default class Campaign extends React.Component {
   componentDidMount = async () => {
     const { apikeys } = this.props
     const {
-      id, title, delivered, opened, clicked,
+      id, title, delivered, opened, clicked, status,
     } = this.props.navigation.state.params
 
     this.setState({
       isLoading: true,
     })
 
-    const campaignDetails = await getCampaignDetails(apikeys.get(0), id)
+    const campaignDetails = await getCampaignDetails(apikeys.get(0), id, status)
     this.setState({
       campaignDetails: {
-        ...campaignDetails, title, delivered, opened, clicked,
+        ...campaignDetails, title, delivered, opened, clicked, status,
       },
       isLoading: false,
     })
@@ -48,6 +48,7 @@ export default class Campaign extends React.Component {
             delivered={campaignDetails.delivered}
             opened={campaignDetails.opened}
             clicked={campaignDetails.clicked}
+            status={campaignDetails.status}
           />
         ) : isLoading ? (
           <EmptyState state="loading" context="Campaign details" />

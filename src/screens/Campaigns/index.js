@@ -1,10 +1,10 @@
 import { StackNavigator } from 'react-navigation'
-import CampaignsList from './CampaignsList'
+import Campaigns from './Campaigns'
 import Campaign from '../Campaign'
 
 const CampaignsNavigator = StackNavigator({
   Campaigns: {
-    screen: CampaignsList,
+    screen: Campaigns,
     navigationOptions: {
       title: 'Campaigns',
       headerStyle: {

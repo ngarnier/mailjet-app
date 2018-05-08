@@ -38,7 +38,7 @@ export default class ContactList extends React.Component {
             <View style={style.row}>
               <Text style={style.title}>{name}</Text>
             </View>
-            <View style={[style.row, style.columns]}>
+            <View style={[style.row, style.columns, { borderBottomWidth: 0 }]}>
               <View>
                 <Text style={style.label}>Contacts</Text>
                 <Text style={style.title}>{subscribers}</Text>

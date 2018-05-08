@@ -1,26 +1,17 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { ScrollView, SafeAreaView, TouchableOpacity, View, StyleSheet } from 'react-native'
+import { FlatList, TouchableOpacity, View, StyleSheet } from 'react-native'
 import { connect } from 'react-redux'
-import FilterRow from '../../components/FilterRow'
-import Picker from '../../components/Picker'
 import MessageRow from '../../components/MessageRow'
 import EmptyState from '../../components/EmptyState'
 import { getAllCampaigns } from '../../helpers/mailjet'
-
-const style = StyleSheet.create({
-  container: {
-    height: '100%',
-    backgroundColor: '#f6f6f6',
-  },
-})
 
 @connect(state => ({
   apikeys: state.apikeys,
   filters: state.filters,
 }))
 
-export default class CampaignsList extends React.Component {
+export default class Campaigns extends React.Component {
   state = {
     campaigns: [],
     isLoading: false,
@@ -33,8 +24,7 @@ export default class CampaignsList extends React.Component {
       isLoading: true,
     })
 
-    const filter = filters.campaigns
-    const campaigns = await getAllCampaigns(apikeys.get(0), filter)
+    const campaigns = await getAllCampaigns(apikeys.get(0), filters.campaigns)
     this.setState({
       campaigns,
       isLoading: false,
@@ -47,8 +37,7 @@ export default class CampaignsList extends React.Component {
 
   componentDidUpdate = async () => {
     const { apikeys, filters } = this.props
-    const filter = filters.campaigns
-    const campaigns = await getAllCampaigns(apikeys.get(0), filter)
+    const campaigns = await getAllCampaigns(apikeys.get(0), filters.campaigns)
     this.setState({
       campaigns,
       isLoading: false,
@@ -57,33 +46,35 @@ export default class CampaignsList extends React.Component {
 
   render() {
     const { campaigns, isLoading } = this.state
-    const { filters } = this.props
+    const { navigation } = this.props
 
     return (
-      <SafeAreaView style={style.container}>
-        <FilterRow filter={filters.campaigns} />
+      <View style={style.container}>
         {campaigns.length > 0 ? (
-          <ScrollView>
-            {campaigns.map(e => (
+          <FlatList
+            data={campaigns}
+            keyExtractor={(item, index) => index}
+            renderItem={({ item }) => (
               <TouchableOpacity
-                key={e.id}
-                onPress={() => this.props.navigation.navigate('Campaign', {
-                  id: e.id,
-                  title: e.title,
-                  delivered: e.delivered,
-                  opened: e.opened,
-                  clicked: e.clicked,
+                onPress={() => navigation.navigate('Campaign', {
+                  id: item.id,
+                  title: item.title,
+                  delivered: item.delivered,
+                  opened: item.opened,
+                  clicked: item.clicked,
+                  status: item.status,
                 })}
               >
                 <MessageRow
-                  title={e.title}
-                  subtitle={e.subject}
-                  status={e.status}
-                  date={e.date}
-                  navigation={this.props.navigation}
+                  title={item.title}
+                  subtitle={item.subject}
+                  status={item.status}
+                  date={item.date}
+                  navigation={navigation}
                 />
-              </TouchableOpacity>))}
-          </ScrollView>
+              </TouchableOpacity>
+            )}
+          />
         ) : isLoading ? (
           <View>
             <EmptyState state="loading" context="Campaigns" />
@@ -93,12 +84,18 @@ export default class CampaignsList extends React.Component {
             <EmptyState state="no-data" context="Campaigns" navigation={this.props.navigation} />
           </View>
             )}
-        <Picker context="campaigns" />
-      </SafeAreaView>
+      </View>
     )
   }
 }
 
-CampaignsList.propTypes = {
+Campaigns.propTypes = {
   filters: PropTypes.string.isRequired,
 }
+
+const style = StyleSheet.create({
+  container: {
+    height: '100%',
+    backgroundColor: '#f6f6f6',
+  },
+})
