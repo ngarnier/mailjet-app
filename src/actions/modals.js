@@ -1,13 +1,9 @@
-export const showModal = (key) => {
-  return {
-    type: 'MODAL_SHOW',
-    key,
-  }
-}
+export const showModal = key => ({
+  type: 'MODAL_SHOW',
+  key,
+})
 
-export function hideModal(key) {
-  return {
-    type: 'MODAL_HIDE',
-    key,
-  }
-}
+export const hideModal = key => ({
+  type: 'MODAL_HIDE',
+  key,
+})

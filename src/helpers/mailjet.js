@@ -61,21 +61,30 @@ export const getMailjetKeys = async (publicKey, secretKey) => {
   return "Couldn't authenticate with those keys"
 }
 
-const getCampaigns = async (apikey) => {
+const getCampaigns = async (apikey, filter) => {
   const { publicKey, secretKey } = apikey
-  return mailjetGet('campaignoverview', publicKey, secretKey, {
-    Limit,
-    IDType: 'Campaign',
-  })
+  let res
+  if (filter === 'Drafts') {
+    res = await mailjetGet('campaignoverview', publicKey, secretKey, {
+      Limit,
+      Drafts: true,
+    })
+  } else {
+    res = await mailjetGet('campaignoverview', publicKey, secretKey, {
+      Limit,
+      IDType: 'Campaign',
+    })
+  }
+  return res
 }
 
-export const getAllCampaigns = async (apikeys) => {
+export const getAllCampaigns = async (apikeys, filter) => {
   const campaigns = []
-  const keyData = await getCampaigns(apikeys)
+  const keyData = await getCampaigns(apikeys, filter)
   keyData.sort((a, b) => b.SendTimeStart - a.SendTimeStart)
   /* eslint-disable array-callback-return */
   keyData.map((e) => {
-    const status = e.SendTimeStart > 0 ? 'Sent' : 'Draft'
+    const status = e.ProcessedCount > 0 ? 'Sent' : 'Draft'
     const timestamp = e.SendTimeStart
     let date
     if (timestamp > 0) {

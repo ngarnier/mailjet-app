@@ -1,6 +1,4 @@
-/* eslint-disable import/prefer-default-export */
-
-export const modals = (state = { campaigns: false }, action) => {
+export default function modals(state = { campaigns: false }, action) {
   switch (action.type) {
     case 'MODAL_SHOW': {
       return { [action.key]: true }

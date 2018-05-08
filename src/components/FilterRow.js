@@ -1,40 +1,40 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { View, Text, StyleSheet } from 'react-native'
 import { Icon } from 'native-base'
 import { showModal } from '../actions/modals'
 
-@connect(state => ({
-  modals: state.modals,
-}), {
-  showModal,
+@connect(null, {
+  showModalConnected: showModal,
 })
 
 export default class FilterRow extends React.Component {
-  state = {
-    type: 'Sent',
-  }
-
   render() {
-    const { type } = this.state
-    const { modals, showModal } = this.props
+    const { showModalConnected, filter } = this.props
     return (
       <View style={style.row}>
         <Icon
           name="sort"
           type="MaterialIcons"
           style={style.icon}
-          onPress={showModal}
+          onPress={showModalConnected}
         />
         <Text
-          style={style.type}
-          onPress={showModal}
+          style={style.filter}
+          onPress={showModalConnected}
         >
-          {type}
+          {filter}
         </Text>
       </View>
     )
   }
+}
+
+FilterRow.propTypes = {
+  modals: PropTypes.arrayOf.isRequired,
+  showModalConnected: PropTypes.func.isRequired,
+  filter: PropTypes.string.isRequired,
 }
 
 const style = StyleSheet.create({
@@ -50,7 +50,7 @@ const style = StyleSheet.create({
     color: '#fda836',
     marginRight: 10,
   },
-  type: {
+  filter: {
     fontSize: 16,
     color: '#fda836',
   },

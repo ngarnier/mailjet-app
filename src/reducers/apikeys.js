@@ -1,8 +1,6 @@
 import { List } from 'immutable'
 
-/* eslint-disable import/prefer-default-export */
-
-export const apikeys = (state = List(), action) => {
+export default function apikeys(state = List(), action) {
   switch (action.type) {
     case 'APIKEYS_LOAD_SUCCESS':
       return action.key

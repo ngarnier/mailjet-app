@@ -1,5 +1,6 @@
 import React from 'react'
-import { Modal, Text, TouchableHighlight, View, StyleSheet } from 'react-native'
+import PropTypes from 'prop-types'
+import { Modal, Text, View, StyleSheet } from 'react-native'
 import { connect } from 'react-redux'
 import { Icon } from 'native-base'
 import ModalPick from './ModalPick'
@@ -8,41 +9,41 @@ import { hideModal } from '../actions/modals'
 @connect(state => ({
   modals: state.modals,
 }), {
-    hideModal,
-  })
+  hideModalConnect: hideModal,
+})
 
-export default class ModalExample extends React.Component {
-  state = {
-    modalVisible: false,
-  };
-
-  setModalVisible(visible) {
-    this.setState({ modalVisible: visible })
-  }
-
+export default class Picker extends React.Component {
   render() {
-    const { modals, hideModal } = this.props
+    const { modals, hideModalConnect, context } = this.props
     return (
       <Modal
         animationType="slide"
-        visible={modals.campaigns}
+        visible={modals[context]}
       >
         <View style={style.modal}>
           <View style={style.titleRow}>
-            <Text style={style.title}>Campaigns</Text>
+            <Text style={style.title}>{context}</Text>
             <Icon
               name="close"
-              onPress={() => hideModal('campaigns')}
+              onPress={() => hideModalConnect(context)}
               style={{ color: '#999' }}
             />
           </View>
           <View>
-            {['Drafts', 'Sent'].map(e => (<ModalPick status={e} state="active" />))}
+            {context === 'campaigns' && (
+              ['Drafts', 'Sent'].map(e => (<ModalPick context={context} filter={e} />))
+            )}
           </View>
         </View>
       </Modal>
     )
   }
+}
+
+Picker.propTypes = {
+  modals: PropTypes.arrayOf.isRequired,
+  hideModalConnect: PropTypes.func.isRequired,
+  context: PropTypes.string.isRequired,
 }
 
 const style = StyleSheet.create({
