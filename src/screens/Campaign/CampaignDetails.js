@@ -42,12 +42,16 @@ CampaignDetails.propTypes = {
   subject: PropTypes.string.isRequired,
   fromName: PropTypes.string.isRequired,
   fromEmail: PropTypes.string.isRequired,
-  listName: PropTypes.string.isRequired,
+  listName: PropTypes.string,
   permalink: PropTypes.string.isRequired,
-  delivered: PropTypes.string.isRequired,
+  delivered: PropTypes.number.isRequired,
   opened: PropTypes.string.isRequired,
   clicked: PropTypes.string.isRequired,
   status: PropTypes.string.isRequired,
+}
+
+CampaignDetails.defaultProps = {
+  listName: null,
 }
 
 const style = StyleSheet.create({

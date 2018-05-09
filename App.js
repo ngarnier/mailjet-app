@@ -4,7 +4,6 @@ import thunk from 'redux-thunk'
 import { createStore, applyMiddleware } from 'redux'
 import { StyleProvider } from 'native-base'
 import Home from './src/screens/Home'
-import Login from './src/screens/Login'
 import reducer from './src/reducers/index'
 import { loadApiKeys } from './src/actions/apikeys'
 import getTheme from './src/native-base-theme/components'
@@ -17,11 +16,10 @@ async function boot() {
 boot()
 
 export default function App() {
-  const apikeys = store.getState('apikeys').apikeys.get(0)
   return (
     <Provider store={store}>
       <StyleProvider style={getTheme(commonColor)}>
-        {apikeys ? (<Home />) : <Login />}
+        <Home />
       </StyleProvider>
     </Provider>
   )

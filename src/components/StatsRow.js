@@ -28,7 +28,7 @@ export default function StatsRow({ delivered, opened, clicked }) {
 }
 
 StatsRow.propTypes = {
-  delivered: PropTypes.string.isRequired,
+  delivered: PropTypes.number.isRequired,
   opened: PropTypes.string.isRequired,
   clicked: PropTypes.string.isRequired,
 }

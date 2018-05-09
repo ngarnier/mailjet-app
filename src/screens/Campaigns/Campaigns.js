@@ -7,11 +7,14 @@ import Picker from '../../components/Picker'
 import CampaignsList from './CampaignsList'
 
 @connect(state => ({
-  apikeys: state.apikeys,
   filters: state.filters,
 }))
 
 export default class Campaigns extends React.Component {
+  static propTypes = {
+    filters: PropTypes.objectOf(PropTypes.string).isRequired,
+  }
+
   render() {
     const { filters, navigation } = this.props
 
@@ -23,10 +26,6 @@ export default class Campaigns extends React.Component {
       </SafeAreaView>
     )
   }
-}
-
-Campaigns.propTypes = {
-  filters: PropTypes.string.isRequired,
 }
 
 const style = StyleSheet.create({

@@ -14,6 +14,14 @@ import { hideModal } from '../actions/modals'
 })
 
 export default class ModalPick extends React.Component {
+  static propTypes = {
+    context: PropTypes.string.isRequired,
+    filter: PropTypes.string.isRequired,
+    filters: PropTypes.objectOf(PropTypes.string).isRequired,
+    setFilterConnect: PropTypes.func.isRequired,
+    hideModalConnect: PropTypes.func.isRequired,
+  }
+
   handleFilter = (filter) => {
     const { setFilterConnect, hideModalConnect, context } = this.props
     setFilterConnect(context, filter)
@@ -32,27 +40,27 @@ export default class ModalPick extends React.Component {
           <View style={style.row}>
             <View style={style.rowStart}>
               {filter === 'Sent' && (
-                <Icon name="check" type="MaterialCommunityIcons" style={style.icon} />
+                <Icon
+                  name="check"
+                  type="MaterialCommunityIcons"
+                  style={filters[context] === filter ? [style.icon, style.active] : style.icon}
+                />
               )}
               {filter === 'Drafts' && (
-                <Icon name="pencil" type="MaterialCommunityIcons" style={style.icon} />
+                <Icon
+                  name="pencil"
+                  type="MaterialCommunityIcons"
+                  style={filters[context] === filter ? [style.icon, style.active] : style.icon}
+                />
               )}
               <Text style={style.filter}>{filter}</Text>
             </View>
-            {filters[context] === filter && <Icon name="checkmark" />}
+            {filters[context] === filter && <Icon name="checkmark" style={style.active} />}
           </View>
         )}
       </TouchableHighlight>
     )
   }
-}
-
-ModalPick.propTypes = {
-  context: PropTypes.string.isRequired,
-  filter: PropTypes.string.isRequired,
-  filters: PropTypes.arrayOf.isRequired,
-  setFilterConnect: PropTypes.func.isRequired,
-  hideModalConnect: PropTypes.func.isRequired,
 }
 
 const style = StyleSheet.create({
@@ -74,6 +82,9 @@ const style = StyleSheet.create({
   filter: {
     marginLeft: 10,
     fontSize: 16,
+  },
+  active: {
+    color: '#fda836',
   },
 })
 

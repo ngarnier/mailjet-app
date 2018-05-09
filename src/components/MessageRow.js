@@ -28,7 +28,11 @@ MessageRow.propTypes = {
   title: PropTypes.string.isRequired,
   subtitle: PropTypes.string.isRequired,
   status: PropTypes.string.isRequired,
-  date: PropTypes.string.isRequired,
+  date: PropTypes.string,
+}
+
+MessageRow.defaultProps = {
+  date: null,
 }
 
 const style = StyleSheet.create({

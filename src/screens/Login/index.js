@@ -40,6 +40,10 @@ const style = StyleSheet.create({
 )
 
 export default class Login extends React.Component {
+  static propTypes = {
+    addApiKey: PropTypes.func.isRequired,
+  }
+
   state = {
     publicKey: '',
     secretKey: '',
@@ -134,8 +138,4 @@ export default class Login extends React.Component {
       </Container>
     )
   }
-}
-
-Login.propTypes = {
-  addApiKey: PropTypes.string.isRequired,
 }

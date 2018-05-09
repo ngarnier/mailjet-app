@@ -13,6 +13,12 @@ import { hideModal } from '../actions/modals'
 })
 
 export default class Picker extends React.Component {
+  static propTypes = {
+    modals: PropTypes.objectOf(PropTypes.bool).isRequired,
+    hideModalConnect: PropTypes.func.isRequired,
+    context: PropTypes.string.isRequired,
+  }
+
   render() {
     const { modals, hideModalConnect, context } = this.props
     return (
@@ -29,21 +35,16 @@ export default class Picker extends React.Component {
               style={{ color: '#999' }}
             />
           </View>
-          <View>
-            {context === 'campaigns' && (
-              ['Drafts', 'Sent'].map(e => (<ModalPick context={context} filter={e} />))
-            )}
-          </View>
+          {context === 'campaigns' && (
+            <View>
+              <ModalPick context={context} filter="Drafts" />
+              <ModalPick context={context} filter="Sent" />
+            </View>
+          )}
         </View>
       </Modal>
     )
   }
-}
-
-Picker.propTypes = {
-  modals: PropTypes.arrayOf.isRequired,
-  hideModalConnect: PropTypes.func.isRequired,
-  context: PropTypes.string.isRequired,
 }
 
 const style = StyleSheet.create({

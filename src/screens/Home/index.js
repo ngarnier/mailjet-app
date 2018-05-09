@@ -1,20 +1,31 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { TabNavigator, TabBarBottom } from 'react-navigation'
 import { Icon } from 'native-base'
 import MessagesNavigator from '../MessagesList'
 import CampaignsNavigator from '../Campaigns/'
 import ContactsNavigator from '../ContactLists'
+import Login from '../Login'
 
 @connect(state => ({
   apikeys: state.apikeys,
 }))
 
 export default class Home extends React.Component {
+  static propTypes = {
+    apikeys: PropTypes.objectOf(PropTypes.any),
+  }
+
+  static defaultProps = {
+    apikeys: [],
+  }
   render() {
-    return (
-      <CustomTabs />
-    )
+    const { apikeys } = this.props
+    if (apikeys.get(0)) {
+      return <CustomTabs />
+    }
+    return <Login />
   }
 }
 
@@ -43,11 +54,14 @@ const CustomTabs = TabNavigator({
   tabBarComponent: TabBarBottom,
   tabBarPosition: 'bottom',
   tabBarOptions: {
-    activeTintColor: '#de980f',
-    inactiveTintColor: '#747579',
+    activeTintColor: '#333',
+    inactiveTintColor: '#9a9b9f',
     showIcon: true,
     labelStyle: {
       fontSize: 12,
+    },
+    style: {
+      backgroundColor: '#fefefe',
     },
   },
 })

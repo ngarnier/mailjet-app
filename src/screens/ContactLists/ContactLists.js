@@ -5,13 +5,6 @@ import ContactListItem from './ContactListItem'
 import EmptyState from '../../components/EmptyState'
 import { getLists } from '../../helpers/mailjet'
 
-const style = StyleSheet.create({
-  container: {
-    height: '100%',
-    backgroundColor: '#f6f6f6',
-  },
-})
-
 @connect(state => ({
   apikeys: state.apikeys,
 }))
@@ -63,3 +56,9 @@ export default class ContactLists extends React.Component {
   }
 }
 
+const style = StyleSheet.create({
+  container: {
+    height: '100%',
+    backgroundColor: '#f6f6f6',
+  },
+})

@@ -11,7 +11,11 @@ import { getAllCampaigns } from '../../helpers/mailjet'
   filters: state.filters,
 }))
 
-export default class Campaigns extends React.Component {
+export default class CampaignsList extends React.Component {
+  static propTypes = {
+    filters: PropTypes.objectOf(PropTypes.string).isRequired,
+  }
+
   state = {
     campaigns: [],
     isLoading: false,
@@ -53,7 +57,7 @@ export default class Campaigns extends React.Component {
         {campaigns.length > 0 ? (
           <FlatList
             data={campaigns}
-            keyExtractor={(item, index) => index}
+            keyExtractor={(item, index) => index.toString()}
             renderItem={({ item }) => (
               <TouchableOpacity
                 onPress={() => navigation.navigate('Campaign', {
@@ -87,10 +91,6 @@ export default class Campaigns extends React.Component {
       </View>
     )
   }
-}
-
-Campaigns.propTypes = {
-  filters: PropTypes.string.isRequired,
 }
 
 const style = StyleSheet.create({

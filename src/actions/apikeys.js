@@ -6,10 +6,8 @@ export const addApiKey = (name, publicKey, secretKey) => async (dispatch) => {
   let duplicate = false
   /* eslint-disable array-callback-return */
   keys.map((k) => {
-    if (k.publicKey !== publicKey) {
+    if (k.publicKey === publicKey) {
       duplicate = true
-    } else {
-      // handle the error
     }
   })
   /* eslint-enable */

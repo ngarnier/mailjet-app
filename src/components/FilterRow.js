@@ -10,6 +10,11 @@ import { showModal } from '../actions/modals'
 })
 
 export default class FilterRow extends React.Component {
+  static propTypes = {
+    showModalConnected: PropTypes.func.isRequired,
+    filter: PropTypes.string.isRequired,
+  }
+
   render() {
     const { showModalConnected, filter } = this.props
     return (
@@ -29,11 +34,6 @@ export default class FilterRow extends React.Component {
       </View>
     )
   }
-}
-
-FilterRow.propTypes = {
-  showModalConnected: PropTypes.func.isRequired,
-  filter: PropTypes.string.isRequired,
 }
 
 const style = StyleSheet.create({

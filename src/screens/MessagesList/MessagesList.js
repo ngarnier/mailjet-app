@@ -1,23 +1,18 @@
 import React from 'react'
-import { ScrollView, View, StyleSheet } from 'react-native'
+import { SafeAreaView, FlatList, View, StyleSheet } from 'react-native'
 import { connect } from 'react-redux'
 import MessageRow from '../../components/MessageRow'
 import EmptyState from '../../components/EmptyState'
 import { getAllMessages } from '../../helpers/mailjet'
-
-const style = StyleSheet.create({
-  container: {
-    height: '100%',
-    backgroundColor: '#f6f6f6',
-  },
-})
 
 @connect(state => ({
   apikeys: state.apikeys,
 }))
 
 export default class MessagesList extends React.Component {
-  state = {}
+  state = {
+    messages: [],
+  }
 
   componentDidMount = async () => {
     const { apikeys } = this.props
@@ -36,29 +31,37 @@ export default class MessagesList extends React.Component {
   render() {
     const { messages, isLoading } = this.state
     return (
-      <ScrollView style={style.container}>
-        {messages && (
-          <ScrollView>
-            {messages.map(e => (
+      <SafeAreaView style={style.container}>
+        {messages.length > 0 ? (
+          <FlatList
+            data={messages}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={({ item }) => (
               <MessageRow
-                title={e.subject}
-                subtitle={`From: ${e.fromName} (${e.fromEmail})\nTo: ${e.toEmail}\nSent on ${e.sentAt}`}
-                status={e.status}
-                key={e.messageID}
-              />))}
-          </ScrollView>
-        )}
-        {isLoading && (
+                title={item.subject}
+                subtitle={`From: ${item.fromName} (${item.fromEmail})\nTo: ${item.toEmail}\nSent on ${item.sentAt}`}
+                status={item.status}
+              />
+            )}
+          />
+        ) : isLoading ? (
           <View>
             <EmptyState state="loading" context="Messages" />
           </View>
-        )}
-        {!messages && !isLoading && (
+        ) : !messages && !isLoading && (
           <View>
             <EmptyState state="no-data" context="Messages" navigation={this.props.navigation} />
           </View>
         )}
-      </ScrollView>
+      </SafeAreaView>
     )
   }
 }
+
+const style = StyleSheet.create({
+  container: {
+    height: '100%',
+    backgroundColor: '#f6f6f6',
+  },
+})
+

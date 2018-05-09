@@ -35,7 +35,7 @@ export default class Campaign extends React.Component {
     const { campaignDetails, isLoading } = this.state
 
     return (
-      <View>
+      <View style={{ flex: 1 }}>
         {campaignDetails ? (
           <CampaignDetails
             campaignDetails={campaignDetails}

@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, WebView, StyleSheet } from 'react-native'
+import { View, WebView, StyleSheet, Dimensions } from 'react-native'
 import PropTypes from 'prop-types'
 import { Icon } from 'native-base'
 import LabelRow from './LabelRow'
@@ -31,14 +31,14 @@ export default class Preview extends React.Component {
     }
 
     return (
-      <View style={style.preview}>
+      <View style={{ height: isFullSize ? Dimensions.get('window').height - 180 : Dimensions.get('window').height / 2 }}>
         <LabelRow title="CONTENT" />
         <View style={style.topView} />
         <WebView
           ref={(c) => { this.nav = c }}
           source={{ uri: permalink }}
           mixedContentMode="always"
-          style={{ height: isFullSize ? 600 : 300, width: '100%', marginBottom: 10 }}
+          style={{ width: '100%', marginBottom: 10 }}
           onNavigationStateChange={handleNavigation}
           startInLoadingState
         />
@@ -47,8 +47,8 @@ export default class Preview extends React.Component {
             name="arrow-back"
             onPress={goBack}
             style={{
- opacity: canGoBack ? '100' : '0', fontSize: 36, color: '#555', marginLeft: 10,
-}}
+              opacity: canGoBack ? 100 : 0, fontSize: 36, color: '#555', marginLeft: 10,
+            }}
           />
           <Icon
             name={isFullSize ? 'fullscreen-exit' : 'fullscreen'}
