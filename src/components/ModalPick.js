@@ -34,9 +34,8 @@ export default class ModalPick extends React.Component {
       <TouchableHighlight
         onPress={() => this.handleFilter(filter)}
         underlayColor="#fafafa"
-        style={style.highlight}
       >
-        {context === 'campaigns' && (
+        {context === 'campaigns' ? (
           <View style={style.row}>
             <View style={style.rowStart}>
               {filter === 'Sent' && (
@@ -53,7 +52,22 @@ export default class ModalPick extends React.Component {
                   style={filters[context] === filter ? [style.icon, style.active] : style.icon}
                 />
               )}
-              <Text style={style.filter}>{filter}</Text>
+              <Text
+                style={filters[context] === filter ? [style.filter, style.active] : style.filter}
+              >
+                {filter}
+              </Text>
+            </View>
+            {filters[context] === filter && <Icon name="checkmark" style={style.active} />}
+          </View>
+        ) : (
+          <View style={style.row}>
+            <View style={style.rowStart}>
+              <Text
+                style={filters[context] === filter ? [style.filter, style.active] : style.filter}
+              >
+                {filter}
+              </Text>
             </View>
             {filters[context] === filter && <Icon name="checkmark" style={style.active} />}
           </View>
@@ -64,24 +78,24 @@ export default class ModalPick extends React.Component {
 }
 
 const style = StyleSheet.create({
-  highlight: {
-    height: 26,
-  },
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    height: 32,
   },
   rowStart: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   icon: {
-    fontSize: 18,
+    fontSize: 20,
+    color: '#444',
   },
   filter: {
     marginLeft: 10,
-    fontSize: 16,
+    fontSize: 18,
+    color: '#222',
   },
   active: {
     color: '#fda836',

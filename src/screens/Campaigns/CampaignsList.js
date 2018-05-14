@@ -8,12 +8,12 @@ import { getAllCampaigns } from '../../helpers/mailjet'
 
 @connect(state => ({
   apikeys: state.apikeys,
-  filters: state.filters,
+  filter: state.filters.campaigns,
 }))
 
 export default class CampaignsList extends React.Component {
   static propTypes = {
-    filters: PropTypes.objectOf(PropTypes.string).isRequired,
+    filter: PropTypes.objectOf(PropTypes.string).isRequired,
   }
 
   state = {
@@ -22,26 +22,28 @@ export default class CampaignsList extends React.Component {
   }
 
   componentDidMount = async () => {
-    const { apikeys, filters } = this.props
+    const { apikeys, filter } = this.props
 
     this.setState({
       isLoading: true,
     })
 
-    const campaigns = await getAllCampaigns(apikeys.get(0), filters.campaigns)
+    const campaigns = await getAllCampaigns(apikeys.get(0), filter)
     this.setState({
       campaigns,
       isLoading: false,
     })
   }
 
-  shouldComponentUpdate(nextProps) {
-    return nextProps.filters.campaigns === this.props.filters.campaigns
-  }
+  // shouldComponentUpdate(nextProps) {
+  //   console.log(this.props.filters.campaigns)
+  //   console.log(nextProps.filters.campaigns)
+  //   return nextProps.filters.campaigns !== this.props.filters.campaigns
+  // }
 
   componentDidUpdate = async () => {
-    const { apikeys, filters } = this.props
-    const campaigns = await getAllCampaigns(apikeys.get(0), filters.campaigns)
+    const { apikeys, filter } = this.props
+    const campaigns = await getAllCampaigns(apikeys.get(0), filter)
     this.setState({
       campaigns,
       isLoading: false,

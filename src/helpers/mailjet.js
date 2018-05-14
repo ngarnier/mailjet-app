@@ -170,7 +170,7 @@ const getMessageContactInformation = async (apikeys, contactID) => {
   return information
 }
 
-export const getAllMessages = async (apikeys) => {
+export const getAllMessages = async (apikeys, statusFilter = 'All') => {
   const { publicKey, secretKey } = apikeys
   const d = getTS()
   const messages = []
@@ -178,11 +178,20 @@ export const getAllMessages = async (apikeys) => {
   const contactIDs = []
   const campaigns = []
   const contacts = []
-  const messagesList = await mailjetGet('message', publicKey, secretKey, {
-    Limit,
-    FromType: 'Transactional',
-    FromTS: d,
-  })
+  console.log('mailjet call doing')
+  const messagesList = statusFilter === 'All' ?
+    await mailjetGet('message', publicKey, secretKey, {
+      Limit,
+      FromType: 'Transactional',
+      FromTS: d,
+    }) :
+    await mailjetGet('message', publicKey, secretKey, {
+      Limit,
+      FromType: 'Transactional',
+      FromTS: d,
+      MessageStatus: statusFilter,
+    })
+  console.log('mailjet call done')
   for (let i = 0; i < messagesList.length; i += 1) {
     const campaignID = messagesList[i].CampaignID
     const contactID = messagesList[i].ContactID

@@ -1,5 +1,6 @@
 import React from 'react'
-import { SafeAreaView, FlatList, View, StyleSheet } from 'react-native'
+import PropTypes from 'prop-types'
+import { FlatList, View } from 'react-native'
 import { connect } from 'react-redux'
 import MessageRow from '../../components/MessageRow'
 import EmptyState from '../../components/EmptyState'
@@ -7,23 +8,37 @@ import { getAllMessages } from '../../helpers/mailjet'
 
 @connect(state => ({
   apikeys: state.apikeys,
+  filters: state.filters,
 }))
 
 export default class MessagesList extends React.Component {
+  static propTypes = {
+    filters: PropTypes.objectOf(PropTypes.string).isRequired,
+  }
+
   state = {
     messages: [],
   }
 
   componentDidMount = async () => {
-    const { apikeys } = this.props
+    const { apikeys, filters } = this.props
 
     this.setState({
       isLoading: true,
     })
 
-    const messages = await getAllMessages(apikeys.get(0))
+    const messages = await getAllMessages(apikeys.get(0), filters.messages)
     this.setState({
       messages: messages.length > 0 ? messages.reverse() : false,
+      isLoading: false,
+    })
+  }
+
+  componentDidUpdate = async () => {
+    const { apikeys, filters } = this.props
+    const messages = await getAllMessages(apikeys.get(0), filters.messages)
+    this.setState({
+      messages,
       isLoading: false,
     })
   }
@@ -31,7 +46,7 @@ export default class MessagesList extends React.Component {
   render() {
     const { messages, isLoading } = this.state
     return (
-      <SafeAreaView style={style.container}>
+      <View>
         {messages.length > 0 ? (
           <FlatList
             data={messages}
@@ -48,20 +63,13 @@ export default class MessagesList extends React.Component {
           <View>
             <EmptyState state="loading" context="Messages" />
           </View>
-        ) : !messages && !isLoading && (
+        ) : (
           <View>
-            <EmptyState state="no-data" context="Messages" navigation={this.props.navigation} />
+            <EmptyState state="no-data" context="Messages" />
           </View>
-        )}
-      </SafeAreaView>
+            )}
+      </View>
     )
   }
 }
-
-const style = StyleSheet.create({
-  container: {
-    height: '100%',
-    backgroundColor: '#f6f6f6',
-  },
-})
 

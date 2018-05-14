@@ -13,21 +13,22 @@ export default class FilterRow extends React.Component {
   static propTypes = {
     showModalConnected: PropTypes.func.isRequired,
     filter: PropTypes.string.isRequired,
+    context: PropTypes.string.isRequired,
   }
 
   render() {
-    const { showModalConnected, filter } = this.props
+    const { showModalConnected, filter, context } = this.props
     return (
       <View style={style.row}>
         <Icon
-          name="sort"
-          type="MaterialIcons"
+          name="sliders"
+          type="FontAwesome"
           style={style.icon}
-          onPress={showModalConnected}
+          onPress={() => showModalConnected(context)}
         />
         <Text
           style={style.filter}
-          onPress={showModalConnected}
+          onPress={() => showModalConnected(context)}
         >
           {filter}
         </Text>
@@ -48,9 +49,10 @@ const style = StyleSheet.create({
   icon: {
     color: '#fda836',
     marginRight: 10,
+    fontSize: 22,
   },
   filter: {
-    fontSize: 16,
+    fontSize: 18,
     color: '#fda836',
   },
 })

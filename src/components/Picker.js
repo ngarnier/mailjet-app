@@ -41,6 +41,18 @@ export default class Picker extends React.Component {
               <ModalPick context={context} filter="Sent" />
             </View>
           )}
+          {context === 'messages' && (
+            <View>
+              <ModalPick context={context} filter="All" />
+              <ModalPick context={context} filter="Sent" />
+              <ModalPick context={context} filter="Opened" />
+              <ModalPick context={context} filter="Clicked" />
+              <ModalPick context={context} filter="Queued" />
+              <ModalPick context={context} filter="Bounce" />
+              <ModalPick context={context} filter="Blocked" />
+              <ModalPick context={context} filter="Spam" />
+            </View>
+          )}
         </View>
       </Modal>
     )
@@ -58,7 +70,7 @@ const style = StyleSheet.create({
     justifyContent: 'space-between',
   },
   title: {
-    fontSize: 16,
+    fontSize: 20,
     fontWeight: 'bold',
     color: '#999',
     paddingBottom: 5,

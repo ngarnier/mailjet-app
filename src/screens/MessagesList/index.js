@@ -1,9 +1,9 @@
 import { StackNavigator } from 'react-navigation'
-import MessagesLists from './MessagesList'
+import Messages from './Messages'
 
 const MessagesNavigator = StackNavigator({
   MessagesLists: {
-    screen: MessagesLists,
+    screen: Messages,
     navigationOptions: {
       title: 'Transactional Activity',
       headerStyle: {

@@ -4,25 +4,25 @@ import { SafeAreaView, StyleSheet } from 'react-native'
 import { connect } from 'react-redux'
 import FilterRow from '../../components/FilterRow'
 import Picker from '../../components/Picker'
-import CampaignsList from './CampaignsList'
+import MessagesList from './MessagesList'
 
 @connect(state => ({
-  filters: state.filters,
+  filter: state.filters.messages,
 }))
 
-export default class Campaigns extends React.Component {
+export default class Messages extends React.Component {
   static propTypes = {
-    filters: PropTypes.objectOf(PropTypes.string).isRequired,
+    filter: PropTypes.objectOf(PropTypes.string).isRequired,
   }
 
   render() {
-    const { filters, navigation } = this.props
+    const { filter } = this.props
 
     return (
       <SafeAreaView style={style.container}>
-        <FilterRow filter={filters.campaigns} context="campaigns" />
-        <CampaignsList filter={filters.campaigns} navigation={navigation} />
-        <Picker context="campaigns" />
+        <FilterRow filter={filter} context="messages" />
+        <MessagesList filter={filter} />
+        <Picker context="messages" />
       </SafeAreaView>
     )
   }
@@ -34,3 +34,4 @@ const style = StyleSheet.create({
     backgroundColor: '#f6f6f6',
   },
 })
+
