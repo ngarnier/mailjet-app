@@ -44,7 +44,6 @@ export default class Picker extends React.Component {
           {context === 'messages' && (
             <View>
               <ModalPick context={context} filter="All" />
-              <ModalPick context={context} filter="Sent" />
               <ModalPick context={context} filter="Opened" />
               <ModalPick context={context} filter="Clicked" />
               <ModalPick context={context} filter="Queued" />

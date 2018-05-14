@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { View, Text, StyleSheet } from 'react-native'
+import { View, TouchableOpacity, Text, StyleSheet } from 'react-native'
 import { Icon } from 'native-base'
 import { showModal } from '../actions/modals'
 
@@ -20,18 +20,19 @@ export default class FilterRow extends React.Component {
     const { showModalConnected, filter, context } = this.props
     return (
       <View style={style.row}>
-        <Icon
-          name="sliders"
-          type="FontAwesome"
-          style={style.icon}
-          onPress={() => showModalConnected(context)}
-        />
-        <Text
-          style={style.filter}
+        <TouchableOpacity
+          style={style.block}
           onPress={() => showModalConnected(context)}
         >
-          {filter}
-        </Text>
+          <Icon
+            name="sliders"
+            type="FontAwesome"
+            style={style.icon}
+          />
+          <Text style={style.filter}>
+            {filter}
+          </Text>
+        </TouchableOpacity>
       </View>
     )
   }
@@ -45,6 +46,9 @@ const style = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#eee',
     padding: 10,
+  },
+  block: {
+    flexDirection: 'row',
   },
   icon: {
     color: '#fda836',

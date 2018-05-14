@@ -5,13 +5,13 @@ import { Spinner } from 'native-base'
 
 export default function EmptyState({ state, context }) {
   return (
-    <View contentContainerStyle={styles.container}>
+    <View style={style.container}>
       {state === 'no-data' ? (
-        <View style={styles.container}>
+        <View style={style.block}>
           <Text>No {context} found</Text>
         </View>
       ) : (
-        <View style={styles.container}>
+        <View style={style.block}>
           <Spinner color="#FCAC2E" />
           <Text>Loading {context}</Text>
         </View>
@@ -25,12 +25,13 @@ EmptyState.propTypes = {
   context: PropTypes.string.isRequired,
 }
 
-const styles = StyleSheet.create({
+const style = StyleSheet.create({
   container: {
-    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     height: '90%',
-    paddingTop: 200,
+  },
+  block: {
+    justifyContent: 'center',
   },
 })

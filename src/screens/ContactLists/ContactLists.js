@@ -1,5 +1,5 @@
 import React from 'react'
-import { ScrollView, SafeAreaView, View, StyleSheet } from 'react-native'
+import { FlatList, SafeAreaView, View, StyleSheet } from 'react-native'
 import { connect } from 'react-redux'
 import ContactListItem from './ContactListItem'
 import EmptyState from '../../components/EmptyState'
@@ -32,16 +32,18 @@ export default class ContactLists extends React.Component {
     return (
       <SafeAreaView style={style.container}>
         {lists ? (
-          <ScrollView>
-            {lists.map(e =>
-              (<ContactListItem
-                id={e.ID}
-                name={e.Name}
-                subscribers={e.SubscriberCount}
-                key={e.ID}
+          <FlatList
+            data={lists}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={({ item }) => (
+              <ContactListItem
+                id={item.ID}
+                name={item.Name}
+                subscribers={item.SubscriberCount}
+                key={item.ID}
                 navigation={this.props.navigation}
-              />))}
-          </ScrollView>
+              />)}
+          />
         ) : isLoading ? (
           <View>
             <EmptyState state="loading" context="Contact Lists" />
@@ -50,7 +52,7 @@ export default class ContactLists extends React.Component {
           <View>
             <EmptyState state="no-data" context="Contact Lists" />
           </View>
-            )}
+        )}
       </SafeAreaView>
     )
   }

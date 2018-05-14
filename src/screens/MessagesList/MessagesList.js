@@ -28,6 +28,7 @@ export default class MessagesList extends React.Component {
     })
 
     const messages = await getAllMessages(apikeys.get(0), filters.messages)
+
     this.setState({
       messages: messages.length > 0 ? messages.reverse() : false,
       isLoading: false,
@@ -36,7 +37,9 @@ export default class MessagesList extends React.Component {
 
   componentDidUpdate = async () => {
     const { apikeys, filters } = this.props
+
     const messages = await getAllMessages(apikeys.get(0), filters.messages)
+
     this.setState({
       messages,
       isLoading: false,

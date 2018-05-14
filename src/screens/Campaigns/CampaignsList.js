@@ -35,12 +35,6 @@ export default class CampaignsList extends React.Component {
     })
   }
 
-  // shouldComponentUpdate(nextProps) {
-  //   console.log(this.props.filters.campaigns)
-  //   console.log(nextProps.filters.campaigns)
-  //   return nextProps.filters.campaigns !== this.props.filters.campaigns
-  // }
-
   componentDidUpdate = async () => {
     const { apikeys, filter } = this.props
     const campaigns = await getAllCampaigns(apikeys.get(0), filter)
@@ -87,9 +81,9 @@ export default class CampaignsList extends React.Component {
           </View>
         ) : (
           <View>
-            <EmptyState state="no-data" context="Campaigns" navigation={this.props.navigation} />
+            <EmptyState state="no-data" context="Campaigns" />
           </View>
-            )}
+        )}
       </View>
     )
   }
