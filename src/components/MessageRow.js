@@ -113,7 +113,7 @@ const style = StyleSheet.create({
     alignItems: 'center',
   },
   blockedText: {
-    color: '#DCDFE4',
+    color: '#fff',
     fontWeight: 'bold',
   },
   bounced: {

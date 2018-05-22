@@ -1,78 +1,73 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { FlatList, View } from 'react-native'
-import { connect } from 'react-redux'
+import { FlatList, View, ActivityIndicator, StyleSheet } from 'react-native'
 import MessageRow from '../../components/MessageRow'
 import EmptyState from '../../components/EmptyState'
-import { getAllMessages } from '../../helpers/mailjet'
+import { convertTimestamp } from '../../helpers/mailjet'
 
-@connect(state => ({
-  apikeys: state.apikeys,
-  filters: state.filters,
-}))
-
-export default class MessagesList extends React.Component {
-  static propTypes = {
-    filters: PropTypes.objectOf(PropTypes.string).isRequired,
-  }
-
-  state = {
-    messages: [],
-  }
-
-  componentDidMount = async () => {
-    const { apikeys, filters } = this.props
-
-    this.setState({
-      isLoading: true,
-    })
-
-    const messages = await getAllMessages(apikeys.get(0), filters.messages)
-
-    this.setState({
-      messages: messages.length > 0 ? messages.reverse() : false,
-      isLoading: false,
-    })
-  }
-
-  componentDidUpdate = async () => {
-    const { apikeys, filters } = this.props
-
-    const messages = await getAllMessages(apikeys.get(0), filters.messages)
-
-    this.setState({
-      messages,
-      isLoading: false,
-    })
-  }
-
-  render() {
-    const { messages, isLoading } = this.state
-    return (
-      <View>
-        {messages.length > 0 ? (
-          <FlatList
-            data={messages}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={({ item }) => (
-              <MessageRow
-                title={item.subject}
-                subtitle={`From: ${item.fromName} (${item.fromEmail})\nTo: ${item.toEmail}\nSent on ${item.sentAt}`}
-                status={item.status}
-              />
-            )}
-          />
-        ) : isLoading ? (
-          <View>
-            <EmptyState state="loading" context="Messages" />
-          </View>
-        ) : (
-          <View>
-            <EmptyState state="no-data" context="Messages" />
-          </View>
-            )}
-      </View>
-    )
-  }
+export default function MessagesList({
+  messages,
+  isLoading,
+  isRefreshing,
+  refresh,
+}) {
+  return (
+    <View style={{ flex: 1 }}>
+      {!messages ? (
+        <View />
+      ) : typeof messages === 'string' ? (
+        <View style={{ flex: 1 }}>
+          <EmptyState tryAgain={() => refresh('update')} state="network-issue" context="Messages" />
+        </View>
+      ) : messages.length === 0 ? (
+        <View style={{ flex: 1 }}>
+          <EmptyState state="no-data" context="Messages" />
+        </View>
+      ) : (
+        <FlatList
+          data={messages.sort((a, b) => b.sentAt - a.sentAt)}
+          keyExtractor={(item, index) => index.toString()}
+          refreshing={isRefreshing}
+          onRefresh={() => refresh('refresh')}
+          initialNumToRender={10}
+          renderItem={({ item }) => (
+            <MessageRow
+              title={item.subject}
+              subtitle={
+                `From: ${item.fromName} (${item.fromEmail})\nTo: ${item.toEmail}\nSent on ${convertTimestamp(item.sentAt)}`
+              }
+              status={item.status}
+            />
+          )}
+        />
+      )}
+      {isLoading && !isRefreshing && (
+        <View style={style.loading}>
+          <ActivityIndicator size="large" />
+        </View>
+      )}
+    </View>
+  )
 }
+
+MessagesList.propTypes = {
+  /* eslint-disable react/forbid-prop-types */
+  messages: PropTypes.any.isRequired,
+  /* eslint-enable */
+  isLoading: PropTypes.bool.isRequired,
+  isRefreshing: PropTypes.bool.isRequired,
+  refresh: PropTypes.func.isRequired,
+}
+
+const style = StyleSheet.create({
+  loading: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+})
 

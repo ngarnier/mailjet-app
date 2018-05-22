@@ -17,6 +17,7 @@ export default class Picker extends React.Component {
     modals: PropTypes.objectOf(PropTypes.bool).isRequired,
     hideModalConnect: PropTypes.func.isRequired,
     context: PropTypes.string.isRequired,
+    pick: PropTypes.func.isRequired,
   }
 
   render() {
@@ -43,13 +44,13 @@ export default class Picker extends React.Component {
           )}
           {context === 'messages' && (
             <View>
-              <ModalPick context={context} filter="All" />
-              <ModalPick context={context} filter="Opened" />
-              <ModalPick context={context} filter="Clicked" />
-              <ModalPick context={context} filter="Queued" />
-              <ModalPick context={context} filter="Bounce" />
-              <ModalPick context={context} filter="Blocked" />
-              <ModalPick context={context} filter="Spam" />
+              <ModalPick onPick={this.props.pick} context={context} filter="All" />
+              <ModalPick onPick={this.props.pick} context={context} filter="Opened" />
+              <ModalPick onPick={this.props.pick} context={context} filter="Clicked" />
+              <ModalPick onPick={this.props.pick} context={context} filter="Queued" />
+              <ModalPick onPick={this.props.pick} context={context} filter="Bounce" />
+              <ModalPick onPick={this.props.pick} context={context} filter="Blocked" />
+              <ModalPick onPick={this.props.pick} context={context} filter="Spam" />
             </View>
           )}
         </View>

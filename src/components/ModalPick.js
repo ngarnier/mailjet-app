@@ -20,12 +20,14 @@ export default class ModalPick extends React.Component {
     filters: PropTypes.objectOf(PropTypes.string).isRequired,
     setFilterConnect: PropTypes.func.isRequired,
     hideModalConnect: PropTypes.func.isRequired,
+    onPick: PropTypes.func.isRequired,
   }
 
-  handleFilter = (filter) => {
+  handleFilter = async (filter) => {
     const { setFilterConnect, hideModalConnect, context } = this.props
-    setFilterConnect(context, filter)
+    await setFilterConnect(context, filter)
     hideModalConnect(context)
+    this.props.onPick()
   }
 
   render() {

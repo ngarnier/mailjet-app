@@ -1,7 +1,7 @@
 import { Buffer } from 'buffer'
 import { getTS, formatTime } from './util'
 
-const Limit = 50
+const Limit = 20
 const months = [
   'January',
   'February',
@@ -16,18 +16,16 @@ const months = [
   'November',
   'December']
 
-export const mailjetGet = async (route, publicKey, secretKey, filters) => {
-  const encodedKeys = await Buffer.from(`${publicKey}:${secretKey}`).toString('base64')
-  let formattedFilters = ''
-  if (filters) {
-    formattedFilters = '?'
-    /* eslint-disable array-callback-return */
-    Object.keys(filters).map((filter) => {
-      formattedFilters += `${filter}=${filters[filter]}&`
-    })
-    /* eslint-enable */
-  }
-  const response = await fetch(`https://api.mailjet.com/v3/REST/${route}${formattedFilters}`, {
+export const convertTimestamp = (timestamp) => {
+  const date = new Date(timestamp)
+  return `${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()} at ${formatTime(date.getHours())}h${formatTime(date.getMinutes())} UTC`
+}
+
+export const timeOutCheck = delay =>
+  new Promise(resolve => setTimeout(resolve, delay, 'timed out'))
+
+const mailjetGetRequest = (route, formattedFilters, encodedKeys) =>
+  fetch(`https://api.mailjet.com/v3/REST/${route}${formattedFilters}`, {
     method: 'GET',
     headers: {
       Accept: 'application/json',
@@ -35,8 +33,31 @@ export const mailjetGet = async (route, publicKey, secretKey, filters) => {
       Authorization: `Basic ${encodedKeys}`,
     },
   })
-  const res = await response.json()
-  if (res.ErrorMessage) {
+
+export const mailjetGet = async (route, publicKey, secretKey, filters) => {
+  const encodedKeys = await Buffer.from(`${publicKey}:${secretKey}`).toString('base64')
+  let formattedFilters = ''
+
+  if (filters) {
+    formattedFilters = '?'
+    for (let i = 0; i < Object.keys(filters).length; i += 1) {
+      if (i === Object.keys(filters).length - 1) {
+        formattedFilters += `${Object.keys(filters)[i]}=${filters[Object.keys(filters)[i]]}`
+      } else {
+        formattedFilters += `${Object.keys(filters)[i]}=${filters[Object.keys(filters)[i]]}&`
+      }
+    }
+  }
+
+  const response = await Promise.race([
+    mailjetGetRequest(route, formattedFilters, encodedKeys),
+    timeOutCheck(5000),
+  ])
+
+  const res = typeof response === 'string' ? 'timed out' : await response.json()
+  if (typeof res === 'string') {
+    return undefined
+  } else if (res.ErrorMessage) {
     return res.ErrorMessage
   }
   return res.Data
@@ -146,15 +167,12 @@ export const getDraftCampaignDetails = async (apikeys, id) => {
 const getMessageCampaignInformation = async (apikeys, campaignID) => {
   const { publicKey, secretKey } = apikeys
   const campaigns = await mailjetGet(`campaign/${campaignID}`, publicKey, secretKey)
-  const splittedDate = campaigns[0].SendEndAt.split('T')
-  const date = splittedDate[0].split('-')
-  const formattedDate = `${months[parseInt(date[1], 10) - 1]} ${date[2]}, ${date[0]} at ${splittedDate[1].replace('Z', ' UTC')}`
   const information = {
     campaignID,
     fromEmail: campaigns[0].FromEmail,
     fromName: campaigns[0].FromName,
     opened: campaigns[0].OpenTracked,
-    sentAt: formattedDate,
+    sentAt: Date.parse(campaigns[0].SendEndAt),
     subject: campaigns[0].Subject,
   }
   return information
@@ -190,22 +208,43 @@ export const getAllMessages = async (apikeys, statusFilter = 'All') => {
       FromTS: d,
       MessageStatus: statusFilter,
     })
+
+  if (!messagesList) {
+    return 'The request timed out'
+  }
+
   for (let i = 0; i < messagesList.length; i += 1) {
     const campaignID = messagesList[i].CampaignID
     const contactID = messagesList[i].ContactID
     const campaignAlreadyFetched = campaignIDs.find(id => id === campaignID)
+    const contactAlreadyFetched = contactIDs.find(id => id === contactID)
+
     if (!campaignAlreadyFetched) {
       campaignIDs.push(campaignID)
       campaigns.push(getMessageCampaignInformation(apikeys, messagesList[i].CampaignID))
     }
-    const contactAlreadyFetched = contactIDs.find(id => id === contactID)
+
     if (!contactAlreadyFetched) {
       contactIDs.push(contactID)
       contacts.push(getMessageContactInformation(apikeys, messagesList[i].ContactID))
     }
   }
-  const resolvedCampaigns = await Promise.all(campaigns)
-  const resolvedContacts = await Promise.all(contacts)
+
+  const resolvedCampaigns = await Promise.race([
+    Promise.all(campaigns),
+    timeOutCheck(5000),
+  ])
+  if (typeof resolvedCampaigns === 'string') {
+    return 'The request timed out'
+  }
+  const resolvedContacts = await Promise.race([
+    Promise.all(contacts),
+    timeOutCheck(5000),
+  ])
+  if (typeof resolvedContacts === 'string') {
+    return 'The request timed out'
+  }
+
   for (let i = 0; i < messagesList.length; i += 1) {
     const campaignInformation = resolvedCampaigns.find(campaign =>
       campaign.campaignID === messagesList[i].CampaignID)
@@ -218,6 +257,7 @@ export const getAllMessages = async (apikeys, statusFilter = 'All') => {
       ...contactInformation,
     })
   }
+
   return messages
 }
 
