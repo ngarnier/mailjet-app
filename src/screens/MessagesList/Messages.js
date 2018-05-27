@@ -14,7 +14,7 @@ import { getAllMessages } from '../../helpers/mailjet'
 
 export default class Messages extends React.Component {
   static propTypes = {
-    filter: PropTypes.objectOf(PropTypes.string).isRequired,
+    filter: PropTypes.string.isRequired,
   }
 
   state = {

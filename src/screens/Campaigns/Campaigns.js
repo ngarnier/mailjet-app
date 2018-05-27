@@ -3,25 +3,24 @@ import PropTypes from 'prop-types'
 import { SafeAreaView, StyleSheet } from 'react-native'
 import { connect } from 'react-redux'
 import FilterRow from '../../components/FilterRow'
-import EmptyState from '../../components/EmptyState'
 import Picker from '../../components/Picker'
 import CampaignsList from './CampaignsList'
 import { getAllCampaigns } from '../../helpers/mailjet'
 
 @connect(state => ({
   apikeys: state.apikeys,
-  filters: state.filters,
+  filter: state.filters.campaigns,
 }))
 
 export default class Campaigns extends React.Component {
   static propTypes = {
-    filters: PropTypes.objectOf(PropTypes.string).isRequired,
+    filter: PropTypes.string.isRequired,
   }
 
   state = {
-    campaigns: [],
+    campaigns: undefined,
     isLoading: false,
-    iterator: 0,
+    isRefreshing: false,
   }
 
   componentDidMount = async () => {
@@ -39,35 +38,43 @@ export default class Campaigns extends React.Component {
     })
   }
 
-  componentDidUpdate = async () => {
+  fetchMessages = async (method) => {
     const { apikeys, filter } = this.props
+
+    if (method === 'update') {
+      this.setState({
+        isLoading: true,
+      })
+    } else {
+      this.setState({
+        isRefreshing: true,
+      })
+    }
 
     const campaigns = await getAllCampaigns(apikeys.get(0), filter)
 
     this.setState({
       campaigns,
       isLoading: false,
-      iterator: this.state.iterator + 1,
+      isRefreshing: false,
     })
   }
 
   render() {
-    const { filters, navigation } = this.props
-    const { isLoading, campaigns } = this.state
+    const { filter, navigation } = this.props
+    const { isLoading, isRefreshing, campaigns } = this.state
 
     return (
       <SafeAreaView style={style.container}>
-        <FilterRow filter={filters.campaigns} context="campaigns" />
-        {typeof campaigns !== 'string' && campaigns.length > 0 ? (
-          <CampaignsList campaigns={campaigns} filter={filters.campaigns} navigation={navigation} />
-        ) : isLoading ? (
-          <EmptyState state="loading" context="Campaigns" />
-        ) : typeof campaigns === 'string' ? (
-          <EmptyState state="network-issue" context="Campaigns" />
-        ) : (
-          <EmptyState state="no-data" context="Campaigns" />
-        )}
-        <Picker context="campaigns" />
+        <FilterRow filter={filter} context="campaigns" />
+        <CampaignsList
+          refresh={method => this.fetchMessages(method)}
+          campaigns={campaigns}
+          navigation={navigation}
+          isLoading={isLoading}
+          isRefreshing={isRefreshing}
+        />
+        <Picker pick={() => this.fetchMessages('update')} context="campaigns" />
       </SafeAreaView>
     )
   }
