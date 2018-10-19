@@ -22,7 +22,7 @@ export default class Home extends React.Component {
   }
   render() {
     const { apikeys } = this.props
-    if (typeof apikeys === 'string' || !apikeys.get(0)) {
+    if (!apikeys.get(0)) {
       return <Login />
     }
     return <CustomTabs />

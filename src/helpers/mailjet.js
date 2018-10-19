@@ -22,7 +22,7 @@ export const convertTimestamp = (timestamp) => {
 }
 
 export const timeOutCheck = delay =>
-  new Promise(resolve => setTimeout(resolve, delay, 'timed out'))
+  new Promise(resolve => setTimeout(resolve, delay, 'The request timed out'))
 
 const mailjetGetRequest = (route, formattedFilters, encodedKeys) =>
   fetch(`https://api.mailjet.com/v3/REST/${route}${formattedFilters}`, {
@@ -64,7 +64,12 @@ export const mailjetGet = async (route, publicKey, secretKey, filters) => {
 }
 
 export const checkAuth = async (publicKey, secretKey) => {
-  const auth = await mailjetGet('template', publicKey, secretKey)
+  console.log('fetching keys')
+  const auth = await Promise.race([
+    mailjetGet('template', publicKey, secretKey),
+    timeOutCheck(5000),
+  ])
+  console.log(auth)
   return auth
 }
 

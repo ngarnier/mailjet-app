@@ -8,30 +8,6 @@ import { addApiKey } from '../../actions/apikeys'
 import commonColor from '../../native-base-theme/variables/commonColor'
 import logo from '../../img/round-logo.png'
 
-
-const style = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingTop: 100,
-    alignItems: 'center',
-    backgroundColor: '#f6f6f6',
-  },
-  warning: {
-    height: 40,
-    width: '100%',
-  },
-  warningText: {
-    margin: 10,
-    justifyContent: 'flex-start',
-    fontSize: 14,
-    color: 'red',
-  },
-  button: {
-    width: 150,
-    justifyContent: 'center',
-  },
-})
-
 @connect(
   null,
   {
@@ -53,29 +29,36 @@ export default class Login extends React.Component {
 
   handlePublicInput = (publicKey) => {
     this.setState({
-      invalidKeys: false,
+      failureMessage: null,
       publicKey,
     })
   }
 
   handleSecretInput = (secretKey) => {
     this.setState({
-      invalidKeys: false,
+      failureMessage: null,
       secretKey,
     })
   }
 
   handleSave = async () => {
-    const { publicKey, secretKey } = this.state
+    let { publicKey, secretKey } = this.state
+    publicKey = publicKey.trim()
+    secretKey = secretKey.trim()
 
     this.setState({
       isLoading: true,
     })
 
     const auth = await checkAuth(publicKey, secretKey)
-    if (typeof auth === 'string') {
+    if (auth === 'The request timed out') {
       this.setState({
-        invalidKeys: true,
+        failureMessage: 'connectivity issues, please check your network.',
+        isLoading: false,
+      })
+    } else if (typeof auth === 'string') {
+      this.setState({
+        failureMessage: 'invalid credentials, please check your API keys.',
         isLoading: false,
       })
     } else {
@@ -86,7 +69,7 @@ export default class Login extends React.Component {
 
   render() {
     const {
-      publicKey, secretKey, invalidKeys, isLoading, publicBorder, secretBorder,
+      publicKey, secretKey, failureMessage, isLoading, publicBorder, secretBorder,
     } = this.state
 
     return (
@@ -119,8 +102,8 @@ export default class Login extends React.Component {
             </Item>
           </Form>
           <View style={style.warning}>
-            {invalidKeys && (
-              <Text style={style.warningText}>Failed to login, please check your API keys</Text>
+            {failureMessage && (
+              <Text style={style.warningText}>Failed to login because of {failureMessage}</Text>
             )}
           </View>
           <View>
@@ -139,3 +122,27 @@ export default class Login extends React.Component {
     )
   }
 }
+
+const style = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingTop: 100,
+    alignItems: 'center',
+    backgroundColor: '#fefefe',
+  },
+  warning: {
+    height: 60,
+    width: '100%',
+    justifyContent: 'center',
+    paddingLeft: 18 ,
+    paddingRight: 18,
+  },
+  warningText: {
+    fontSize: 14,
+    color: 'red',
+  },
+  button: {
+    width: 150,
+    justifyContent: 'center',
+  },
+})
