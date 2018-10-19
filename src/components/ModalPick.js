@@ -5,12 +5,14 @@ import { TouchableHighlight, View, Text, StyleSheet } from 'react-native'
 import { Icon } from 'native-base'
 import setFilter from '../actions/filters'
 import { hideModal } from '../actions/modals'
+import { removeApiKey } from '../actions/apikeys'
 
 @connect(state => ({
   filters: state.filters,
 }), {
   setFilterConnect: setFilter,
   hideModalConnect: hideModal,
+  removeApiKey,
 })
 
 export default class ModalPick extends React.Component {
@@ -20,6 +22,7 @@ export default class ModalPick extends React.Component {
     filters: PropTypes.objectOf(PropTypes.string).isRequired,
     setFilterConnect: PropTypes.func.isRequired,
     hideModalConnect: PropTypes.func.isRequired,
+    removeApiKey: PropTypes.func.isRequired,
     onPick: PropTypes.func.isRequired,
   }
 
@@ -30,11 +33,15 @@ export default class ModalPick extends React.Component {
     this.props.onPick()
   }
 
+  handleDisconnect = async () => {
+    await this.props.removeApiKey()
+  }
+
   render() {
     const { context, filter, filters } = this.props
     return (
       <TouchableHighlight
-        onPress={() => this.handleFilter(filter)}
+        onPress={context === 'settings' ? () => this.handleDisconnect() : () => this.handleFilter(filter)}
         underlayColor="#fafafa"
       >
         {context === 'campaigns' ? (
@@ -62,7 +69,7 @@ export default class ModalPick extends React.Component {
             </View>
             {filters[context] === filter && <Icon name="checkmark" style={style.active} />}
           </View>
-        ) : (
+        ) : context === 'messages' ? (
           <View style={style.row}>
             <View style={style.rowStart}>
               <Text
@@ -72,6 +79,12 @@ export default class ModalPick extends React.Component {
               </Text>
             </View>
             {filters[context] === filter && <Icon name="checkmark" style={style.active} />}
+          </View>
+        ) : context === 'settings' && (
+          <View>
+            <Text style={style.filter}>
+              {filter}
+            </Text>
           </View>
         )}
       </TouchableHighlight>

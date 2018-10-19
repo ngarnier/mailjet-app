@@ -75,6 +75,7 @@ export default class Campaigns extends React.Component {
           isRefreshing={isRefreshing}
         />
         <Picker pick={() => this.fetchMessages('update')} context="campaigns" />
+        <Picker context="settings" />
       </SafeAreaView>
     )
   }

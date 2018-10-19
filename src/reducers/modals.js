@@ -1,4 +1,8 @@
-export default function modals(state = { campaigns: false, messages: false }, action) {
+export default function modals(state = {
+  campaigns: false,
+  messages: false,
+  settings: false,
+}, action) {
   switch (action.type) {
     case 'MODAL_SHOW': {
       return { ...state, [action.key]: true }

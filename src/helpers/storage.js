@@ -10,6 +10,14 @@ export const storeKey = async (keys) => {
   }
 }
 
+export const removeKey = async () => {
+  try {
+    return await AsyncStorage.removeItem('apikeys')
+  } catch (error) {
+    return ('A problem occurred when trying to remove this key.')
+  }
+}
+
 export const listKeys = async () => {
   try {
     return await AsyncStorage.getItem('apikeys')
@@ -25,6 +33,6 @@ export const getLocalKeys = async () => {
     const parsedKeys = keys.map(e => (typeof e === 'string' ? JSON.parse(e) : e))
     return List(parsedKeys)
   } catch (error) {
-    return ('A problem occurred when retrieving your keys.')
+    return null
   }
 }

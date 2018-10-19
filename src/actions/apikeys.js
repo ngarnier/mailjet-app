@@ -1,4 +1,4 @@
-import { storeKey, getLocalKeys } from '../helpers/storage'
+import { storeKey, removeKey, getLocalKeys } from '../helpers/storage'
 
 export const addApiKey = (name, publicKey, secretKey) => async (dispatch) => {
   let keys = await getLocalKeys()
@@ -21,14 +21,11 @@ export const addApiKey = (name, publicKey, secretKey) => async (dispatch) => {
   }
 }
 
-export const removeApiKey = apikey => async (dispatch) => {
-  let keys = await getLocalKeys()
-  const index = keys.findIndex(apikeyObj => apikeyObj.publicKey === apikey.publicKey)
-  keys = keys.splice(index, 1)
-  await storeKey(keys)
+export const removeApiKey = () => async (dispatch) => {
+  await removeKey()
   dispatch({
     type: 'APIKEY_REMOVE',
-    key: index,
+    key: 0,
   })
 }
 

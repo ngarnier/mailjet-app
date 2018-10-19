@@ -53,6 +53,11 @@ export default class Picker extends React.Component {
               <ModalPick onPick={this.props.pick} context={context} filter="Spam" />
             </View>
           )}
+          {context === 'settings' && (
+            <View>
+              <ModalPick context={context} filter="Log out" />
+            </View>
+          )}
         </View>
       </Modal>
     )
