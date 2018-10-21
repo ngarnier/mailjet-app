@@ -16,8 +16,6 @@ export default function ContactLists({
       {isLoading && !isRefreshing ? (
         <EmptyState state="loading" context="Contact Lists" />
       ) : !lists ? (
-        <View />
-      ) : typeof lists === 'string' ? (
         <View style={{ flex: 1 }}>
           <EmptyState tryAgain={() => refresh('update')} state="network-issue" context="Messages" />
         </View>

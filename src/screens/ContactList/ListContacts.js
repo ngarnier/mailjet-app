@@ -1,7 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { StyleSheet, ScrollView, View, Text } from 'react-native'
-import { Content } from 'native-base'
 import EmptyState from '../../components/EmptyState'
 import { getListContacts } from '../../helpers/mailjet'
 
@@ -31,7 +30,7 @@ export default class ListContact extends React.Component {
     const { contacts, isLoading } = this.state
 
     return (
-      <Content>
+      <View style={{ flex: 1 }}>
         {contacts ? (
           <ScrollView>
             {contacts.map(e => (
@@ -43,9 +42,9 @@ export default class ListContact extends React.Component {
         ) : isLoading ? (
           <EmptyState state="loading" context="Contacts" />
         ) : (
-          <EmptyState state="no-data" context="contact" />
+          <EmptyState state="no-data" context="subscribed contact" />
         )}
-      </Content>
+      </View>
     )
   }
 }

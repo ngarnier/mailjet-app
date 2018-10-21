@@ -7,6 +7,7 @@ import { convertTimestamp } from '../../helpers/mailjet'
 
 export default function MessagesList({
   messages,
+  filter,
   isLoading,
   isRefreshing,
   refresh,
@@ -23,7 +24,7 @@ export default function MessagesList({
         </View>
       ) : messages.length === 0 ? (
         <View style={{ flex: 1 }}>
-          <EmptyState state="no-data" context="Messages" />
+          <EmptyState state="no-data" context={`${filter !== 'All' ? filter.toLowerCase() : ''} message`} />
         </View>
       ) : (
         <FlatList
@@ -51,6 +52,7 @@ MessagesList.propTypes = {
   /* eslint-disable react/forbid-prop-types */
   messages: PropTypes.any.isRequired,
   /* eslint-enable */
+  filter: PropTypes.string.isRequired,
   isLoading: PropTypes.bool.isRequired,
   isRefreshing: PropTypes.bool.isRequired,
   refresh: PropTypes.func.isRequired,

@@ -70,6 +70,7 @@ export default class Messages extends React.Component {
         <MessagesList
           refresh={method => this.fetchMessages(method)}
           messages={messages}
+          filter={filter}
           isLoading={isLoading}
           isRefreshing={isRefreshing}
         />

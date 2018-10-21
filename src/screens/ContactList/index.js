@@ -32,7 +32,7 @@ export default class ContactList extends React.Component {
     const { listStats, isLoading } = this.state
 
     return (
-      <View>
+      <View style={{ flex: 1 }}>
         {listStats ? (
           <View>
             <View style={style.row}>
