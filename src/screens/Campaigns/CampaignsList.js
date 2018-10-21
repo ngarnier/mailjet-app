@@ -12,7 +12,7 @@ export default function CampaignsList({
   refresh,
 }) {
   return (
-    <View>
+    <View style={{ flex: 1 }}>
       {!campaigns ? (
         <View />
       ) : typeof campaigns === 'string' ? (
@@ -81,3 +81,4 @@ const style = StyleSheet.create({
     justifyContent: 'center',
   },
 })
+

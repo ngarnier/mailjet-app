@@ -1,66 +1,70 @@
 import React from 'react'
-import { FlatList, SafeAreaView, View, StyleSheet } from 'react-native'
-import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
+import { FlatList, View, ActivityIndicator, StyleSheet } from 'react-native'
 import ContactListItem from './ContactListItem'
 import EmptyState from '../../components/EmptyState'
-import { getLists } from '../../helpers/mailjet'
 
-@connect(state => ({
-  apikeys: state.apikeys,
-}))
-
-export default class ContactLists extends React.Component {
-  state = {}
-
-  componentDidMount = async () => {
-    const { apikeys } = this.props
-
-    this.setState({
-      isLoading: true,
-    })
-
-    const lists = await getLists(apikeys.get(0))
-    this.setState({
-      lists: lists.length > 0 ? lists : false,
-      isLoading: false,
-    })
-  }
-
-  render() {
-    const { lists, isLoading } = this.state
-
-    return (
-      <SafeAreaView style={style.container}>
-        {lists ? (
-          <FlatList
-            data={lists}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={({ item }) => (
-              <ContactListItem
-                id={item.ID}
-                name={item.Name}
-                subscribers={item.SubscriberCount}
-                key={item.ID}
-                navigation={this.props.navigation}
-              />)}
-          />
-        ) : isLoading ? (
-          <View>
-            <EmptyState state="loading" context="Contact Lists" />
-          </View>
-        ) : (
-          <View>
-            <EmptyState state="no-data" context="Contact Lists" />
-          </View>
+export default function ContactLists({
+  lists,
+  isLoading,
+  isRefreshing,
+  refresh,
+  navigation,
+}) {
+  return (
+    <View style={{ flex: 1 }}>
+      {!lists ? (
+        <View />
+      ) : typeof lists === 'string' ? (
+        <View style={{ flex: 1 }}>
+          <EmptyState tryAgain={() => refresh('update')} state="network-issue" context="Messages" />
+        </View>
+      ) : lists.length === 0 ? (
+        <View>
+          <EmptyState state="no-data" context="Contact Lists" />
+        </View>
+      ) : (
+        <FlatList
+          data={lists}
+          keyExtractor={index => index.toString()}
+          refreshing={isRefreshing}
+          onRefresh={() => refresh('refresh')}
+          renderItem={({ item }) => (
+            <ContactListItem
+              id={item.ID}
+              name={item.Name}
+              subscribers={item.SubscriberCount}
+              key={item.ID}
+              navigation={navigation}
+            />)}
+        />
         )}
-      </SafeAreaView>
-    )
-  }
+      {isLoading && !isRefreshing && (
+        <View style={style.loading}>
+          <ActivityIndicator size="large" />
+        </View>
+        )}
+    </View>
+  )
+}
+
+ContactLists.propTypes = {
+  /* eslint-disable react/forbid-prop-types */
+  lists: PropTypes.any.isRequired,
+  /* eslint-enable */
+  isLoading: PropTypes.bool.isRequired,
+  isRefreshing: PropTypes.bool.isRequired,
+  refresh: PropTypes.func.isRequired,
 }
 
 const style = StyleSheet.create({
-  container: {
-    height: '100%',
-    backgroundColor: '#f6f6f6',
+  loading: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 })
