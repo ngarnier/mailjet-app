@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { FlatList, View } from 'react-native'
 import MessageRow from '../../components/MessageRow'
 import EmptyState from '../../components/EmptyState'
+import LoadingState from '../../components/LoadingState'
 import { convertTimestamp } from '../../helpers/mailjet'
 
 export default function MessagesList({
@@ -15,7 +16,7 @@ export default function MessagesList({
   return (
     <View style={{ flex: 1 }}>
       {isLoading && !isRefreshing ? (
-        <EmptyState state="loading" context="Transactional Emails" />
+        <LoadingState />
       ) : !messages ? (
         <View />
       ) : typeof messages === 'string' ? (

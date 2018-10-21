@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { StyleSheet, ScrollView, View, Text } from 'react-native'
 import EmptyState from '../../components/EmptyState'
 import { getListContacts } from '../../helpers/mailjet'
+import LoadingState from '../../components/LoadingState';
 
 @connect(state => ({
   apikeys: state.apikeys,
@@ -40,7 +41,7 @@ export default class ListContact extends React.Component {
               ))}
           </ScrollView>
         ) : isLoading ? (
-          <EmptyState state="loading" context="Contacts" />
+          <LoadingState />
         ) : (
           <EmptyState state="no-data" context="subscribed contact" />
         )}

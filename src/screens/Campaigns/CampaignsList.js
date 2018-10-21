@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { View, FlatList, TouchableOpacity } from 'react-native'
 import EmptyState from '../../components/EmptyState'
 import MessageRow from '../../components/MessageRow'
+import LoadingState from '../../components/LoadingState';
 
 export default function CampaignsList({
   navigation,
@@ -14,7 +15,7 @@ export default function CampaignsList({
   return (
     <View style={{ flex: 1 }}>
       {isLoading && !isRefreshing ? (
-        <EmptyState state="loading" context="Campaigns" />
+        <LoadingState />
       ) : !campaigns ? (
         <View />
       ) : typeof campaigns === 'string' ? (

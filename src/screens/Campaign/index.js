@@ -4,6 +4,7 @@ import { View } from 'react-native'
 import CampaignDetails from './CampaignDetails'
 import EmptyState from '../../components/EmptyState'
 import { getCampaignDetails } from '../../helpers/mailjet'
+import LoadingState from '../../components/LoadingState';
 
 @connect(state => ({
   apikeys: state.apikeys,
@@ -51,7 +52,7 @@ export default class Campaign extends React.Component {
             status={campaignDetails.status}
           />
         ) : isLoading ? (
-          <EmptyState state="loading" context="Campaign details" />
+          <LoadingState />
         ) : (
           <EmptyState state="no-data" context="Campaign details" />
         )}

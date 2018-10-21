@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { FlatList, View } from 'react-native'
 import ContactListItem from './ContactListItem'
 import EmptyState from '../../components/EmptyState'
+import LoadingState from '../../components/LoadingState';
 
 export default function ContactLists({
   lists,
@@ -14,7 +15,7 @@ export default function ContactLists({
   return (
     <View style={{ flex: 1 }}>
       {isLoading && !isRefreshing ? (
-        <EmptyState state="loading" context="Contact Lists" />
+        <LoadingState />
       ) : !lists ? (
         <View style={{ flex: 1 }}>
           <EmptyState tryAgain={() => refresh('update')} state="network-issue" context="Messages" />

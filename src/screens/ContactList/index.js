@@ -5,6 +5,7 @@ import { Icon } from 'native-base'
 import EmptyState from '../../components/EmptyState'
 import StatsRow from '../../components/StatsRow'
 import { getListStats } from '../../helpers/mailjet'
+import LoadingState from '../../components/LoadingState';
 
 @connect(state => ({
   apikeys: state.apikeys,
@@ -70,7 +71,7 @@ export default class ContactList extends React.Component {
               </View>
             </View>
           </View>) : isLoading ? (
-            <EmptyState state="loading" context="List Information" />
+            <LoadingState />
           ) : (<EmptyState state="no-data" context="List Information" />)
           }
       </View>
