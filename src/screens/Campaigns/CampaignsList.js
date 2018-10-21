@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { View, FlatList, TouchableOpacity, ActivityIndicator, StyleSheet } from 'react-native'
+import { View, FlatList, TouchableOpacity } from 'react-native'
 import EmptyState from '../../components/EmptyState'
 import MessageRow from '../../components/MessageRow'
 
@@ -13,7 +13,9 @@ export default function CampaignsList({
 }) {
   return (
     <View style={{ flex: 1 }}>
-      {!campaigns ? (
+      {isLoading && !isRefreshing ? (
+        <EmptyState state="loading" context="Campaigns" />
+      ) : !campaigns ? (
         <View />
       ) : typeof campaigns === 'string' ? (
         <View style={{ flex: 1 }}>
@@ -51,11 +53,6 @@ export default function CampaignsList({
         )}
         />
       )}
-      {isLoading && !isRefreshing && (
-        <View style={style.loading}>
-          <ActivityIndicator size="large" />
-        </View>
-      )}
     </View>
 
   )
@@ -69,16 +66,3 @@ CampaignsList.propTypes = {
   isRefreshing: PropTypes.bool.isRequired,
   refresh: PropTypes.func.isRequired,
 }
-
-const style = StyleSheet.create({
-  loading: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    top: 0,
-    bottom: 0,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-})
-

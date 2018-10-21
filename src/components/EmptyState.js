@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { View, Text, StyleSheet } from 'react-native'
-import { Spinner } from 'native-base'
+import { View, Text, StyleSheet, ActivityIndicator } from 'react-native'
 
 export default function EmptyState({ state, context, tryAgain }) {
   return (
@@ -10,14 +9,14 @@ export default function EmptyState({ state, context, tryAgain }) {
         <View style={style.container}>
           <Text>No {context} found</Text>
         </View>
-      ) : state === 'network-issue' ? (
+      ) : state === 'network-issue' && state !== 'loading' ? (
         <View style={style.container}>
           <Text>The request failed due to network issues</Text>
           <Text onPress={() => tryAgain()}>Try again</Text>
         </View>
-      ) : (
-        <View style={style.container}>
-          <Spinner color="#FCAC2E" />
+      ) : state === 'loading' && (
+        <View style={style.loading}>
+          <ActivityIndicator size="large" />
           <Text>Loading {context}</Text>
         </View>
         )}

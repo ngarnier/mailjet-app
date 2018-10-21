@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { View, StyleSheet } from 'react-native'
-import { Container, Content, Thumbnail, Form, Item, Label, Input, Button, Text, Spinner } from 'native-base'
+import { Container, Content, Thumbnail, Form, Item, Label, Input, Button, Text, ActivityIndicator } from 'native-base'
 import { connect } from 'react-redux'
 import { checkAuth, getMailjetKeys } from '../../helpers/mailjet'
 import { addApiKey } from '../../actions/apikeys'
@@ -112,7 +112,7 @@ export default class Login extends React.Component {
               style={style.button}
               onPress={() => this.handleSave()}
             >
-              {isLoading && (<Spinner size="small" color="white" />)}
+              {isLoading && (<ActivityIndicator />)}
               {!isLoading && (<Text>Login</Text>)}
             </Button>
 

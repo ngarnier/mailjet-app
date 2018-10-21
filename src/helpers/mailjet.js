@@ -64,12 +64,10 @@ export const mailjetGet = async (route, publicKey, secretKey, filters) => {
 }
 
 export const checkAuth = async (publicKey, secretKey) => {
-  console.log('fetching keys')
   const auth = await Promise.race([
     mailjetGet('template', publicKey, secretKey),
     timeOutCheck(5000),
   ])
-  console.log(auth)
   return auth
 }
 
@@ -107,6 +105,9 @@ const getCampaigns = async (apikey, filter) => {
 export const getAllCampaigns = async (apikeys, filter) => {
   const campaigns = []
   const keyData = await getCampaigns(apikeys, filter)
+  if (!keyData) {
+    return 'The request timed out'
+  }
   keyData.sort((a, b) => b.SendTimeStart - a.SendTimeStart)
   /* eslint-disable array-callback-return */
   keyData.map((e) => {

@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { FlatList, View, ActivityIndicator, StyleSheet } from 'react-native'
+import { FlatList, View } from 'react-native'
 import ContactListItem from './ContactListItem'
 import EmptyState from '../../components/EmptyState'
 
@@ -13,7 +13,9 @@ export default function ContactLists({
 }) {
   return (
     <View style={{ flex: 1 }}>
-      {!lists ? (
+      {isLoading && !isRefreshing ? (
+        <EmptyState state="loading" context="Contact Lists" />
+      ) : !lists ? (
         <View />
       ) : typeof lists === 'string' ? (
         <View style={{ flex: 1 }}>
@@ -39,11 +41,6 @@ export default function ContactLists({
             />)}
         />
         )}
-      {isLoading && !isRefreshing && (
-        <View style={style.loading}>
-          <ActivityIndicator size="large" />
-        </View>
-        )}
     </View>
   )
 }
@@ -57,14 +54,3 @@ ContactLists.propTypes = {
   refresh: PropTypes.func.isRequired,
 }
 
-const style = StyleSheet.create({
-  loading: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    top: 0,
-    bottom: 0,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-})

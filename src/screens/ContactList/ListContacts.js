@@ -43,7 +43,7 @@ export default class ListContact extends React.Component {
         ) : isLoading ? (
           <EmptyState state="loading" context="Contacts" />
         ) : (
-          <EmptyState state="no-data" context="Contacts" />
+          <EmptyState state="no-data" context="contact" />
         )}
       </Content>
     )

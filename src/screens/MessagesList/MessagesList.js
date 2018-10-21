@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { FlatList, View, ActivityIndicator, StyleSheet } from 'react-native'
+import { FlatList, View } from 'react-native'
 import MessageRow from '../../components/MessageRow'
 import EmptyState from '../../components/EmptyState'
 import { convertTimestamp } from '../../helpers/mailjet'
@@ -13,7 +13,9 @@ export default function MessagesList({
 }) {
   return (
     <View style={{ flex: 1 }}>
-      {!messages ? (
+      {isLoading && !isRefreshing ? (
+        <EmptyState state="loading" context="Transactional Emails" />
+      ) : !messages ? (
         <View />
       ) : typeof messages === 'string' ? (
         <View style={{ flex: 1 }}>
@@ -26,7 +28,7 @@ export default function MessagesList({
       ) : (
         <FlatList
           data={messages.sort((a, b) => b.sentAt - a.sentAt)}
-          keyExtractor={(item, index) => index.toString()}
+          keyExtractor={index => index.toString()}
           refreshing={isRefreshing}
           onRefresh={() => refresh('refresh')}
           initialNumToRender={10}
@@ -41,11 +43,6 @@ export default function MessagesList({
           )}
         />
       )}
-      {isLoading && !isRefreshing && (
-        <View style={style.loading}>
-          <ActivityIndicator size="large" />
-        </View>
-      )}
     </View>
   )
 }
@@ -58,16 +55,3 @@ MessagesList.propTypes = {
   isRefreshing: PropTypes.bool.isRequired,
   refresh: PropTypes.func.isRequired,
 }
-
-const style = StyleSheet.create({
-  loading: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    top: 0,
-    bottom: 0,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-})
-
