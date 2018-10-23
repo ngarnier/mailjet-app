@@ -11,7 +11,7 @@ const CampaignsNavigator = StackNavigator({
       title: 'Campaigns',
       headerRight: <SettingsGear />,
       headerStyle: {
-        backgroundColor: '#ffc94c',
+        backgroundColor: '#fead0d',
       },
       headerTintColor: '#fff',
     },
@@ -20,7 +20,7 @@ const CampaignsNavigator = StackNavigator({
     screen: Campaign,
     navigationOptions: {
       headerStyle: {
-        backgroundColor: '#ffc94c',
+        backgroundColor: '#fead0d',
       },
       headerTintColor: '#fff',
     },
