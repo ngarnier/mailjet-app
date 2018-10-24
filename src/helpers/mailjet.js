@@ -85,26 +85,28 @@ export const getMailjetKeys = async (publicKey, secretKey) => {
   return "Couldn't authenticate with those keys"
 }
 
-const getCampaigns = async (apikey, filter) => {
+const getCampaigns = async (apikey, filter, offset) => {
   const { publicKey, secretKey } = apikey
   let res
   if (filter === 'Drafts') {
     res = await mailjetGet('campaignoverview', publicKey, secretKey, {
-      Limit,
+      Limit: 20,
+      Offset: offset,
       Drafts: true,
     })
   } else {
     res = await mailjetGet('campaignoverview', publicKey, secretKey, {
-      Limit,
+      Limit: 20,
+      Offset: offset,
       IDType: 'Campaign',
     })
   }
   return res
 }
 
-export const getAllCampaigns = async (apikeys, filter) => {
+export const getAllCampaigns = async (apikeys, filter, offset = 0) => {
   const campaigns = []
-  const keyData = await getCampaigns(apikeys, filter)
+  const keyData = await getCampaigns(apikeys, filter, offset)
   if (!keyData) {
     return 'The request timed out'
   }

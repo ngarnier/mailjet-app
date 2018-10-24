@@ -39,7 +39,6 @@ export default class Lists extends React.Component {
 
     if (canLoadMore) {
       const newLists = await getLists(apikeys.get(0), offset + 40)
-      console.log(newLists)
       this.setState({
         lists: [...lists, ...newLists],
         offset: offset + 40,

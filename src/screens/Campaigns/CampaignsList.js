@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { View, FlatList, TouchableOpacity } from 'react-native'
 import EmptyState from '../../components/EmptyState'
 import MessageRow from '../../components/MessageRow'
-import LoadingState from '../../components/LoadingState';
+import LoadingState from '../../components/LoadingState'
 
 export default function CampaignsList({
   navigation,
@@ -32,6 +32,8 @@ export default function CampaignsList({
           keyExtractor={(item, index) => index.toString()}
           refreshing={isRefreshing}
           onRefresh={() => refresh('refresh')}
+          onEndReachedThreshold={0}
+          onEndReached={() => refresh('load more')}
           renderItem={({ item }) => (
             <TouchableOpacity
               onPress={() => navigation.navigate('Campaign', {

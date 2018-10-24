@@ -21,6 +21,8 @@ export default class Campaigns extends React.Component {
     campaigns: undefined,
     isLoading: false,
     isRefreshing: false,
+    offset: 0,
+    canLoadMore: true,
   }
 
   componentDidMount = async () => {
@@ -35,29 +37,47 @@ export default class Campaigns extends React.Component {
     this.setState({
       campaigns,
       isLoading: false,
+      canLoadMore: campaigns.length === 20,
     })
   }
 
   fetchMessages = async (method) => {
     const { apikeys, filter } = this.props
+    const { offset, campaigns, canLoadMore } = this.state
 
     if (method === 'update') {
       this.setState({
+        offset: 0,
         isLoading: true,
       })
-    } else {
+      const updatedCampaigns = await getAllCampaigns(apikeys.get(0), filter)
+
+      this.setState({
+        campaigns: updatedCampaigns,
+        isLoading: false,
+        canLoadMore: updatedCampaigns.length === 20,
+      })
+    } else if (method === 'load more' && canLoadMore) {
+      const newCampaigns = await getAllCampaigns(apikeys.get(0), filter, offset + 20)
+
+      this.setState({
+        campaigns: [...campaigns, ...newCampaigns],
+        offset: offset + 20,
+        canLoadMore: newCampaigns.length === 20,
+      })
+    } else if (method === 'refresh') {
       this.setState({
         isRefreshing: true,
       })
+
+      const refreshedCampaigns = await getAllCampaigns(apikeys.get(0), filter)
+
+      this.setState({
+        campaigns: refreshedCampaigns,
+        isRefreshing: false,
+        canLoadMore: refreshedCampaigns.length === 20,
+      })
     }
-
-    const campaigns = await getAllCampaigns(apikeys.get(0), filter)
-
-    this.setState({
-      campaigns,
-      isLoading: false,
-      isRefreshing: false,
-    })
   }
 
   render() {
