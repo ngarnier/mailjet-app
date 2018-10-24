@@ -1,7 +1,7 @@
 import { Buffer } from 'buffer'
 import { getTS, formatTime } from './util'
 
-const Limit = 20
+const Limit = 40
 const months = [
   'January',
   'February',
@@ -267,10 +267,11 @@ export const getAllMessages = async (apikeys, statusFilter = 'All') => {
   return messages
 }
 
-export const getLists = async (apikey) => {
+export const getLists = async (apikey, offset = 0) => {
   const { publicKey, secretKey } = apikey
   return mailjetGet('contactslist', publicKey, secretKey, {
-    Limit,
+    Limit: 40,
+    Offset: offset,
     isDeleted: false,
     Sort: 'Name',
   })

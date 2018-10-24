@@ -12,6 +12,8 @@ export default class Lists extends React.Component {
   state = {
     lists: undefined,
     isLoading: false,
+    offset: 0,
+    canLoadMore: true,
   }
 
   componentDidMount = async () => {
@@ -22,38 +24,35 @@ export default class Lists extends React.Component {
     })
 
     const lists = await getLists(apikeys.get(0))
+
     this.setState({
       lists,
       isLoading: false,
       isRefreshing: false,
+      canLoadMore: lists.length === 40,
     })
   }
 
   fetchLists = async (method) => {
     const { apikeys } = this.props
+    const { offset, lists, canLoadMore } = this.state
 
-    if (method === 'update') {
+    if (canLoadMore) {
+      const newLists = await getLists(apikeys.get(0), offset + 40)
+      console.log(newLists)
       this.setState({
-        isLoading: true,
-      })
-    } else {
-      this.setState({
-        isRefreshing: true,
+        lists: [...lists, ...newLists],
+        offset: offset + 40,
+        canLoadMore: newLists.length === 40,
       })
     }
-
-    const lists = await getLists(apikeys.get(0))
-
-    this.setState({
-      lists,
-      isLoading: false,
-      isRefreshing: false,
-    })
   }
 
   render() {
     const { navigation } = this.props
-    const { lists, isLoading, isRefreshing } = this.state
+    const {
+      lists, isLoading, isRefreshing,
+    } = this.state
 
     return (
       <SafeAreaView style={style.container}>
@@ -71,7 +70,7 @@ export default class Lists extends React.Component {
 
 const style = StyleSheet.create({
   container: {
-    height: '100%',
+    height: '40%',
     backgroundColor: '#f6f6f6',
     flex: 1,
   },

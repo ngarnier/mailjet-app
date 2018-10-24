@@ -3,45 +3,51 @@ import PropTypes from 'prop-types'
 import { FlatList, View } from 'react-native'
 import ContactListItem from './ContactListItem'
 import EmptyState from '../../components/EmptyState'
-import LoadingState from '../../components/LoadingState';
+import LoadingState from '../../components/LoadingState'
 
-export default function ContactLists({
-  lists,
-  isLoading,
-  isRefreshing,
-  refresh,
-  navigation,
-}) {
-  return (
-    <View style={{ flex: 1 }}>
-      {isLoading && !isRefreshing ? (
-        <LoadingState />
-      ) : !lists ? (
-        <View style={{ flex: 1 }}>
-          <EmptyState tryAgain={() => refresh('update')} state="network-issue" context="Messages" />
-        </View>
-      ) : lists.length === 0 ? (
-        <View>
-          <EmptyState state="no-data" context="Contact Lists" />
-        </View>
-      ) : (
-        <FlatList
-          data={lists}
-          keyExtractor={index => index.toString()}
-          refreshing={isRefreshing}
-          onRefresh={() => refresh('refresh')}
-          renderItem={({ item }) => (
-            <ContactListItem
-              id={item.ID}
-              name={item.Name}
-              subscribers={item.SubscriberCount}
-              key={item.ID}
-              navigation={navigation}
-            />)}
-        />
-        )}
-    </View>
-  )
+export default class ContactLists extends React.PureComponent {
+  render() {
+    const {
+      lists,
+      isLoading,
+      isRefreshing,
+      refresh,
+      navigation,
+    } = this.props
+
+    return (
+      <View style={{ flex: 1 }}>
+        {isLoading && !isRefreshing ? (
+          <LoadingState />
+        ) : !lists ? (
+          <View style={{ flex: 1 }}>
+            <EmptyState tryAgain={() => refresh('update')} state="network-issue" context="Messages" />
+          </View>
+        ) : lists.length === 0 ? (
+          <View>
+            <EmptyState state="no-data" context="Contact Lists" />
+          </View>
+        ) : (
+          <FlatList
+            data={lists}
+            keyExtractor={index => index.toString()}
+            refreshing={isRefreshing}
+            onRefresh={() => refresh('refresh')}
+            onEndReachedThreshold={0}
+            onEndReached={() => refresh('load more')}
+            renderItem={({ item }) => (
+              <ContactListItem
+                id={item.ID}
+                name={item.Name}
+                subscribers={item.SubscriberCount}
+                key={item.ID}
+                navigation={navigation}
+              />)}
+          />
+          )}
+      </View>
+    )
+  }
 }
 
 ContactLists.propTypes = {
