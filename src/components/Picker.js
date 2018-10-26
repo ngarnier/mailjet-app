@@ -26,6 +26,7 @@ export default class Picker extends React.Component {
       <Modal
         animationType="slide"
         visible={modals[context]}
+        onRequestClose={() => undefined}
       >
         <View style={style.modal}>
           <View style={style.titleRow}>
@@ -55,7 +56,7 @@ export default class Picker extends React.Component {
           )}
           {context === 'settings' && (
             <View>
-              <ModalPick context={context} filter="Log out" />
+              <ModalPick onPick={this.props.pick} context={context} filter="Log out" />
             </View>
           )}
         </View>

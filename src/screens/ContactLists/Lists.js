@@ -57,14 +57,17 @@ export default class Lists extends React.Component {
       this.setState({
         isLoadingMore: true,
       })
+
       const newLists = await getLists(apikeys.get(0), offset + 40)
 
-      this.setState({
-        lists: [...lists, ...newLists],
-        offset: offset + 40,
-        canLoadMore: typeof newLists === 'object' ? newLists.length === 20 : false,
-        isLoadingMore: false,
-      })
+      if (typeof newLists === 'object') {
+        this.setState({
+          lists: [...lists, ...newLists],
+          offset: offset + 40,
+          canLoadMore: typeof newLists === 'object' ? newLists.length === 20 : false,
+          isLoadingMore: false,
+        })
+      }
     } else if (method === 'refresh') {
       this.setState({
         isRefreshing: true,

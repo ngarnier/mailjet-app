@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { View, Text, Image, Button, ActivityIndicator, StyleSheet } from 'react-native'
+import { View, Text, Image, Button, StyleSheet } from 'react-native'
 
 export default function EmptyState({ state, context, tryAgain }) {
   return (
@@ -15,7 +15,7 @@ export default function EmptyState({ state, context, tryAgain }) {
           />
           <Text>No {context}</Text>
         </View>
-      ) : state === 'network-issue' && state !== 'loading' ? (
+      ) : state === 'network-issue' && state !== 'loading' && (
         <View style={style.container}>
           <Image
             style={{ height: 180, resizeMode: 'contain' }}
@@ -23,7 +23,7 @@ export default function EmptyState({ state, context, tryAgain }) {
             source={require('../img/disconnection.png')}
             /* eslint-enable */
           />
-          <Text>The request failed due to network issues</Text>
+          <Text style={{ marginBottom: 10 }}>The request failed due to network issues</Text>
           <Button
             onPress={() => tryAgain()}
             title="Try again"
@@ -31,12 +31,7 @@ export default function EmptyState({ state, context, tryAgain }) {
             accessibilityLabel="Try again"
           />
         </View>
-      ) : state === 'loading' && (
-        <View style={style.loading}>
-          <ActivityIndicator size="large" />
-          <Text>Loading {context}</Text>
-        </View>
-        )}
+      )}
     </View>
   )
 }

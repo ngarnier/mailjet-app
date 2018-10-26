@@ -64,14 +64,17 @@ export default class Campaigns extends React.Component {
       this.setState({
         isLoadingMore: true,
       })
+
       const newCampaigns = await getAllCampaigns(apikeys.get(0), filter, offset + 20)
 
-      this.setState({
-        campaigns: [...campaigns, ...newCampaigns],
-        offset: offset + 20,
-        canLoadMore: typeof newCampaigns === 'object' ? newCampaigns.length === 20 : false,
-        isLoadingMore: false,
-      })
+      if (typeof newCampaigns === 'object') {
+        this.setState({
+          campaigns: [...campaigns, ...newCampaigns],
+          offset: offset + 20,
+          canLoadMore: typeof newCampaigns === 'object' ? newCampaigns.length === 20 : false,
+          isLoadingMore: false,
+        })
+      }
     } else if (method === 'refresh') {
       this.setState({
         isRefreshing: true,
@@ -105,9 +108,7 @@ export default class Campaigns extends React.Component {
           isRefreshing={isRefreshing}
         />
         {isLoadingMore && (
-          <View style={style.loader}>
-            <ActivityIndicator size="large" />
-          </View>
+          <ActivityIndicator style={style.loader} size="large" />
         )}
         <Picker pick={() => this.fetchMessages('update')} context="campaigns" />
         <Picker pick={() => undefined} context="settings" />
@@ -122,7 +123,7 @@ const style = StyleSheet.create({
     backgroundColor: '#f6f6f6',
   },
   loader: {
-    paddingTop: 10,
     paddingBottom: 10,
+    backgroundColor: 'transparent',
   },
 })
