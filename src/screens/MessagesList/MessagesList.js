@@ -33,6 +33,8 @@ export default function MessagesList({
           keyExtractor={(item, index) => index.toString()}
           refreshing={isRefreshing}
           onRefresh={() => refresh('refresh')}
+          onEndReachedThreshold={0.1}
+          onEndReached={() => refresh('load more')}
           initialNumToRender={10}
           renderItem={({ item }) => (
             <MessageRow

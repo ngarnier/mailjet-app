@@ -19,7 +19,7 @@ export default class ContactLists extends React.PureComponent {
       <View style={{ flex: 1 }}>
         {isLoading && !isRefreshing ? (
           <LoadingState />
-        ) : !lists ? (
+        ) : typeof lists === 'string' ? (
           <View style={{ flex: 1 }}>
             <EmptyState tryAgain={() => refresh('update')} state="network-issue" context="Messages" />
           </View>

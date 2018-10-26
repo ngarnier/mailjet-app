@@ -3,25 +3,27 @@ import PropTypes from 'prop-types'
 import { StyleSheet, View, Text } from 'react-native'
 import { Badge } from 'native-base'
 
-export default function MessageRow({
-  title, subtitle, status, date,
-}) {
-  const safeStatus = status.toLowerCase()
-
-  return (
-    <View style={style.row}>
-      <Text style={style.title}>{title || 'Untitled'}</Text>
-      {subtitle && (<Text style={style.subtitle}>{subtitle}</Text>)}
-      <View style={style.date}>
-        <Badge style={[style.badge, style[safeStatus]]}>
-          <Text style={style[`${safeStatus}Text`]}>
-            {safeStatus}
-          </Text>
-        </Badge>
-        {date && (<Text>on {date}</Text>)}
+export default class MessageRow extends React.PureComponent {
+  render() {
+    const {
+      title, subtitle, status, date,
+    } = this.props
+    const safeStatus = status.toLowerCase()
+    return (
+      <View style={style.row}>
+        <Text style={style.title}>{title || 'Untitled'}</Text>
+        {subtitle && (<Text style={style.subtitle}>{subtitle}</Text>)}
+        <View style={style.date}>
+          <Badge style={[style.badge, style[safeStatus]]}>
+            <Text style={style[`${safeStatus}Text`]}>
+              {safeStatus}
+            </Text>
+          </Badge>
+          {date && (<Text>on {date}</Text>)}
+        </View>
       </View>
-    </View>
-  )
+    )
+  }
 }
 
 MessageRow.propTypes = {

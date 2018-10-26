@@ -50,6 +50,7 @@ export default class Campaigns extends React.Component {
         offset: 0,
         isLoading: true,
       })
+
       const updatedCampaigns = await getAllCampaigns(apikeys.get(0), filter)
 
       this.setState({
@@ -82,7 +83,7 @@ export default class Campaigns extends React.Component {
 
   render() {
     const { filter, navigation } = this.props
-    const { isLoading, isRefreshing, campaigns } = this.state
+    const { campaigns, isLoading, isRefreshing } = this.state
 
     return (
       <SafeAreaView style={style.container}>

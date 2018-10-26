@@ -21,6 +21,8 @@ export default class Messages extends React.Component {
     messages: [],
     isLoading: false,
     isRefreshing: false,
+    offset: 0,
+    canLoadMore: true,
   }
 
   componentDidMount = async () => {
@@ -35,34 +37,53 @@ export default class Messages extends React.Component {
     this.setState({
       messages,
       isLoading: false,
+      canLoadMore: messages.length === 20,
     })
   }
 
   fetchMessages = async (method) => {
     const { apikeys, filter } = this.props
+    const { offset, messages, canLoadMore } = this.state
 
     if (method === 'update') {
       this.setState({
+        offset: 0,
         isLoading: true,
       })
-    } else {
+
+      const updatedMessages = await getAllMessages(apikeys.get(0), filter)
+
+      this.setState({
+        messages: updatedMessages,
+        isLoading: false,
+        canLoadMore: updatedMessages.length === 20,
+      })
+    } else if (method === 'load more' && canLoadMore) {
+      const newMessages = await getAllMessages(apikeys.get(0), filter, offset + 20)
+
+      this.setState({
+        messages: [...messages, ...newMessages],
+        offset: offset + 20,
+        canLoadMore: newMessages.length === 20,
+      })
+    } else if (method === 'refresh') {
       this.setState({
         isRefreshing: true,
       })
+
+      const refreshedMessages = await getAllMessages(apikeys.get(0), filter)
+
+      this.setState({
+        messages: refreshedMessages,
+        isRefreshing: false,
+        canLoadMore: refreshedMessages.length === 20,
+      })
     }
-
-    const messages = await getAllMessages(apikeys.get(0), filter)
-
-    this.setState({
-      messages,
-      isLoading: false,
-      isRefreshing: false,
-    })
   }
 
   render() {
-    const { messages, isLoading, isRefreshing } = this.state
     const { filter } = this.props
+    const { messages, isLoading, isRefreshing } = this.state
 
     return (
       <SafeAreaView style={style.container}>
