@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { View, Text, Image, StyleSheet, ActivityIndicator } from 'react-native'
+import { View, Text, Image, Button, ActivityIndicator, StyleSheet } from 'react-native'
 
 export default function EmptyState({ state, context, tryAgain }) {
   return (
@@ -24,7 +24,12 @@ export default function EmptyState({ state, context, tryAgain }) {
             /* eslint-enable */
           />
           <Text>The request failed due to network issues</Text>
-          <Text onPress={() => tryAgain()}>Try again</Text>
+          <Button
+            onPress={() => tryAgain()}
+            title="Try again"
+            color="#1FBE9F"
+            accessibilityLabel="Try again"
+          />
         </View>
       ) : state === 'loading' && (
         <View style={style.loading}>
