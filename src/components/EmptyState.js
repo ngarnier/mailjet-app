@@ -17,6 +17,12 @@ export default function EmptyState({ state, context, tryAgain }) {
         </View>
       ) : state === 'network-issue' && state !== 'loading' ? (
         <View style={style.container}>
+          <Image
+            style={{ height: 180, resizeMode: 'contain' }}
+            /* eslint-disable global-require */
+            source={require('../img/disconnection.png')}
+            /* eslint-enable */
+          />
           <Text>The request failed due to network issues</Text>
           <Text onPress={() => tryAgain()}>Try again</Text>
         </View>
