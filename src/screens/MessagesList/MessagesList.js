@@ -30,7 +30,7 @@ export default function MessagesList({
       ) : (
         <FlatList
           data={messages.sort((a, b) => b.sentAt - a.sentAt)}
-          keyExtractor={index => index.toString()}
+          keyExtractor={(item, index) => index.toString()}
           refreshing={isRefreshing}
           onRefresh={() => refresh('refresh')}
           initialNumToRender={10}

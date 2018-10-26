@@ -10,8 +10,9 @@ import { getLists } from '../../helpers/mailjet'
 
 export default class Lists extends React.Component {
   state = {
-    lists: undefined,
+    lists: [],
     isLoading: false,
+    isRefreshing: false,
     offset: 0,
     canLoadMore: true,
   }

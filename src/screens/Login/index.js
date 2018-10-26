@@ -75,11 +75,11 @@ export default class Login extends React.Component {
     return (
       <Container>
         <Content contentContainerStyle={style.container}>
-          {/* <Thumbnail
+          <Thumbnail
             large
             style={style.thumbnail}
             source={logo}
-          /> */}
+          />
           <Form style={{ width: '100%' }}>
             <Item style={{ borderColor: publicBorder }} floatingLabel>
               <Label style={{ color: publicBorder }}>Public key</Label>
@@ -134,7 +134,7 @@ const style = StyleSheet.create({
     height: 60,
     width: '100%',
     justifyContent: 'center',
-    paddingLeft: 18 ,
+    paddingLeft: 18,
     paddingRight: 18,
   },
   warningText: {

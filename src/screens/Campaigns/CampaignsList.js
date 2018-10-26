@@ -32,7 +32,7 @@ export default function CampaignsList({
           keyExtractor={(item, index) => index.toString()}
           refreshing={isRefreshing}
           onRefresh={() => refresh('refresh')}
-          onEndReachedThreshold={0}
+          onEndReachedThreshold={0.1}
           onEndReached={() => refresh('load more')}
           renderItem={({ item }) => (
             <TouchableOpacity

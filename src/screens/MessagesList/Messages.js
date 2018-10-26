@@ -18,7 +18,7 @@ export default class Messages extends React.Component {
   }
 
   state = {
-    messages: undefined,
+    messages: [],
     isLoading: false,
     isRefreshing: false,
   }

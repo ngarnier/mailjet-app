@@ -18,7 +18,7 @@ export default class Campaigns extends React.Component {
   }
 
   state = {
-    campaigns: undefined,
+    campaigns: [],
     isLoading: false,
     isRefreshing: false,
     offset: 0,
@@ -95,7 +95,7 @@ export default class Campaigns extends React.Component {
           isRefreshing={isRefreshing}
         />
         <Picker pick={() => this.fetchMessages('update')} context="campaigns" />
-        <Picker context="settings" />
+        <Picker pick={() => undefined} context="settings" />
       </SafeAreaView>
     )
   }
