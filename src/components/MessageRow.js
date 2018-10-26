@@ -9,6 +9,7 @@ export default class MessageRow extends React.PureComponent {
       title, subtitle, status, date,
     } = this.props
     const safeStatus = status.toLowerCase()
+
     return (
       <View style={style.row}>
         <Text style={style.title}>{title || 'Untitled'}</Text>

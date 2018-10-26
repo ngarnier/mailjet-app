@@ -29,7 +29,9 @@ export default class LoadingState extends React.Component {
             <Animated.View style={[style.line, style.subtitle, { opacity: this.state.fadeAnim }]} />
             <View style={style.dateRow}>
               <Animated.View style={[style.line, style.badge, { opacity: this.state.fadeAnim }]} />
-              <Animated.View style={[style.line, style.dateText, { opacity: this.state.fadeAnim }]} />
+              <Animated.View
+                style={[style.line, style.dateText, { opacity: this.state.fadeAnim }]}
+              />
             </View>
           </View>
         ))}

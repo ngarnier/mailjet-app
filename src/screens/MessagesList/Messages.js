@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { SafeAreaView, StyleSheet } from 'react-native'
+import { SafeAreaView, View, ActivityIndicator, StyleSheet } from 'react-native'
 import { connect } from 'react-redux'
 import FilterRow from '../../components/FilterRow'
 import Picker from '../../components/Picker'
@@ -20,6 +20,7 @@ export default class Messages extends React.Component {
   state = {
     messages: [],
     isLoading: false,
+    isLoadingMore: false,
     isRefreshing: false,
     offset: 0,
     canLoadMore: true,
@@ -56,16 +57,25 @@ export default class Messages extends React.Component {
       this.setState({
         messages: updatedMessages,
         isLoading: false,
+        isLoadingMore: false,
         canLoadMore: updatedMessages.length === 20,
       })
     } else if (method === 'load more' && canLoadMore) {
-      const newMessages = await getAllMessages(apikeys.get(0), filter, offset + 20)
-
       this.setState({
-        messages: [...messages, ...newMessages],
-        offset: offset + 20,
-        canLoadMore: newMessages.length === 20,
+        isLoadingMore: true,
       })
+
+      const newMessages = await getAllMessages(apikeys.get(0), filter, offset + 20)
+      console.log(newMessages.length)
+
+      if (typeof newMessages === 'object') {
+        this.setState({
+          messages: [...messages, ...newMessages],
+          offset: offset + 20,
+          canLoadMore: newMessages.length === 20,
+          isLoadingMore: false,
+        })
+      }
     } else if (method === 'refresh') {
       this.setState({
         isRefreshing: true,
@@ -76,6 +86,7 @@ export default class Messages extends React.Component {
       this.setState({
         messages: refreshedMessages,
         isRefreshing: false,
+        isLoadingMore: false,
         canLoadMore: refreshedMessages.length === 20,
       })
     }
@@ -83,7 +94,9 @@ export default class Messages extends React.Component {
 
   render() {
     const { filter } = this.props
-    const { messages, isLoading, isRefreshing } = this.state
+    const {
+      messages, isLoading, isLoadingMore, isRefreshing,
+    } = this.state
 
     return (
       <SafeAreaView style={style.container}>
@@ -95,6 +108,11 @@ export default class Messages extends React.Component {
           isLoading={isLoading}
           isRefreshing={isRefreshing}
         />
+        {isLoadingMore && (
+          <View style={style.loader}>
+            <ActivityIndicator size="large" />
+          </View>
+        )}
         <Picker pick={() => this.fetchMessages('update')} context="messages" />
       </SafeAreaView>
     )
@@ -106,6 +124,10 @@ const style = StyleSheet.create({
     height: '100%',
     backgroundColor: '#f6f6f6',
     flex: 1,
+  },
+  loader: {
+    paddingTop: 10,
+    paddingBottom: 10,
   },
 })
 

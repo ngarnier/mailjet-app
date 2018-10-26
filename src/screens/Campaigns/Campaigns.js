@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { SafeAreaView, StyleSheet } from 'react-native'
+import { SafeAreaView, View, ActivityIndicator, StyleSheet } from 'react-native'
 import { connect } from 'react-redux'
 import FilterRow from '../../components/FilterRow'
 import Picker from '../../components/Picker'
@@ -20,6 +20,7 @@ export default class Campaigns extends React.Component {
   state = {
     campaigns: [],
     isLoading: false,
+    isLoadingMore: false,
     isRefreshing: false,
     offset: 0,
     canLoadMore: true,
@@ -56,15 +57,20 @@ export default class Campaigns extends React.Component {
       this.setState({
         campaigns: updatedCampaigns,
         isLoading: false,
+        isLoadingMore: false,
         canLoadMore: updatedCampaigns.length === 20,
       })
     } else if (method === 'load more' && canLoadMore) {
+      this.setState({
+        isLoadingMore: true,
+      })
       const newCampaigns = await getAllCampaigns(apikeys.get(0), filter, offset + 20)
 
       this.setState({
         campaigns: [...campaigns, ...newCampaigns],
         offset: offset + 20,
         canLoadMore: newCampaigns.length === 20,
+        isLoadingMore: false,
       })
     } else if (method === 'refresh') {
       this.setState({
@@ -76,6 +82,7 @@ export default class Campaigns extends React.Component {
       this.setState({
         campaigns: refreshedCampaigns,
         isRefreshing: false,
+        isLoadingMore: false,
         canLoadMore: refreshedCampaigns.length === 20,
       })
     }
@@ -83,7 +90,9 @@ export default class Campaigns extends React.Component {
 
   render() {
     const { filter, navigation } = this.props
-    const { campaigns, isLoading, isRefreshing } = this.state
+    const {
+      campaigns, isLoading, isLoadingMore, isRefreshing,
+    } = this.state
 
     return (
       <SafeAreaView style={style.container}>
@@ -95,6 +104,11 @@ export default class Campaigns extends React.Component {
           isLoading={isLoading}
           isRefreshing={isRefreshing}
         />
+        {isLoadingMore && (
+          <View style={style.loader}>
+            <ActivityIndicator size="large" />
+          </View>
+        )}
         <Picker pick={() => this.fetchMessages('update')} context="campaigns" />
         <Picker pick={() => undefined} context="settings" />
       </SafeAreaView>
@@ -106,5 +120,9 @@ const style = StyleSheet.create({
   container: {
     height: '100%',
     backgroundColor: '#f6f6f6',
+  },
+  loader: {
+    paddingTop: 10,
+    paddingBottom: 10,
   },
 })

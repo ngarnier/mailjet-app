@@ -1,5 +1,5 @@
 import React from 'react'
-import { SafeAreaView, StyleSheet } from 'react-native'
+import { SafeAreaView, View, ActivityIndicator, StyleSheet } from 'react-native'
 import { connect } from 'react-redux'
 import ContactLists from './ContactLists'
 import { getLists } from '../../helpers/mailjet'
@@ -12,6 +12,7 @@ export default class Lists extends React.Component {
   state = {
     lists: [],
     isLoading: false,
+    isLoadingMore: false,
     isRefreshing: false,
     offset: 0,
     canLoadMore: true,
@@ -43,19 +44,26 @@ export default class Lists extends React.Component {
         offset: 0,
         isLoading: true,
       })
+
       const updatedLists = await getLists(apikeys.get(0))
 
       this.setState({
         lists: updatedLists,
         isLoading: false,
+        isLoadingMore: false,
         canLoadMore: updatedLists.length === 40,
       })
     } else if (method === 'load more' && canLoadMore) {
+      this.setState({
+        isLoadingMore: true,
+      })
       const newLists = await getLists(apikeys.get(0), offset + 40)
+
       this.setState({
         lists: [...lists, ...newLists],
         offset: offset + 40,
         canLoadMore: newLists.length === 40,
+        isLoadingMore: false,
       })
     } else if (method === 'refresh') {
       this.setState({
@@ -67,6 +75,7 @@ export default class Lists extends React.Component {
       this.setState({
         lists: refreshedLists,
         isRefreshing: false,
+        isLoadingMore: false,
         canLoadMore: refreshedLists.length === 40,
       })
     }
@@ -75,7 +84,7 @@ export default class Lists extends React.Component {
   render() {
     const { navigation } = this.props
     const {
-      lists, isLoading, isRefreshing,
+      lists, isLoading, isLoadingMore, isRefreshing,
     } = this.state
 
     return (
@@ -87,6 +96,11 @@ export default class Lists extends React.Component {
           isLoading={isLoading}
           isRefreshing={isRefreshing}
         />
+        {isLoadingMore && (
+          <View style={style.loader}>
+            <ActivityIndicator size="large" />
+          </View>
+        )}
       </SafeAreaView>
     )
   }
@@ -97,5 +111,9 @@ const style = StyleSheet.create({
     height: '40%',
     backgroundColor: '#f6f6f6',
     flex: 1,
+  },
+  loader: {
+    paddingTop: 10,
+    paddingBottom: 10,
   },
 })
