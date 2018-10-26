@@ -38,7 +38,7 @@ export default class Campaigns extends React.Component {
     this.setState({
       campaigns,
       isLoading: false,
-      canLoadMore: campaigns.length === 20,
+      canLoadMore: typeof campaigns === 'object' ? campaigns.length === 20 : false,
     })
   }
 
@@ -58,7 +58,7 @@ export default class Campaigns extends React.Component {
         campaigns: updatedCampaigns,
         isLoading: false,
         isLoadingMore: false,
-        canLoadMore: updatedCampaigns.length === 20,
+        canLoadMore: typeof updatedCampaigns === 'object' ? updatedCampaigns.length === 20 : false,
       })
     } else if (method === 'load more' && canLoadMore) {
       this.setState({
@@ -69,7 +69,7 @@ export default class Campaigns extends React.Component {
       this.setState({
         campaigns: [...campaigns, ...newCampaigns],
         offset: offset + 20,
-        canLoadMore: newCampaigns.length === 20,
+        canLoadMore: typeof newCampaigns === 'object' ? newCampaigns.length === 20 : false,
         isLoadingMore: false,
       })
     } else if (method === 'refresh') {
@@ -83,7 +83,7 @@ export default class Campaigns extends React.Component {
         campaigns: refreshedCampaigns,
         isRefreshing: false,
         isLoadingMore: false,
-        canLoadMore: refreshedCampaigns.length === 20,
+        canLoadMore: typeof refreshedCampaigns === 'object' ? refreshedCampaigns.length === 20 : false,
       })
     }
   }

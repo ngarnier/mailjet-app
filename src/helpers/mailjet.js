@@ -273,12 +273,16 @@ export const getAllMessages = async (apikeys, statusFilter = 'All', offset = 0) 
 
 export const getLists = async (apikey, offset = 0) => {
   const { publicKey, secretKey } = apikey
-  return mailjetGet('contactslist', publicKey, secretKey, {
+  const response = await mailjetGet('contactslist', publicKey, secretKey, {
     Limit: 40,
     Offset: offset,
     isDeleted: false,
     Sort: 'Name',
   })
+  if (!response) {
+    return 'The request timed out'
+  }
+  return response
 }
 
 export const getListStats = async (apikey, id) => {

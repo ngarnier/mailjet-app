@@ -31,7 +31,7 @@ export default class Lists extends React.Component {
       lists,
       isLoading: false,
       isRefreshing: false,
-      canLoadMore: lists.length === 40,
+      canLoadMore: typeof lists === 'object' ? lists.length === 40 : false,
     })
   }
 
@@ -51,7 +51,7 @@ export default class Lists extends React.Component {
         lists: updatedLists,
         isLoading: false,
         isLoadingMore: false,
-        canLoadMore: updatedLists.length === 40,
+        canLoadMore: typeof updatedLists === 'object' ? updatedLists.length === 40 : false,
       })
     } else if (method === 'load more' && canLoadMore) {
       this.setState({
@@ -62,7 +62,7 @@ export default class Lists extends React.Component {
       this.setState({
         lists: [...lists, ...newLists],
         offset: offset + 40,
-        canLoadMore: newLists.length === 40,
+        canLoadMore: typeof newLists === 'object' ? newLists.length === 20 : false,
         isLoadingMore: false,
       })
     } else if (method === 'refresh') {
@@ -76,7 +76,7 @@ export default class Lists extends React.Component {
         lists: refreshedLists,
         isRefreshing: false,
         isLoadingMore: false,
-        canLoadMore: refreshedLists.length === 40,
+        canLoadMore: typeof refreshedLists === 'object' ? refreshedLists.length === 20 : false,
       })
     }
   }
