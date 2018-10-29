@@ -308,24 +308,33 @@ export const getListStats = async (apikey, id) => {
   }
 }
 
-export const getListContactIDs = async (apikeys, listName) => {
+export const getListContactIDs = async (apikeys, listName, offset) => {
   const { publicKey, secretKey } = apikeys
   return mailjetGet('listrecipient', publicKey, secretKey, {
     ListName: listName,
-    Limit,
+    Limit: 20,
+    Offset: offset,
     Unsub: false,
     IgnoreDeleted: true,
   })
 }
 
-export const getListContacts = async (apikeys, listName) => {
+export const getListContacts = async (apikeys, listName, offset = 0) => {
   const { publicKey, secretKey } = apikeys
-  const contactIDs = await getListContactIDs(apikeys, listName)
+  const contactIDs = await getListContactIDs(apikeys, listName, offset)
   const contacts = []
+
+  if (typeof contactIDs !== 'object') {
+    return 'The request timed out'
+  }
+
   for (let i = 0; i < contactIDs.length; i += 1) {
     const contactID = contactIDs[i].ContactID
     contacts.push(mailjetGet(`contact/${contactID}`, publicKey, secretKey))
   }
-  const resolved = await Promise.all(contacts)
-  return resolved
+
+  return Promise.race([
+    Promise.all(contacts),
+    timeOutCheck(5000),
+  ])
 }
