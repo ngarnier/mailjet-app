@@ -38,7 +38,7 @@ export default class Messages extends React.Component {
     this.setState({
       messages,
       isLoading: false,
-      canLoadMore: typeof messages === 'object' ? messages.length === 40 : false,
+      canLoadMore: typeof messages === 'object' ? messages.length === 20 : false,
     })
   }
 
@@ -58,20 +58,20 @@ export default class Messages extends React.Component {
         messages: updatedMessages,
         isLoading: false,
         isLoadingMore: false,
-        canLoadMore: typeof updatedMessages === 'object' ? updatedMessages.length === 40 : false,
+        canLoadMore: typeof updatedMessages === 'object' ? updatedMessages.length === 20 : false,
       })
     } else if (method === 'load more' && canLoadMore) {
       this.setState({
         isLoadingMore: true,
       })
 
-      const newMessages = await getAllMessages(apikeys.get(0), filter, offset + 40)
+      const newMessages = await getAllMessages(apikeys.get(0), filter, offset + 20)
 
       if (typeof newMessages === 'object') {
         this.setState({
           messages: [...messages, ...newMessages],
-          offset: offset + 40,
-          canLoadMore: typeof newMessages === 'object' ? newMessages.length === 40 : false,
+          offset: offset + 20,
+          canLoadMore: typeof newMessages === 'object' ? newMessages.length === 20 : false,
           isLoadingMore: false,
         })
       }
@@ -86,7 +86,7 @@ export default class Messages extends React.Component {
         messages: refreshedMessages,
         isRefreshing: false,
         isLoadingMore: false,
-        canLoadMore: typeof refreshedMessages === 'object' ? refreshedMessages.length === 40 : false,
+        canLoadMore: typeof refreshedMessages === 'object' ? refreshedMessages.length === 20 : false,
       })
     }
   }

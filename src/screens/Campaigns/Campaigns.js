@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { SafeAreaView, View, ActivityIndicator, StyleSheet } from 'react-native'
+import { SafeAreaView, ActivityIndicator, StyleSheet } from 'react-native'
 import { connect } from 'react-redux'
 import FilterRow from '../../components/FilterRow'
 import Picker from '../../components/Picker'

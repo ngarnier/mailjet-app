@@ -1,6 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { View, Text, Image, Button, StyleSheet } from 'react-native'
+import disconnection from '../img/disconnection.png'
+import noResult from '../img/noResultState.png'
 
 export default function EmptyState({ state, context, tryAgain }) {
   return (
@@ -10,7 +12,7 @@ export default function EmptyState({ state, context, tryAgain }) {
           <Image
             style={{ height: 180, resizeMode: 'contain' }}
             /* eslint-disable global-require */
-            source={require('../img/noResultState.png')}
+            source={noResult}
             /* eslint-enable */
           />
           <Text>No {context}</Text>
@@ -20,7 +22,7 @@ export default function EmptyState({ state, context, tryAgain }) {
           <Image
             style={{ height: 180, resizeMode: 'contain' }}
             /* eslint-disable global-require */
-            source={require('../img/disconnection.png')}
+            source={disconnection}
             /* eslint-enable */
           />
           <Text style={{ marginBottom: 10 }}>The request failed due to network issues</Text>

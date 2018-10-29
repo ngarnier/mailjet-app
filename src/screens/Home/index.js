@@ -22,6 +22,7 @@ export default class Home extends React.Component {
   }
   render() {
     const { apikeys } = this.props
+    console.log(apikeys)
     if (!apikeys.get(0)) {
       return <Login />
     }
