@@ -1,6 +1,5 @@
 export default function modals(state = {
   campaigns: false,
-  messages: false,
   settings: false,
 }, action) {
   switch (action.type) {

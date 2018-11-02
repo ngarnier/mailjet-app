@@ -69,17 +69,6 @@ export default class ModalPick extends React.Component {
             </View>
             {filters[context] === filter && <Icon name="checkmark" style={style.active} />}
           </View>
-        ) : context === 'messages' ? (
-          <View style={style.row}>
-            <View style={style.rowStart}>
-              <Text
-                style={filters[context] === filter ? [style.filter, style.active] : style.filter}
-              >
-                {filter}
-              </Text>
-            </View>
-            {filters[context] === filter && <Icon name="checkmark" style={style.active} />}
-          </View>
         ) : context === 'settings' && (
           <View>
             <Text style={style.filter}>

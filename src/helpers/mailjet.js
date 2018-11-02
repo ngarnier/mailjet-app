@@ -1,5 +1,5 @@
 import { Buffer } from 'buffer'
-import { getTS, formatTime } from './util'
+import { formatTime } from './util'
 
 const months = [
   'January',
@@ -171,98 +171,6 @@ export const getDraftCampaignDetails = async (apikeys, id) => {
   details[0].ListName = listDetails[0].Name
   details[0].Permalink = content[0].Url
   return details[0]
-}
-
-const getMessageCampaignInformation = async (apikeys, campaignID) => {
-  const { publicKey, secretKey } = apikeys
-  const campaigns = await mailjetGet(`campaign/${campaignID}`, publicKey, secretKey)
-  const information = {
-    campaignID,
-    fromEmail: campaigns[0].FromEmail,
-    fromName: campaigns[0].FromName,
-    opened: campaigns[0].OpenTracked,
-    sentAt: Date.parse(campaigns[0].SendEndAt),
-    subject: campaigns[0].Subject,
-  }
-  return information
-}
-
-const getMessageContactInformation = async (apikeys, contactID) => {
-  const { publicKey, secretKey } = apikeys
-  const contactData = await mailjetGet(`contact/${contactID}`, publicKey, secretKey)
-  const information = {
-    contactID,
-    toEmail: contactData[0].Email,
-  }
-  return information
-}
-
-export const getAllMessages = async (apikeys, statusFilter, offset = 0) => {
-  const { publicKey, secretKey } = apikeys
-  const d = getTS()
-  const messages = []
-  const campaignIDs = []
-  const contactIDs = []
-  const campaigns = []
-  const contacts = []
-  const messagesList = await mailjetGet('message', publicKey, secretKey, {
-    Limit: 20,
-    Offset: offset,
-    FromType: 'Transactional',
-    FromTS: d,
-    MessageStatus: statusFilter,
-  })
-
-  if (!messagesList) {
-    return 'The request timed out'
-  }
-
-  for (let i = 0; i < messagesList.length; i += 1) {
-    const campaignID = messagesList[i].CampaignID
-    const contactID = messagesList[i].ContactID
-    const campaignAlreadyFetched = campaignIDs.find(id => id === campaignID)
-    const contactAlreadyFetched = contactIDs.find(id => id === contactID)
-
-    if (!campaignAlreadyFetched) {
-      campaignIDs.push(campaignID)
-      campaigns.push(getMessageCampaignInformation(apikeys, messagesList[i].CampaignID))
-    }
-
-    if (!contactAlreadyFetched) {
-      contactIDs.push(contactID)
-      contacts.push(getMessageContactInformation(apikeys, messagesList[i].ContactID))
-    }
-  }
-
-  const resolvedCampaigns = await Promise.race([
-    Promise.all(campaigns),
-    timeOutCheck(5000),
-  ])
-  if (typeof resolvedCampaigns === 'string') {
-    return 'The request timed out'
-  }
-  const resolvedContacts = await Promise.race([
-    Promise.all(contacts),
-    timeOutCheck(5000),
-  ])
-  if (typeof resolvedContacts === 'string') {
-    return 'The request timed out'
-  }
-
-  for (let i = 0; i < messagesList.length; i += 1) {
-    const campaignInformation = resolvedCampaigns.find(campaign =>
-      campaign.campaignID === messagesList[i].CampaignID)
-    const contactInformation = resolvedContacts.find(contact =>
-      contact.contactID === messagesList[i].ContactID)
-    messages.push({
-      messageID: messagesList[i].ID,
-      status: messagesList[i].Status,
-      ...campaignInformation,
-      ...contactInformation,
-    })
-  }
-
-  return messages
 }
 
 export const getLists = async (apikey, offset = 0) => {

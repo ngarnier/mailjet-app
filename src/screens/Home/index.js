@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { TabNavigator, TabBarBottom } from 'react-navigation'
 import { Icon } from 'native-base'
-import MessagesNavigator from '../MessagesList'
 import CampaignsNavigator from '../Campaigns/'
 import ContactsNavigator from '../ContactLists'
 import Login from '../Login'
@@ -35,12 +34,6 @@ const CustomTabs = TabNavigator({
     screen: CampaignsNavigator,
     navigationOptions: {
       tabBarIcon: ({ tintColor }) => <Icon name="mail" style={{ color: tintColor }} />,
-    },
-  },
-  Transactional: {
-    screen: MessagesNavigator,
-    navigationOptions: {
-      tabBarIcon: ({ tintColor }) => <Icon name="stats" style={{ color: tintColor }} />,
     },
   },
   Contacts: {

@@ -39,19 +39,8 @@ export default class Picker extends React.Component {
           </View>
           {context === 'campaigns' && (
             <View>
+              <ModalPick onPick={this.props.pick} context={context} filter="Sent" />
               <ModalPick onPick={this.props.pick} context={context} filter="Drafts" />
-              <ModalPick onPick={this.props.pick} context={context} filter="Sent" />
-            </View>
-          )}
-          {context === 'messages' && (
-            <View>
-              <ModalPick onPick={this.props.pick} context={context} filter="Sent" />
-              <ModalPick onPick={this.props.pick} context={context} filter="Opened" />
-              <ModalPick onPick={this.props.pick} context={context} filter="Clicked" />
-              <ModalPick onPick={this.props.pick} context={context} filter="Queued" />
-              <ModalPick onPick={this.props.pick} context={context} filter="Bounce" />
-              <ModalPick onPick={this.props.pick} context={context} filter="Blocked" />
-              <ModalPick onPick={this.props.pick} context={context} filter="Spam" />
             </View>
           )}
           {context === 'settings' && (
