@@ -1,7 +1,6 @@
 import { Buffer } from 'buffer'
 import { getTS, formatTime } from './util'
 
-const Limit = 40
 const months = [
   'January',
   'February',
@@ -48,6 +47,8 @@ export const mailjetGet = async (route, publicKey, secretKey, filters) => {
       }
     }
   }
+
+  console.log(`https://api.mailjet.com/v3/REST/${route}${formattedFilters}`)
 
   const response = await Promise.race([
     mailjetGetRequest(route, formattedFilters, encodedKeys),
@@ -196,7 +197,7 @@ const getMessageContactInformation = async (apikeys, contactID) => {
   return information
 }
 
-export const getAllMessages = async (apikeys, statusFilter = 'All', offset = 0) => {
+export const getAllMessages = async (apikeys, statusFilter, offset = 0) => {
   const { publicKey, secretKey } = apikeys
   const d = getTS()
   const messages = []
@@ -204,20 +205,13 @@ export const getAllMessages = async (apikeys, statusFilter = 'All', offset = 0) 
   const contactIDs = []
   const campaigns = []
   const contacts = []
-  const messagesList = statusFilter === 'All' ?
-    await mailjetGet('message', publicKey, secretKey, {
-      Limit: 20,
-      Offset: offset,
-      FromType: 'Transactional',
-      FromTS: d,
-    }) :
-    await mailjetGet('message', publicKey, secretKey, {
-      Limit: 20,
-      Offset: offset,
-      FromType: 'Transactional',
-      FromTS: d,
-      MessageStatus: statusFilter,
-    })
+  const messagesList = await mailjetGet('message', publicKey, secretKey, {
+    Limit: 20,
+    Offset: offset,
+    FromType: 'Transactional',
+    FromTS: d,
+    MessageStatus: statusFilter,
+  })
 
   if (!messagesList) {
     return 'The request timed out'
