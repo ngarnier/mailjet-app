@@ -175,8 +175,6 @@ export const getListStats = async (apikey, id) => {
     CounterTiming: 'Message',
   })
 
-  console.log(stats)
-
   if (!stats || !stats[0]) {
     return undefined
   }

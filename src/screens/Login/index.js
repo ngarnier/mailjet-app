@@ -49,9 +49,9 @@ export default class Login extends React.Component {
     this.setState({
       isLoading: true,
     })
-    console.log(publicKey, secretKey)
+
     const auth = await checkAuth(publicKey, secretKey)
-    console.log(auth)
+
     if (auth === 'The request timed out') {
       this.setState({
         failureMessage: 'connectivity issues, please check your network.',
@@ -63,11 +63,9 @@ export default class Login extends React.Component {
         isLoading: false,
       })
     } else {
-      console.log('going to add the apikey')
       const { name } = await getMailjetKeys(publicKey, secretKey)
-      console.log(name)
+
       this.props.addApiKey(name, publicKey, secretKey)
-      console.log('added the keys')
     }
   }
 
