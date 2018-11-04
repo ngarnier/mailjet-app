@@ -2,10 +2,9 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { StyleSheet, View, Text } from 'react-native'
 import { Icon } from 'native-base'
-import EmptyState from '../../components/EmptyState'
 import StatsRow from '../../components/StatsRow'
 import { getListStats } from '../../helpers/mailjet'
-import LoadingState from '../../components/LoadingState';
+import LoadingState from '../../components/LoadingState'
 
 @connect(state => ({
   apikeys: state.apikeys,
@@ -34,7 +33,7 @@ export default class ContactList extends React.Component {
 
     return (
       <View style={{ flex: 1 }}>
-        {listStats ? (
+        {isLoading ? (<LoadingState />) : (
           <View>
             <View style={style.row}>
               <Text style={style.title}>{name}</Text>
@@ -51,29 +50,26 @@ export default class ContactList extends React.Component {
                 />
               </View>
             </View>
-            <StatsRow
-              delivered={listStats.delivered}
-              opened={listStats.opened}
-              clicked={listStats.clicked}
-            />
-            <View style={[style.row, { borderTopColor: '#ddd', borderTopWidth: 1 }]}>
-              <View style={[style.columns, { paddingBottom: 5 }]}>
-                <Text style={style.label}>Contacts</Text>
-                <Text style={style.figure}>{subscribers}</Text>
-              </View>
-              <View style={[style.columns, { paddingBottom: 5 }]}>
-                <Text style={style.label}>Subscribed contacts</Text>
-                <Text style={style.figure}>{listStats.active}</Text>
-              </View>
-              <View style={[style.columns, { paddingBottom: 5 }]}>
-                <Text style={style.label}>Unsubscribed contacts</Text>
-                <Text style={style.figure}>{listStats.unsub}</Text>
-              </View>
-            </View>
-          </View>) : isLoading ? (
-            <LoadingState />
-          ) : (<EmptyState state="no-data" context="List Information" />)
-          }
+            {listStats && (
+              <View>
+                <StatsRow
+                  sent={listStats.sent}
+                  opened={listStats.opened}
+                  clicked={listStats.clicked}
+                />
+                <View style={[style.row, { borderTopColor: '#ddd', borderTopWidth: 1 }]}>
+                  <View style={[style.columns, { paddingBottom: 5 }]}>
+                    <Text style={style.label}>Contacts</Text>
+                    <Text style={style.figure}>{subscribers}</Text>
+                  </View>
+                  <View style={[style.columns, { paddingBottom: 5 }]}>
+                    <Text style={style.label}>Unsubscribed contacts</Text>
+                    <Text style={style.figure}>{listStats.unsub}</Text>
+                  </View>
+                </View>
+              </View>)
+            }
+          </View>)}
       </View>
     )
   }

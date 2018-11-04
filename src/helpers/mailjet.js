@@ -127,7 +127,7 @@ export const getAllCampaigns = async (apikeys, filter, offset = 0) => {
       status,
       id: e.ID,
       date,
-      delivered: e.DeliveredCount,
+      sent: e.DeliveredCount,
       opened: `${Math.floor((e.OpenedCount / e.DeliveredCount) * 100) || 0}%`,
       clicked: `${Math.floor((e.ClickedCount / e.OpenedCount) * 100) || 0}%`,
     })
@@ -189,24 +189,29 @@ export const getLists = async (apikey, offset = 0) => {
 
 export const getListStats = async (apikey, id) => {
   const { publicKey, secretKey } = apikey
-  const lists = await mailjetGet(`liststatistics/${id}`, publicKey, secretKey, {
-    CalcActive: true,
-    CalcActiveUnsub: true,
+  const stats = await mailjetGet('statcounters', publicKey, secretKey, {
+    SourceID: id,
+    CounterSource: 'List',
+    CounterResolution: 'Lifetime',
+    CounterTiming: 'Message',
   })
 
+  if (!stats[0]) {
+    return undefined
+  }
+
   const {
-    ActiveCount,
-    ActiveUnsubscribedCount,
-    DeliveredCount,
-    OpenedCount,
-    ClickedCount,
-  } = lists[0]
+    MessageClickedCount,
+    MessageOpenedCount,
+    MessageSentCount,
+    MessageUnsubscribedCount,
+  } = stats[0]
+
   return {
-    active: ActiveCount,
-    unsub: ActiveUnsubscribedCount,
-    delivered: DeliveredCount,
-    opened: `${Math.floor((OpenedCount / DeliveredCount) * 100) || 0}%`,
-    clicked: `${Math.floor((ClickedCount / OpenedCount) * 100) || 0}%`,
+    sent: MessageSentCount,
+    unsub: MessageUnsubscribedCount,
+    opened: `${Math.floor((MessageOpenedCount / MessageSentCount) * 100) || 0}%`,
+    clicked: `${Math.floor((MessageClickedCount / MessageOpenedCount) * 100) || 0}%`,
   }
 }
 

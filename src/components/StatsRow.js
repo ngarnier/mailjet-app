@@ -2,11 +2,11 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { StyleSheet, View, Text } from 'react-native'
 
-export default function StatsRow({ delivered, opened, clicked }) {
+export default function StatsRow({ sent, opened, clicked }) {
   return (
     <View style={style.row}>
       <Text style={style.label}>Emails sent</Text>
-      <Text style={style.title}>{delivered}</Text>
+      <Text style={style.title}>{sent}</Text>
       <View style={style.columns}>
         <View style={{ width: '48%' }}>
           <Text style={style.subtitle}>{opened}</Text>
@@ -28,7 +28,7 @@ export default function StatsRow({ delivered, opened, clicked }) {
 }
 
 StatsRow.propTypes = {
-  delivered: PropTypes.number.isRequired,
+  sent: PropTypes.number.isRequired,
   opened: PropTypes.string.isRequired,
   clicked: PropTypes.string.isRequired,
 }
