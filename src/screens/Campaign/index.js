@@ -4,7 +4,7 @@ import { View } from 'react-native'
 import CampaignDetails from './CampaignDetails'
 import EmptyState from '../../components/EmptyState'
 import { getCampaignDetails } from '../../helpers/mailjet'
-import LoadingState from '../../components/LoadingState';
+import LoadingState from '../../components/LoadingState'
 
 @connect(state => ({
   apikeys: state.apikeys,

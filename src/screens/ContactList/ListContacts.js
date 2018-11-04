@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { FlatList, View, Text, ActivityIndicator, StyleSheet } from 'react-native'
+import { FlatList, View, Text, TouchableOpacity, ActivityIndicator, StyleSheet } from 'react-native'
 import EmptyState from '../../components/EmptyState'
 import { getListContacts } from '../../helpers/mailjet'
 import LoadingState from '../../components/LoadingState'
@@ -28,7 +28,6 @@ export default class ListContact extends React.Component {
     })
 
     const contacts = await getListContacts(apikeys.get(0), name)
-
     this.setState({
       contacts,
       isLoading: false,
@@ -92,6 +91,7 @@ export default class ListContact extends React.Component {
     const {
       contacts, isLoading, isLoadingMore, isRefreshing,
     } = this.state
+    const { navigation } = this.props
 
     return (
       <View style={style.container}>
@@ -110,9 +110,20 @@ export default class ListContact extends React.Component {
             onEndReachedThreshold={0.1}
             onEndReached={() => this.loadMore('load more')}
             renderItem={({ item }) => (
-              <View style={style.row} key={item[0].ID}>
-                <Text style={style.label}>{item[0].Email}</Text>
-              </View>)}
+              <TouchableOpacity
+                onPress={() => navigation.navigate('Contact', {
+                  createdAt: item[0].CreatedAt,
+                  deliveredCount: item[0].DeliveredCount,
+                  email: item[0].Email,
+                  id: item[0].ID,
+                  lastActivityAt: item[0].LastActivityAt,
+                })}
+              >
+                <View style={style.row} key={item[0].ID}>
+                  <Text style={style.label}>{item[0].Email}</Text>
+                </View>
+              </TouchableOpacity>
+              )}
           />)}
         {isLoadingMore && (
           <View style={style.loader}>

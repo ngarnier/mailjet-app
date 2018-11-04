@@ -28,7 +28,7 @@ export default function CampaignDetails({
       <LabelRow title="FROM" subtitle={fromEmail ? `${fromName} (${fromEmail})` : 'No sender specified'} />
       {status === 'Sent' && (
       <StatsRow
-        delivered={delivered}
+        sent={delivered}
         opened={opened}
         clicked={clicked}
       />

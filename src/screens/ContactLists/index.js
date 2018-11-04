@@ -3,6 +3,7 @@ import { StackNavigator } from 'react-navigation'
 import Lists from './Lists'
 import ContactList from '../ContactList'
 import ListContacts from '../ContactList/ListContacts'
+import ContactCard from '../ContactList/ContactCard'
 import SettingsGear from '../../components/SettingsGear'
 
 const ContactsNavigator = StackNavigator({
@@ -28,6 +29,16 @@ const ContactsNavigator = StackNavigator({
   },
   ListContacts: {
     screen: ListContacts,
+    navigationOptions: ({ navigation }) => ({
+      title: `${navigation.state.params.name}`,
+      headerStyle: {
+        backgroundColor: '#fead0d',
+      },
+      headerTintColor: '#fff',
+    }),
+  },
+  Contact: {
+    screen: ContactCard,
     navigationOptions: ({ navigation }) => ({
       title: `${navigation.state.params.name}`,
       headerStyle: {

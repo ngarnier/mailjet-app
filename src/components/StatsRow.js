@@ -7,30 +7,37 @@ export default function StatsRow({ sent, opened, clicked }) {
     <View style={style.row}>
       <Text style={style.label}>Emails sent</Text>
       <Text style={style.title}>{sent}</Text>
-      <View style={style.columns}>
-        <View style={{ width: '48%' }}>
-          <Text style={style.subtitle}>{opened}</Text>
-          <View style={style.emptyBar}>
-            <View style={[style.filledBar, { width: `${opened}` }]} />
+      {opened && clicked && (
+        <View style={style.columns}>
+          <View style={{ width: '48%' }}>
+            <Text style={style.subtitle}>{opened}</Text>
+            <View style={style.emptyBar}>
+              <View style={[style.filledBar, { width: `${opened}` }]} />
+            </View>
+            <Text>Opens</Text>
           </View>
-          <Text>Opens</Text>
-        </View>
-        <View style={{ width: '48%' }}>
-          <Text style={style.subtitle}>{clicked}</Text>
-          <View style={style.emptyBar}>
-            <View style={[style.filledBar, { width: `${clicked}` }]} />
+          <View style={{ width: '48%' }}>
+            <Text style={style.subtitle}>{clicked}</Text>
+            <View style={style.emptyBar}>
+              <View style={[style.filledBar, { width: `${clicked}` }]} />
+            </View>
+            <Text>Clicks</Text>
           </View>
-          <Text>Clicks</Text>
         </View>
-      </View>
+      )}
     </View>
   )
 }
 
 StatsRow.propTypes = {
   sent: PropTypes.number.isRequired,
-  opened: PropTypes.string.isRequired,
-  clicked: PropTypes.string.isRequired,
+  opened: PropTypes.string,
+  clicked: PropTypes.string,
+}
+
+StatsRow.defaultProps = {
+  opened: null,
+  clicked: null,
 }
 
 const style = StyleSheet.create({

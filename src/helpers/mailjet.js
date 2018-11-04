@@ -1,24 +1,5 @@
 import { Buffer } from 'buffer'
-import { formatTime } from './util'
-
-const months = [
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December']
-
-export const convertTimestamp = (timestamp) => {
-  const date = new Date(timestamp)
-  return `${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()} at ${formatTime(date.getHours())}h${formatTime(date.getMinutes())} UTC`
-}
+import { convertTimestamp } from './util'
 
 export const timeOutCheck = delay =>
   new Promise(resolve => setTimeout(resolve, delay, 'The request timed out'))
@@ -47,8 +28,6 @@ export const mailjetGet = async (route, publicKey, secretKey, filters) => {
       }
     }
   }
-
-  console.log(`https://api.mailjet.com/v3/REST/${route}${formattedFilters}`)
 
   const response = await Promise.race([
     mailjetGetRequest(route, formattedFilters, encodedKeys),
@@ -108,6 +87,7 @@ const getCampaigns = async (apikey, filter, offset) => {
 export const getAllCampaigns = async (apikeys, filter, offset = 0) => {
   const campaigns = []
   const keyData = await getCampaigns(apikeys, filter, offset)
+
   if (!keyData) {
     return 'The request timed out'
   }
@@ -118,8 +98,7 @@ export const getAllCampaigns = async (apikeys, filter, offset = 0) => {
     const timestamp = e.SendTimeStart
     let date
     if (timestamp > 0) {
-      date = new Date(timestamp * 1000)
-      date = `${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()} at ${formatTime(date.getHours())}h${formatTime(date.getMinutes())} UTC`
+      date = convertTimestamp(timestamp * 1000)
     }
     campaigns.push({
       title: e.Title,
@@ -127,7 +106,7 @@ export const getAllCampaigns = async (apikeys, filter, offset = 0) => {
       status,
       id: e.ID,
       date,
-      sent: e.DeliveredCount,
+      delivered: e.DeliveredCount,
       opened: `${Math.floor((e.OpenedCount / e.DeliveredCount) * 100) || 0}%`,
       clicked: `${Math.floor((e.ClickedCount / e.OpenedCount) * 100) || 0}%`,
     })
@@ -196,7 +175,9 @@ export const getListStats = async (apikey, id) => {
     CounterTiming: 'Message',
   })
 
-  if (!stats[0]) {
+  console.log(stats)
+
+  if (!stats || !stats[0]) {
     return undefined
   }
 
