@@ -224,3 +224,10 @@ export const getListContacts = async (apikeys, listName, offset = 0) => {
     timeOutCheck(5000),
   ])
 }
+
+export const getContactProperties = async (apikeys, id) => {
+  const { publicKey, secretKey } = apikeys
+  const contactData = await mailjetGet(`contactdata/${id}`, publicKey, secretKey)
+
+  return contactData[0].Data || 'The request timed out'
+}

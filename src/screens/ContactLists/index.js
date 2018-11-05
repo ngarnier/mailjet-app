@@ -4,6 +4,7 @@ import Lists from './Lists'
 import ContactList from '../ContactList'
 import ListContacts from '../ContactList/ListContacts'
 import ContactCard from '../ContactList/ContactCard'
+import ContactDetails from '../ContactList/ContactDetails'
 import SettingsGear from '../../components/SettingsGear'
 
 const ContactsNavigator = StackNavigator({
@@ -39,8 +40,18 @@ const ContactsNavigator = StackNavigator({
   },
   Contact: {
     screen: ContactCard,
-    navigationOptions: ({ navigation }) => ({
-      title: `${navigation.state.params.name}`,
+    navigationOptions: () => ({
+      title: 'Contact information',
+      headerStyle: {
+        backgroundColor: '#fead0d',
+      },
+      headerTintColor: '#fff',
+    }),
+  },
+  ContactDetails: {
+    screen: ContactDetails,
+    navigationOptions: () => ({
+      title: 'Contact details',
       headerStyle: {
         backgroundColor: '#fead0d',
       },
