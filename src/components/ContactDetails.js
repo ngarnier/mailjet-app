@@ -1,16 +1,15 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { FlatList, View, StyleSheet } from 'react-native'
-import { getContactProperties } from '../../helpers/mailjet'
-import LeftRight from '../../components/LeftRight'
-import LoadingState from '../../components/LoadingState'
-import EmptyState from '../../components/EmptyState'
+import { View, ActivityIndicator, StyleSheet } from 'react-native'
+import { getContactProperties } from '../helpers/mailjet'
+import LeftRight from './LeftRight'
+import EmptyState from './EmptyState'
 
 @connect(state => ({
   apikeys: state.apikeys,
 }))
 
-export default class ListContact extends React.Component {
+export default class ContactDetails extends React.Component {
   state = {
     properties: [],
     isLoading: true,
@@ -18,7 +17,7 @@ export default class ListContact extends React.Component {
 
   componentDidMount = async () => {
     const { apikeys } = this.props
-    const { id } = this.props.navigation.state.params
+    const { id } = this.props
 
     const properties = await getContactProperties(apikeys.get(0), id)
 
@@ -34,19 +33,19 @@ export default class ListContact extends React.Component {
     return (
       <View style={style.container}>
         {isLoading ? (
-          <LoadingState />
+          <ActivityIndicator style={{ paddingTop: 10 }} size="large" />
         ) : typeof properties === 'string' ? (
           <EmptyState tryAgain={() => this.loadMore('update')} state="network-issue" context="Contact details" />
         ) : properties.length === 0 ? (
           <EmptyState state="no-data" context="Contact details" />
         ) : (
-          <FlatList
-            data={properties}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={({ item }) => (
-              <LeftRight left={item.Name} right={item.Value} />
-            )}
-          />)}
+          properties.map((property, index) => (<LeftRight
+            key={index.toString()}
+            left={property.Name}
+            right={property.Value}
+            padding
+          />))
+        )}
       </View>
     )
   }
@@ -54,7 +53,6 @@ export default class ListContact extends React.Component {
 
 const style = StyleSheet.create({
   container: {
-    flex: 1,
     justifyContent: 'center',
   },
   row: {

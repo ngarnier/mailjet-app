@@ -2,9 +2,16 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { StyleSheet, View, Text } from 'react-native'
 
-export default function LeftRight({ left, right, border }) {
+export default function LeftRight({
+  left, right, border, padding,
+}) {
   return (
-    <View style={border ? style.rowWithBorder : style.rowWithoutBorder}>
+    <View style={[
+      style.row,
+      border ? style.withBorder : '',
+      padding ? style.withPadding : '',
+    ]}
+    >
       <View style={[style.columns, { paddingBottom: 5 }]}>
         <Text style={style.label}>{left}</Text>
         <Text style={style.figure}>{right}</Text>
@@ -19,28 +26,29 @@ LeftRight.propTypes = {
   right: PropTypes.any.isRequired,
   /* eslint-enable */
   border: PropTypes.bool,
+  padding: PropTypes.bool,
 }
 
 LeftRight.defaultProps = {
   border: false,
+  padding: false,
 }
 
 const style = StyleSheet.create({
-  rowWithoutBorder: {
+  row: {
     backgroundColor: '#fff',
     paddingTop: 5,
     paddingBottom: 5,
     paddingLeft: 20,
     paddingRight: 20,
   },
-  rowWithBorder: {
-    backgroundColor: '#fff',
-    paddingTop: 5,
-    paddingBottom: 5,
-    paddingLeft: 20,
-    paddingRight: 20,
+  withBorder: {
     borderBottomWidth: 1,
     borderBottomColor: '#ddd',
+  },
+  withPadding: {
+    paddingTop: 10,
+    paddingBottom: 10,
   },
   columns: {
     flexDirection: 'row',
