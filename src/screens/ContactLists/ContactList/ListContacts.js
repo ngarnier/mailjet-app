@@ -1,9 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { FlatList, View, Text, TouchableOpacity, ActivityIndicator, StyleSheet } from 'react-native'
-import EmptyState from '../../components/EmptyState'
-import { getListContacts } from '../../helpers/mailjet'
-import LoadingState from '../../components/LoadingState'
+import EmptyState from '../../../components/EmptyState'
+import { getListContacts } from '../../../helpers/mailjet'
+import LoadingState from '../../../components/LoadingState'
 
 @connect(state => ({
   apikeys: state.apikeys,

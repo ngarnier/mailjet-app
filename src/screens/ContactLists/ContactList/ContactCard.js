@@ -1,9 +1,9 @@
 import React from 'react'
 import { StyleSheet, ScrollView, View, Text } from 'react-native'
-import LeftRight from '../../components/LeftRight'
-import StatsRow from '../../components/StatsRow'
-import ContactDetails from '../../components/ContactDetails'
-import { convertTimestamp } from '../../helpers/util'
+import LeftRight from '../../../components/LeftRight'
+import StatsRow from '../../../components/StatsRow'
+import ContactDetails from '../../../components/ContactDetails'
+import { convertTimestamp } from '../../../helpers/util'
 
 export default class ContactList extends React.PureComponent {
   state = {

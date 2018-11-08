@@ -51,12 +51,12 @@ const style = StyleSheet.create({
     flexDirection: 'row',
   },
   icon: {
-    color: '#fda836',
+    color: '#1FBE9F',
     marginRight: 10,
     fontSize: 22,
   },
   filter: {
     fontSize: 18,
-    color: '#fda836',
+    color: '#1FBE9F',
   },
 })

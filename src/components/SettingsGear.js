@@ -17,7 +17,7 @@ export default class SettingsGear extends React.Component {
     const { showModalConnected } = this.props
     return (
       <Icon
-        style={{ paddingRight: 10, color: '#fff' }}
+        style={{ paddingRight: 10, color: '#1FBE9F' }}
         name="md-settings"
         onPress={() => showModalConnected('settings')}
       />

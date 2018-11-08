@@ -102,7 +102,7 @@ const style = StyleSheet.create({
     color: '#222',
   },
   active: {
-    color: '#fda836',
+    color: '#1FBE9F',
   },
 })
 

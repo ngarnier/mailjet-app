@@ -1,9 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { StyleSheet, ScrollView } from 'react-native'
-import LabelRow from '../../components/LabelRow'
-import StatsRow from '../../components/StatsRow'
-import Preview from '../../components/Preview'
+import LabelRow from '../../../components/LabelRow'
+import StatsRow from '../../../components/StatsRow'
+import Preview from '../../../components/Preview'
 
 export default function CampaignDetails({
   title,

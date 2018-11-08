@@ -8,7 +8,7 @@ import LoadingState from '../../components/LoadingState'
 export default class ContactLists extends React.PureComponent {
   render() {
     const {
-      lists,
+      lists = [],
       isLoading,
       isRefreshing,
       refresh,
