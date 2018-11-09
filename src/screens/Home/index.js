@@ -24,13 +24,15 @@ export default class Home extends React.Component {
   }
   render() {
     const { apikeys } = this.props
-    let companyName = apikeys.get(0).name
-    companyName = companyName === 'user' ? 'My account' :
-      companyName.length > 29 ? companyName.substring(0, 30).concat('...') : companyName
 
     if (!apikeys.get(0)) {
       return <Login />
     }
+
+    let companyName = apikeys.get(0).name
+    companyName = companyName === 'user' ? 'My account' :
+      companyName.length > 29 ? companyName.substring(0, 30).concat('...') : companyName
+
     return (
       <SafeAreaView
         style={{ flex: 1 }}
