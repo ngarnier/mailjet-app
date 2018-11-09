@@ -15,6 +15,13 @@ const CampaignsNavigator = StackNavigator({
       title: `${navigation.state.params.title}`,
     }),
   },
+}, {
+  navigationOptions: {
+    headerForceInset: { top: 'never' },
+    headerStyle: {
+      backgroundColor: '#fff',
+    },
+  },
 })
 
 export default CampaignsNavigator

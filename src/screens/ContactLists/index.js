@@ -29,6 +29,13 @@ const ContactsNavigator = StackNavigator({
       title: 'Contact information',
     },
   },
+}, {
+  navigationOptions: {
+    headerForceInset: { top: 'never' },
+    headerStyle: {
+      backgroundColor: '#fff',
+    },
+  },
 })
 
 export default ContactsNavigator

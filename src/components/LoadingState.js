@@ -1,7 +1,17 @@
 import React from 'react'
-import { Animated, View, StyleSheet } from 'react-native'
+import PropTypes from 'prop-types'
+import { Animated, View, Image, StyleSheet } from 'react-native'
+import noResult from '../img/splash.png'
 
 export default class LoadingState extends React.Component {
+  static propTypes = {
+    type: PropTypes.string,
+  }
+
+  static defaultProps = {
+    type: undefined,
+  }
+
   state = {
     fadeAnim: new Animated.Value(0.5),
   }
@@ -21,9 +31,20 @@ export default class LoadingState extends React.Component {
   }
 
   render() {
+    const { type } = this.props
+
     return (
       <View style={style.container}>
-        {[0, 1, 2, 3, 4, 5, 6].map(e => (
+        {type === 'login' ? (
+          <View>
+            <Image
+              style={{ height: 180, resizeMode: 'contain' }}
+              /* eslint-disable global-require */
+              source={noResult}
+              /* eslint-enable */
+            />
+          </View>
+        ) : [0, 1, 2, 3, 4, 5, 6].map(e => (
           <View style={style.row} key={e}>
             <Animated.View style={[style.line, style.title, { opacity: this.state.fadeAnim }]} />
             <Animated.View style={[style.line, style.subtitle, { opacity: this.state.fadeAnim }]} />

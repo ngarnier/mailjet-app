@@ -9,6 +9,7 @@ import CampaignsNavigator from '../Campaigns/'
 import ContactsNavigator from '../ContactLists'
 import Login from '../Login'
 import SettingsGear from '../../components/SettingsGear'
+import LoadingState from '../../components/LoadingState'
 
 @connect(state => ({
   apikeys: state.apikeys,
@@ -16,32 +17,33 @@ import SettingsGear from '../../components/SettingsGear'
 
 export default class Home extends React.Component {
   static propTypes = {
-    apikeys: PropTypes.objectOf(PropTypes.any),
+    apikeys: PropTypes.objectOf(PropTypes.any).isRequired,
   }
 
-  static defaultProps = {
-    apikeys: [],
-  }
   render() {
     const { apikeys } = this.props
+    let companyName = ''
 
-    if (!apikeys.get(0)) {
-      return <Login />
+    if (apikeys.get(0)) {
+      companyName = apikeys.get(0).name
+      companyName = companyName === 'user' ? 'My account' :
+        companyName.length > 29 ? companyName.substring(0, 30).concat('...') : companyName
     }
-
-    let companyName = apikeys.get(0).name
-    companyName = companyName === 'user' ? 'My account' :
-      companyName.length > 29 ? companyName.substring(0, 30).concat('...') : companyName
 
     return (
       <SafeAreaView
         style={{ flex: 1 }}
       >
-        <View style={style.header}>
-          <Text style={style.company}>{companyName}</Text>
-          <SettingsGear />
-        </View>
-        <CustomTabs />
+        {apikeys === 'undefined' ? (<LoadingState type="login" />) :
+          apikeys.size === 0 ? (<Login />) : (
+            <View style={{ flex: 1 }}>
+              <View style={style.header}>
+                <Text style={style.company}>{companyName}</Text>
+                <SettingsGear />
+              </View>
+              <CustomTabs />
+            </View>
+        )}
       </SafeAreaView>
     )
   }
@@ -72,6 +74,7 @@ const CustomTabs = TabNavigator({
   tabBarComponent: TabBarBottom,
   tabBarPosition: 'bottom',
   tabBarOptions: {
+    headerForceInset: { bottom: 'never' },
     activeTintColor: '#1FBE9F',
     inactiveTintColor: '#9a9b9f',
     showIcon: true,
@@ -79,7 +82,6 @@ const CustomTabs = TabNavigator({
       fontSize: 14,
     },
     style: {
-      height: 65,
       backgroundColor: '#fefefe',
     },
   },
