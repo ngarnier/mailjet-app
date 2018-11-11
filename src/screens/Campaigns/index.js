@@ -11,11 +11,9 @@ const CampaignsNavigator = StackNavigator({
   },
   Campaign: {
     screen: Campaign,
-    navigationOptions: ({ navigation }) => ({
-      title: `${navigation.state.params.title}`,
-    }),
   },
 }, {
+  headerMode: 'screen',
   navigationOptions: {
     headerForceInset: { top: 'never' },
     headerStyle: {
@@ -25,3 +23,4 @@ const CampaignsNavigator = StackNavigator({
 })
 
 export default CampaignsNavigator
+

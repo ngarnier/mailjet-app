@@ -1,23 +1,38 @@
 import React from 'react'
-import { View, WebView, StyleSheet, Dimensions } from 'react-native'
+import { connect } from 'react-redux'
+import { View, WebView, StyleSheet } from 'react-native'
 import PropTypes from 'prop-types'
 import { Icon } from 'native-base'
 import LabelRow from './LabelRow'
+import changePreviewSize from '../actions/preview'
+
+@connect(state => ({
+  previewIsFullSize: state.preview.previewIsFullSize,
+}), {
+  changePreviewSizeConnect: changePreviewSize,
+})
 
 export default class Preview extends React.Component {
+  static propTypes = {
+    permalink: PropTypes.string.isRequired,
+    previewIsFullSize: PropTypes.bool.isRequired,
+  }
+
   state = {
-    isFullSize: false,
     canGoBack: false,
   }
 
-  render() {
-    const { permalink } = this.props
-    const { isFullSize, canGoBack } = this.state
+  resize = async () => {
+    const { changePreviewSizeConnect, previewIsFullSize } = this.props
+    await changePreviewSizeConnect(!previewIsFullSize)
+  }
 
-    const resize = () => {
-      this.setState({
-        isFullSize: !isFullSize,
-      })
+  render() {
+    const { permalink, previewIsFullSize } = this.props
+    const { canGoBack } = this.state
+
+    const goBack = () => {
+      this.nav.goBack()
     }
 
     const handleNavigation = (e) => {
@@ -26,14 +41,8 @@ export default class Preview extends React.Component {
       })
     }
 
-    const goBack = () => {
-      this.nav.goBack()
-    }
-
     return (
-      <View
-        //style={{ height: isFullSize ? Dimensions.get('window').height - 180 : Dimensions.get('window').height / 2 }}
-      >
+      <View style={{ flex: 1 }}>
         <LabelRow title="CONTENT" />
         <View style={style.topView} />
         <WebView
@@ -53,8 +62,8 @@ export default class Preview extends React.Component {
             }}
           />
           <Icon
-            name={isFullSize ? 'fullscreen-exit' : 'fullscreen'}
-            onPress={resize}
+            name={previewIsFullSize ? 'fullscreen-exit' : 'fullscreen'}
+            onPress={() => this.resize()}
             type="MaterialCommunityIcons"
             style={style.resize}
           />
@@ -62,10 +71,6 @@ export default class Preview extends React.Component {
       </View>
     )
   }
-}
-
-Preview.propTypes = {
-  permalink: PropTypes.string.isRequired,
 }
 
 const style = StyleSheet.create({

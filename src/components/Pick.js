@@ -69,7 +69,7 @@ const style = StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    height: 32,
+    height: 42,
   },
   filter: {
     marginLeft: 5,

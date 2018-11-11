@@ -1,40 +1,51 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { StyleSheet, ScrollView } from 'react-native'
+import { connect } from 'react-redux'
+import { StyleSheet, ScrollView, View, Dimensions } from 'react-native'
 import LabelRow from '../../../components/LabelRow'
 import StatsRow from '../../../components/StatsRow'
 import Preview from '../../../components/Preview'
 
-export default function CampaignDetails({
-  title,
-  subject,
-  fromName,
-  fromEmail,
-  listName,
-  permalink,
-  delivered,
-  opened,
-  clicked,
-  status,
-}) {
-  return (
-    <ScrollView style={style.container}>
-      {permalink && (
-        <Preview permalink={permalink} />
-      )}
-      <LabelRow title="CAMPAIGN NAME" subtitle={title || 'Untitled Campaign'} />
-      <LabelRow title="SUBJECT" subtitle={subject || 'No subject specified'} />
-      <LabelRow title="RECIPIENTS" subtitle={listName || 'No list specified'} />
-      <LabelRow title="FROM" subtitle={fromEmail ? `${fromName} (${fromEmail})` : 'No sender specified'} />
-      {status === 'Sent' && (
-      <StatsRow
-        sent={delivered}
-        opened={opened}
-        clicked={clicked}
-      />
-      )}
-    </ScrollView>
-  )
+@connect(state => ({
+  previewIsFullSize: state.preview.previewIsFullSize,
+}))
+
+export default class CampaignDetails extends React.Component {
+  render() {
+    const {
+      title,
+      subject,
+      fromName,
+      fromEmail,
+      listName,
+      permalink,
+      delivered,
+      opened,
+      clicked,
+      status,
+      previewIsFullSize,
+    } = this.props
+    return (
+      <ScrollView style={style.container}>
+        <View style={{ height: previewIsFullSize ? Dimensions.get('window').height - 80 : Dimensions.get('window').height / 2 }}>
+          {permalink && (
+            <Preview permalink={permalink} />
+          )}
+        </View>
+        <LabelRow title="CAMPAIGN NAME" subtitle={title || 'Untitled Campaign'} />
+        <LabelRow title="SUBJECT" subtitle={subject || 'No subject specified'} />
+        <LabelRow title="RECIPIENTS" subtitle={listName || 'No list specified'} />
+        <LabelRow title="FROM" subtitle={fromEmail ? `${fromName} (${fromEmail})` : 'No sender specified'} />
+        {status === 'Sent' && (
+        <StatsRow
+          sent={delivered}
+          opened={opened}
+          clicked={clicked}
+        />
+        )}
+      </ScrollView>
+    )
+  }
 }
 
 CampaignDetails.propTypes = {
@@ -48,6 +59,7 @@ CampaignDetails.propTypes = {
   opened: PropTypes.string.isRequired,
   clicked: PropTypes.string.isRequired,
   status: PropTypes.string.isRequired,
+  previewIsFullSize: PropTypes.bool.isRequired,
 }
 
 CampaignDetails.defaultProps = {
@@ -58,6 +70,6 @@ const style = StyleSheet.create({
   container: {
     paddingTop: 10,
     backgroundColor: '#fff',
-    height: '100%',
+    flex: 1,
   },
 })

@@ -13,16 +13,19 @@ import LoadingState from '../../components/LoadingState'
 
 @connect(state => ({
   apikeys: state.apikeys,
+  previewIsFullSize: state.preview.previewIsFullSize,
 }))
 
 export default class Home extends React.Component {
   static propTypes = {
     apikeys: PropTypes.objectOf(PropTypes.any).isRequired,
+    previewIsFullSize: PropTypes.bool.isRequired,
   }
 
   render() {
-    const { apikeys } = this.props
+    const { apikeys, previewIsFullSize } = this.props
     let companyName = ''
+    console.log(previewIsFullSize)
 
     if (apikeys.get(0)) {
       companyName = apikeys.get(0).name
@@ -37,10 +40,12 @@ export default class Home extends React.Component {
         {apikeys === 'undefined' ? (<LoadingState type="login" />) :
           apikeys.size === 0 ? (<Login />) : (
             <View style={{ flex: 1 }}>
-              <View style={style.header}>
-                <Text style={style.company}>{companyName}</Text>
-                <SettingsGear />
-              </View>
+              {previewIsFullSize === false && (
+                <View style={style.header}>
+                  <Text style={style.company}>{companyName}</Text>
+                  <SettingsGear />
+                </View>
+              )}
               <CustomTabs />
             </View>
         )}
@@ -82,6 +87,7 @@ const CustomTabs = TabNavigator({
       fontSize: 14,
     },
     style: {
+      height: 56,
       backgroundColor: '#fefefe',
     },
   },

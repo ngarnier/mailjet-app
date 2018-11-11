@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { View } from 'react-native'
 import CampaignDetails from './CampaignDetails'
@@ -8,9 +9,23 @@ import LoadingState from '../../../components/LoadingState'
 
 @connect(state => ({
   apikeys: state.apikeys,
+  previewIsFullSize: state.preview.previewIsFullSize,
 }))
 
 export default class Campaign extends React.Component {
+  static propTypes = {
+    previewIsFullSize: PropTypes.bool.isRequired,
+  }
+
+  static navigationOptions = ({ navigation }) => (navigation.state.params.previewIsFullSize ? {
+    title: navigation.state.params.title,
+    tabBarVisible: false,
+    header: null,
+  } : {
+    title: navigation.state.params.title,
+    tabBarVisible: false,
+  })
+
   state = {}
 
   componentDidMount = async () => {
@@ -30,6 +45,15 @@ export default class Campaign extends React.Component {
       },
       isLoading: false,
     })
+  }
+
+  shouldComponentUpdate(nextProps) {
+    if (this.props.previewIsFullSize !== nextProps.previewIsFullSize) {
+      this.props.navigation.setParams({
+        previewIsFullSize: nextProps.previewIsFullSize,
+      })
+    }
+    return true
   }
 
   render() {

@@ -13,15 +13,22 @@ const ContactsNavigator = StackNavigator({
   },
   ContactList: {
     screen: ContactList,
+    navigationOptions: {
+      tabBarVisible: false,
+    },
   },
   ListContacts: {
     screen: ListContacts,
     navigationOptions: ({ navigation }) => ({
       title: `${navigation.state.params.name}`,
+      tabBarVisible: false,
     }),
   },
   Contact: {
     screen: ContactCard,
+    navigationOptions: {
+      tabBarVisible: false,
+    },
   },
 }, {
   navigationOptions: {
