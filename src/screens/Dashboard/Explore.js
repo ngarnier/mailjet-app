@@ -28,19 +28,21 @@ export default class Explore extends React.Component {
     const { isLoading, articles } = this.state
 
     return (
-      <View style={{ flex: 1 }}>
+      <View>
         {isLoading ? (
           <LoadingState />
         ) : typeof articles === 'object' ? (
-          <ScrollView style={{ paddingTop: 20 }}>
-            {articles.map((article, index) => (
-              <Article
-                key={index.toString()}
-                title={article.title}
-                description={article.description}
-                categories={article.categories}
-                link={article.link}
-              />))}
+          <ScrollView>
+            <View style={{ paddingTop: 20, paddingBottom: 10 }}>
+              {articles.map((article, index) => (
+                <Article
+                  key={index.toString()}
+                  title={article.title}
+                  description={article.description}
+                  categories={article.categories}
+                  link={article.link}
+                />))}
+            </View>
           </ScrollView>) : (<EmptyState state="network-issue" context="articles" />)}
       </View>
     )

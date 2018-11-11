@@ -1,4 +1,4 @@
-import { parseString } from 'react-native-xml2js' 
+import { parseString } from 'react-native-xml2js'
 
 const mailjetArticlesRequest = () =>
   fetch('https://www.mailjet.com/feed/', {
@@ -14,10 +14,9 @@ const fetchArticles = async () => {
   const feed = await mailjetArticlesRequest()
   const rawXml = await feed.text()
   parseString(rawXml, (err, result) => {
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < 5; i += 1) {
       articles.push({
         title: result.rss.channel[0].item[i].title[0],
-        description: result.rss.channel[0].item[i].description[0],
         link: result.rss.channel[0].item[i].link[0],
         categories: result.rss.channel[0].item[i].category,
       })

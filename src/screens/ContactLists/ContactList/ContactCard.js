@@ -41,7 +41,7 @@ export default class ContactList extends React.PureComponent {
                 <Text style={style.label}>Contact Details</Text>
                 <Text
                   onPress={() => this.toggleState()}
-                  style={{ color: '#1FBE9F' }}
+                  style={{ color: '#1FBE9F', fontSize: 18 }}
                 >
                   {detailsShown ? 'Hide' : 'Show'}
                 </Text>
@@ -74,12 +74,12 @@ const style = StyleSheet.create({
     borderBottomColor: '#ddd',
   },
   title: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: 'bold',
     color: '#222',
   },
   label: {
-    fontSize: 16,
+    fontSize: 18,
     color: '#444',
   },
 })

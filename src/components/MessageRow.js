@@ -16,11 +16,11 @@ export default class MessageRow extends React.PureComponent {
         {subtitle && (<Text style={style.subtitle}>{subtitle}</Text>)}
         <View style={style.date}>
           <Badge style={[style.badge, style[safeStatus]]}>
-            <Text style={style[`${safeStatus}Text`]}>
+            <Text style={[{ fontSize: 16 }, style[`${safeStatus}Text`]]}>
               {safeStatus}
             </Text>
           </Badge>
-          {date && (<Text>on {date}</Text>)}
+          {date && (<Text style={style.dateText}>on {date}</Text>)}
         </View>
       </View>
     )
@@ -46,12 +46,12 @@ const style = StyleSheet.create({
     padding: 20,
   },
   title: {
-    fontSize: 16,
+    fontSize: 20,
     fontWeight: 'bold',
     color: '#333',
   },
   subtitle: {
-    fontSize: 14,
+    fontSize: 18,
     lineHeight: 20,
     paddingTop: 5,
     paddingBottom: 10,
@@ -60,6 +60,9 @@ const style = StyleSheet.create({
   date: {
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  dateText: {
+    fontSize: 16,
   },
   badge: {
     borderRadius: 5,

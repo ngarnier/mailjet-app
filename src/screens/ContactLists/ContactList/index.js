@@ -87,23 +87,24 @@ const style = StyleSheet.create({
     justifyContent: 'space-between',
   },
   title: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: 'bold',
     color: '#222',
   },
   subtitle: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: 'bold',
     color: '#222',
     paddingTop: 10,
   },
   label: {
-    fontSize: 16,
+    fontSize: 18,
     color: '#444',
   },
   figure: {
     color: '#222',
     fontWeight: 'bold',
+    fontSize: 18,
   },
   emptyBar: {
     backgroundColor: '#eee',

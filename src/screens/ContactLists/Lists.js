@@ -64,7 +64,7 @@ export default class Lists extends React.Component {
         this.setState({
           lists: [...lists, ...newLists],
           offset: offset + 40,
-          canLoadMore: typeof newLists === 'object' ? newLists.length === 20 : false,
+          canLoadMore: typeof newLists === 'object' ? newLists.length === 40 : false,
           isLoadingMore: false,
         })
       }
@@ -79,7 +79,7 @@ export default class Lists extends React.Component {
         lists: refreshedLists,
         isRefreshing: false,
         isLoadingMore: false,
-        canLoadMore: typeof refreshedLists === 'object' ? refreshedLists.length === 20 : false,
+        canLoadMore: typeof refreshedLists === 'object' ? refreshedLists.length === 40 : false,
       })
     }
   }

@@ -10,7 +10,7 @@ import Overview from './Overview'
 
 export default class DashboardNavigator extends React.Component {
   render() {
-    return <DashboardTabs />
+    return (<DashboardTabs />)
   }
 }
 
@@ -34,7 +34,8 @@ const DashboardTabs = TabNavigator({
     activeTintColor: '#1FBE9F',
     inactiveTintColor: '#9a9b9f',
     labelStyle: {
-      fontSize: 14,
+      fontSize: 18,
+      fontWeight: 'bold',
     },
     style: {
       backgroundColor: '#fefefe',

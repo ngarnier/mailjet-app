@@ -2,8 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { SafeAreaView, ActivityIndicator, StyleSheet } from 'react-native'
 import { connect } from 'react-redux'
-import FilterRow from '../../components/FilterRow'
 import Picker from '../../components/Picker'
+import Pick from '../../components/Pick'
 import CampaignsList from './CampaignsList'
 import { getAllCampaigns } from '../../helpers/mailjet'
 
@@ -92,14 +92,14 @@ export default class Campaigns extends React.Component {
   }
 
   render() {
-    const { filter, navigation } = this.props
+    const { navigation } = this.props
     const {
       campaigns, isLoading, isLoadingMore, isRefreshing,
     } = this.state
 
     return (
       <SafeAreaView style={style.container}>
-        <FilterRow filter={filter} context="campaigns" />
+        <Pick pick={() => this.fetchMessages('update')} />
         <CampaignsList
           refresh={method => this.fetchMessages(method)}
           campaigns={campaigns}

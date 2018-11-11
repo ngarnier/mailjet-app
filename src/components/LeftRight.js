@@ -55,11 +55,11 @@ const style = StyleSheet.create({
     justifyContent: 'space-between',
   },
   label: {
-    fontSize: 16,
+    fontSize: 18,
     color: '#444',
   },
   figure: {
-    fontSize: 16,
+    fontSize: 18,
     color: '#222',
     fontWeight: 'bold',
   },

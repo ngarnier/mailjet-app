@@ -13,9 +13,6 @@ const ContactsNavigator = StackNavigator({
   },
   ContactList: {
     screen: ContactList,
-    navigationOptions: ({ navigation }) => ({
-      title: `${navigation.state.params.name}`,
-    }),
   },
   ListContacts: {
     screen: ListContacts,
@@ -25,9 +22,6 @@ const ContactsNavigator = StackNavigator({
   },
   Contact: {
     screen: ContactCard,
-    navigationOptions: {
-      title: 'Contact information',
-    },
   },
 }, {
   navigationOptions: {

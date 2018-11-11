@@ -21,7 +21,7 @@ export default class ContactListItem extends React.PureComponent {
         })}
       >
         <Text style={style.title}>{name}</Text>
-        <Text style={{ marginBottom: 5 }}>
+        <Text style={style.subtitle}>
           {subscribers} subscribers
         </Text>
       </TouchableOpacity>
@@ -43,9 +43,13 @@ const style = StyleSheet.create({
     padding: 20,
   },
   title: {
-    fontSize: 16,
+    fontSize: 20,
     fontWeight: 'bold',
     color: '#333',
     paddingBottom: 5,
+  },
+  subtitle: {
+    fontSize: 18,
+    marginBottom: 5,
   },
 })

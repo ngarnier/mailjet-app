@@ -93,8 +93,7 @@ const style = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingTop: 10,
-    paddingBottom: 10,
+    padding: 10,
   },
   company: {
     paddingLeft: 10,

@@ -1,9 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { StyleSheet, View, Text, Button, Linking } from 'react-native'
+import { StyleSheet, View, Text, Linking } from 'react-native'
 
 export default function Article({
-  title, description, link, categories,
+  title, link, categories,
 }) {
   return (
     <View style={style.card}>
@@ -23,7 +23,6 @@ export default function Article({
 
 Article.propTypes = {
   title: PropTypes.string.isRequired,
-  description: PropTypes.string.isRequired,
   link: PropTypes.string.isRequired,
   categories: PropTypes.arrayOf(PropTypes.string).isRequired,
 }
@@ -54,16 +53,17 @@ const style = StyleSheet.create({
     paddingRight: 10,
     marginRight: 5,
     marginBottom: 5,
+    color: '#777',
   },
   title: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: 'bold',
   },
   link: {
     color: '#1FBE9F',
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: '600',
   },
 })

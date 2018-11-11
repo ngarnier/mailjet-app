@@ -34,7 +34,7 @@ export default class Picker extends React.Component {
             <Icon
               name="close"
               onPress={() => hideModalConnect(context)}
-              style={{ color: '#999' }}
+              style={{ fontSize: 46, color: '#999' }}
             />
           </View>
           {context === 'campaigns' && (

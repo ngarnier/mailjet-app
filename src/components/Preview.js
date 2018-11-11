@@ -31,7 +31,9 @@ export default class Preview extends React.Component {
     }
 
     return (
-      <View style={{ height: isFullSize ? Dimensions.get('window').height - 180 : Dimensions.get('window').height / 2 }}>
+      <View
+        //style={{ height: isFullSize ? Dimensions.get('window').height - 180 : Dimensions.get('window').height / 2 }}
+      >
         <LabelRow title="CONTENT" />
         <View style={style.topView} />
         <WebView
