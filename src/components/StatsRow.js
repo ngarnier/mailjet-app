@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { StyleSheet, View, Text } from 'react-native'
+import StatsBar from './StatsBar'
 
 export default function StatsRow({ sent, opened, clicked }) {
   return (
@@ -10,18 +11,10 @@ export default function StatsRow({ sent, opened, clicked }) {
       {opened && clicked && (
         <View style={style.columns}>
           <View style={{ width: '48%' }}>
-            <Text style={style.subtitle}>{opened}</Text>
-            <View style={style.emptyBar}>
-              <View style={[style.filledBar, { width: `${opened}` }]} />
-            </View>
-            <Text>Opens</Text>
+            <StatsBar label="Opens" figure={opened} />
           </View>
           <View style={{ width: '48%' }}>
-            <Text style={style.subtitle}>{clicked}</Text>
-            <View style={style.emptyBar}>
-              <View style={[style.filledBar, { width: `${clicked}` }]} />
-            </View>
-            <Text>Clicks</Text>
+            <StatsBar label="Clicks" figure={clicked} />
           </View>
         </View>
       )}

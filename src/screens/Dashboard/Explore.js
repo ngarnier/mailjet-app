@@ -28,7 +28,7 @@ export default class Explore extends React.Component {
     const { isLoading, articles } = this.state
 
     return (
-      <View>
+      <View style={{ flex: 1 }}>
         {isLoading ? (
           <LoadingState />
         ) : typeof articles === 'object' ? (

@@ -1,5 +1,5 @@
 import { Buffer } from 'buffer'
-import { convertTimestamp } from './util'
+import { convertTimestamp, getTS } from './util'
 
 export const timeOutCheck = delay =>
   new Promise(resolve => setTimeout(resolve, delay, 'The request timed out'))
@@ -57,6 +57,7 @@ export const getMailjetKeys = async (publicKey, secretKey) => {
     if (response[i].APIKey === publicKey) {
       return {
         name: response[i].Name,
+        id: response[i].ID,
         publicKey: response[i].APIKey,
         secretKey: response[i].SecretKey,
       }
@@ -230,4 +231,73 @@ export const getContactProperties = async (apikeys, id) => {
   const contactData = await mailjetGet(`contactdata/${id}`, publicKey, secretKey)
 
   return contactData[0].Data || 'The request timed out'
+}
+
+export const getTotalSent = async (apikeys) => {
+  const { id, publicKey, secretKey } = apikeys
+  let sent = 0
+
+  const stats = await mailjetGet('statcounters', publicKey, secretKey, {
+    SourceID: id,
+    CounterSource: 'APIKey',
+    CounterResolution: 'Day',
+    CounterTiming: 'Message',
+    FromTS: getTS(),
+  })
+
+  if (!stats || typeof stats === 'string') {
+    return 'The request timed out'
+  }
+
+  for (let i = 0; i < stats.length; i += 1) {
+    sent += stats[i].MessageSentCount
+  }
+  return sent
+}
+
+export const getTotalContacts = async (apikeys) => {
+  const { publicKey, secretKey } = apikeys
+  let offset = 0
+  let total = 0
+  let length = 1000
+
+  while (length === 1000) {
+    /* eslint-disable no-await-in-loop */
+    const currentPage = await mailjetGet('contact', publicKey, secretKey, {
+      Offset: offset,
+      Limit: 1000,
+    })
+
+    if (typeof currentPage !== 'object') {
+      return 'The request timed out'
+    }
+    /* eslint-enable */
+    /* eslint-disable prefer-destructuring */
+    length = currentPage.length
+    /* *eslint-enable */
+    offset += length
+    total += length
+  }
+
+  return total
+}
+
+export const getLastCampaign = async (apikeys) => {
+  const { publicKey, secretKey } = apikeys
+
+  const lastCampaign = await mailjetGet('campaignoverview', publicKey, secretKey, {
+    Limit: 1,
+    IDType: 'Campaign',
+  })
+
+  if (typeof lastCampaign !== 'object') {
+    return 'The request timed out'
+  }
+
+  return {
+    subject: lastCampaign[0].Subject,
+    sent: lastCampaign[0].DeliveredCount,
+    opened: `${Math.floor((lastCampaign[0].OpenedCount / lastCampaign[0].DeliveredCount) * 100) || 0}%`,
+    clicked: `${Math.floor((lastCampaign[0].ClickedCount / lastCampaign[0].OpenedCount) * 100) || 0}%`,
+  }
 }

@@ -59,11 +59,12 @@ CampaignDetails.propTypes = {
   opened: PropTypes.string.isRequired,
   clicked: PropTypes.string.isRequired,
   status: PropTypes.string.isRequired,
-  previewIsFullSize: PropTypes.bool.isRequired,
+  previewIsFullSize: PropTypes.bool,
 }
 
 CampaignDetails.defaultProps = {
   listName: null,
+  previewIsFullSize: false,
 }
 
 const style = StyleSheet.create({

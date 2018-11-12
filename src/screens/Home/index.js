@@ -25,7 +25,6 @@ export default class Home extends React.Component {
   render() {
     const { apikeys, previewIsFullSize } = this.props
     let companyName = ''
-    console.log(previewIsFullSize)
 
     if (apikeys.get(0)) {
       companyName = apikeys.get(0).name

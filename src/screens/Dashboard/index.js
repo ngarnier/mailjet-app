@@ -15,11 +15,11 @@ export default class DashboardNavigator extends React.Component {
 }
 
 const DashboardTabs = TabNavigator({
-  Explore: {
-    screen: Explore,
-  },
   Overview: {
     screen: Overview,
+  },
+  Explore: {
+    screen: Explore,
   },
 }, {
   swipeEnabled: true,

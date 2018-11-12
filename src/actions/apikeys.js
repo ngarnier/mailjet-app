@@ -1,8 +1,10 @@
 import { storeKey, removeKey, getLocalKeys } from '../helpers/storage'
 
-export const addApiKey = (name, publicKey, secretKey) => async (dispatch) => {
+export const addApiKey = (name, id, publicKey, secretKey) => async (dispatch) => {
   let keys = await getLocalKeys()
-  const key = { name, publicKey, secretKey }
+  const key = {
+    name, id, publicKey, secretKey,
+  }
   let duplicate = false
   /* eslint-disable array-callback-return */
   keys.map((k) => {

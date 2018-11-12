@@ -15,7 +15,7 @@ export default function CampaignsList({
   return (
     <View style={{ flex: 1 }}>
       {isLoading && !isRefreshing ? (
-        <LoadingState />
+        <LoadingState type="campaigns" />
       ) : !campaigns ? (
         <View />
       ) : typeof campaigns === 'string' ? (

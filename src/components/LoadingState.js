@@ -34,7 +34,7 @@ export default class LoadingState extends React.Component {
     const { type } = this.props
 
     return (
-      <View style={style.container}>
+      <View>
         {type === 'login' ? (
           <View>
             <Image
@@ -48,12 +48,16 @@ export default class LoadingState extends React.Component {
           <View style={style.row} key={e}>
             <Animated.View style={[style.line, style.title, { opacity: this.state.fadeAnim }]} />
             <Animated.View style={[style.line, style.subtitle, { opacity: this.state.fadeAnim }]} />
-            <View style={style.dateRow}>
-              <Animated.View style={[style.line, style.badge, { opacity: this.state.fadeAnim }]} />
-              <Animated.View
-                style={[style.line, style.dateText, { opacity: this.state.fadeAnim }]}
-              />
-            </View>
+            {type === 'campaigns' && (
+              <View style={style.dateRow}>
+                <Animated.View
+                  style={[style.line, style.badge, { opacity: this.state.fadeAnim }]}
+                />
+                <Animated.View
+                  style={[style.line, style.dateText, { opacity: this.state.fadeAnim }]}
+                />
+              </View>
+            )}
           </View>
         ))}
       </View>
@@ -62,9 +66,6 @@ export default class LoadingState extends React.Component {
 }
 
 const style = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   row: {
     backgroundColor: '#fff',
     borderColor: '#ddd',
@@ -93,7 +94,7 @@ const style = StyleSheet.create({
     width: 50,
     borderRadius: 5,
     marginRight: 5,
-    backgroundColor: '#DEFFEE',
+    backgroundColor: '#ccc',
   },
   dateText: {
     height: 10,

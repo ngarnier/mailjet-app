@@ -13,7 +13,6 @@ export default function Article({
           <Text key={index.toString()} style={style.category}>{category}</Text>
         ))}
       </View>
-      {/* <Text style={style.description}>{description}</Text> */}
       <Text style={style.link} onPress={() => { Linking.openURL(link) }}>
         Learn more
       </Text>

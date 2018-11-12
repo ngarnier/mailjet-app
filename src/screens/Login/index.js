@@ -63,9 +63,9 @@ export default class Login extends React.Component {
         isLoading: false,
       })
     } else {
-      const { name } = await getMailjetKeys(publicKey, secretKey)
+      const { name, id } = await getMailjetKeys(publicKey, secretKey)
 
-      this.props.addApiKey(name, publicKey, secretKey)
+      this.props.addApiKey(name, id, publicKey, secretKey)
     }
   }
 

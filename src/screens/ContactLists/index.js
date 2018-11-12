@@ -36,6 +36,13 @@ const ContactsNavigator = StackNavigator({
     headerStyle: {
       backgroundColor: '#fff',
     },
+    headerTitleStyle: {
+      color: '#000',
+    },
+    headerBackTitleStyle: {
+      color: '#1FBE9F',
+    },
+    headerTintColor: '#1FBE9F',
   },
 })
 

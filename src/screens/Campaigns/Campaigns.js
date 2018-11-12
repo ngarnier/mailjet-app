@@ -1,7 +1,7 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import { SafeAreaView, ActivityIndicator, StyleSheet } from 'react-native'
-import { connect } from 'react-redux'
 import Picker from '../../components/Picker'
 import Pick from '../../components/Pick'
 import CampaignsList from './CampaignsList'
