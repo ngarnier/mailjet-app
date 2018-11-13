@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { SafeAreaView, View, Text, StyleSheet } from 'react-native'
-import { TabNavigator, TabBarBottom } from 'react-navigation'
+import { createBottomTabNavigator, BottomTabBar } from 'react-navigation-tabs'
 import { Icon } from 'native-base'
 import DashboardNavigator from '../Dashboard'
 import CampaignsNavigator from '../Campaigns/'
@@ -53,7 +53,7 @@ export default class Home extends React.Component {
   }
 }
 
-const CustomTabs = TabNavigator({
+const CustomTabs = createBottomTabNavigator({
   Dashboard: {
     screen: DashboardNavigator,
     navigationOptions: {
@@ -75,7 +75,7 @@ const CustomTabs = TabNavigator({
   },
 }, {
   swipeEnabled: false,
-  tabBarComponent: TabBarBottom,
+  tabBarComponent: BottomTabBar,
   tabBarPosition: 'bottom',
   tabBarOptions: {
     headerForceInset: { bottom: 'never' },

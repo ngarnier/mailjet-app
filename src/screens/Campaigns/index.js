@@ -1,8 +1,8 @@
-import { StackNavigator } from 'react-navigation'
+import { createStackNavigator } from 'react-navigation'
 import Campaigns from './Campaigns'
 import Campaign from './Campaign'
 
-const CampaignsNavigator = StackNavigator({
+const CampaignsNavigator = createStackNavigator({
   Campaigns: {
     screen: Campaigns,
     navigationOptions: {

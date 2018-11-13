@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { TabNavigator, TabBarTop } from 'react-navigation'
+import { createMaterialTopTabNavigator } from 'react-navigation'
 import Explore from './Explore'
 import Overview from './Overview'
 
@@ -14,7 +14,7 @@ export default class DashboardNavigator extends React.Component {
   }
 }
 
-const DashboardTabs = TabNavigator({
+const DashboardTabs = createMaterialTopTabNavigator({
   Overview: {
     screen: Overview,
   },
@@ -23,7 +23,6 @@ const DashboardTabs = TabNavigator({
   },
 }, {
   swipeEnabled: true,
-  tabBarComponent: TabBarTop,
   tabBarPosition: 'top',
   lazy: false,
   tabBarOptions: {

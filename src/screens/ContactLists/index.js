@@ -1,10 +1,10 @@
-import { StackNavigator } from 'react-navigation'
+import { createStackNavigator } from 'react-navigation'
 import Lists from './Lists'
 import ContactList from './ContactList'
 import ListContacts from './ContactList/ListContacts'
 import ContactCard from './ContactList/ContactCard'
 
-const ContactsNavigator = StackNavigator({
+const ContactsNavigator = createStackNavigator({
   Lists: {
     screen: Lists,
     navigationOptions: {
