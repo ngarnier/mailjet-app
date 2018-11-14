@@ -1,18 +1,6 @@
-import React from 'react'
-import { connect } from 'react-redux'
 import { createMaterialTopTabNavigator } from 'react-navigation'
 import Explore from './Explore'
 import Overview from './Overview'
-
-@connect(state => ({
-  apikeys: state.apikeys,
-}))
-
-export default class DashboardNavigator extends React.Component {
-  render() {
-    return (<DashboardTabs />)
-  }
-}
 
 const DashboardTabs = createMaterialTopTabNavigator({
   Overview: {
@@ -42,3 +30,5 @@ const DashboardTabs = createMaterialTopTabNavigator({
     },
   },
 })
+
+export default DashboardTabs

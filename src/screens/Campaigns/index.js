@@ -1,4 +1,6 @@
+import React from 'react'
 import { createStackNavigator } from 'react-navigation'
+import LogOut from '../../components/LogOut'
 import Campaigns from './Campaigns'
 import Campaign from './Campaign'
 
@@ -15,6 +17,7 @@ const CampaignsNavigator = createStackNavigator({
 }, {
   headerMode: 'screen',
   navigationOptions: {
+    headerRight: (<LogOut />),
     headerForceInset: { top: 'never' },
     headerStyle: {
       backgroundColor: '#fff',

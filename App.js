@@ -3,6 +3,7 @@ import { Provider } from 'react-redux'
 import thunk from 'redux-thunk'
 import { createStore, applyMiddleware } from 'redux'
 import { StyleProvider } from 'native-base'
+import { SafeAreaView } from 'react-native'
 import Home from './src/screens/Home'
 import reducer from './src/reducers/index'
 import { loadApiKeys } from './src/actions/apikeys'
@@ -19,7 +20,9 @@ export default function App() {
   return (
     <Provider store={store}>
       <StyleProvider style={getTheme(commonColor)}>
-        <Home />
+        <SafeAreaView style={{ flex: 1 }}>
+          <Home />
+        </SafeAreaView>
       </StyleProvider>
     </Provider>
   )
