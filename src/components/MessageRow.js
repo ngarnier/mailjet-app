@@ -46,12 +46,14 @@ const style = StyleSheet.create({
     padding: 20,
   },
   title: {
-    fontSize: 20,
+    fontSize: 17,
+    fontFamily: 'System',
     fontWeight: 'bold',
     color: '#333',
   },
   subtitle: {
-    fontSize: 18,
+    fontSize: 17,
+    fontFamily: 'System',
     lineHeight: 20,
     paddingTop: 5,
     paddingBottom: 10,

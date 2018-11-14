@@ -78,7 +78,7 @@ const CustomTabs = createBottomTabNavigator({
   tabBarComponent: BottomTabBar,
   tabBarPosition: 'bottom',
   tabBarOptions: {
-    headerForceInset: { bottom: 'never' },
+    safeAreaInset: { bottom: 'never' },
     activeTintColor: '#1FBE9F',
     inactiveTintColor: '#9a9b9f',
     showIcon: true,
@@ -86,7 +86,6 @@ const CustomTabs = createBottomTabNavigator({
       fontSize: 14,
     },
     style: {
-      height: 56,
       backgroundColor: '#fefefe',
     },
   },
@@ -103,6 +102,7 @@ const style = StyleSheet.create({
   company: {
     paddingLeft: 10,
     fontSize: 20,
-    fontWeight: '300',
+    fontFamily: 'System',
+    fontWeight: 'bold',
   },
 })

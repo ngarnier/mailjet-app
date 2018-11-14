@@ -35,6 +35,7 @@ const DashboardTabs = createMaterialTopTabNavigator({
     labelStyle: {
       fontSize: 18,
       fontWeight: 'bold',
+      fontFamily: 'System',
     },
     style: {
       backgroundColor: '#fefefe',

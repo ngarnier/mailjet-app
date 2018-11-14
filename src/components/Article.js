@@ -34,7 +34,10 @@ const style = StyleSheet.create({
     marginLeft: 20,
     marginRight: 20,
     marginBottom: 10,
-    padding: 20,
+    paddingTop: 10,
+    paddingRight: 15,
+    paddingBottom: 10,
+    paddingLeft: 15,
   },
   categories: {
     flexWrap: 'wrap',
@@ -42,7 +45,7 @@ const style = StyleSheet.create({
     justifyContent: 'flex-start',
     maxWidth: '100%',
     paddingTop: 10,
-    paddingBottom: 10,
+    paddingBottom: 5,
   },
   category: {
     borderRadius: 5,
@@ -52,17 +55,19 @@ const style = StyleSheet.create({
     paddingRight: 10,
     marginRight: 5,
     marginBottom: 5,
+    fontSize: 15,
     color: '#777',
   },
   title: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    fontSize: 20,
+    fontSize: 17,
     fontWeight: 'bold',
+    fontFamily: 'System',
   },
   link: {
     color: '#1FBE9F',
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: '600',
   },
 })

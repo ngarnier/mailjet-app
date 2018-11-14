@@ -65,7 +65,8 @@ const style = StyleSheet.create({
     justifyContent: 'space-between',
   },
   title: {
-    fontSize: 20,
+    fontSize: 17,
+    fontFamily: 'System',
     fontWeight: 'bold',
     color: '#999',
     paddingBottom: 5,

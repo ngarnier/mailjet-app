@@ -73,7 +73,7 @@ const style = StyleSheet.create({
   },
   filter: {
     marginLeft: 5,
-    fontSize: 20,
+    fontSize: 18,
     color: '#1FBE9F',
     fontWeight: '600',
   },

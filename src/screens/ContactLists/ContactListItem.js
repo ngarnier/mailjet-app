@@ -43,13 +43,13 @@ const style = StyleSheet.create({
     padding: 20,
   },
   title: {
-    fontSize: 20,
+    fontSize: 17,
     fontWeight: 'bold',
     color: '#333',
     paddingBottom: 5,
   },
   subtitle: {
-    fontSize: 18,
+    fontSize: 16,
     marginBottom: 5,
   },
 })

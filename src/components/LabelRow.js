@@ -28,13 +28,15 @@ const style = StyleSheet.create({
     paddingLeft: 20,
   },
   title: {
-    fontSize: 20,
+    fontSize: 17,
+    fontFamily: 'System',
     fontWeight: 'bold',
     color: '#999',
     paddingBottom: 5,
   },
   subtitle: {
-    fontSize: 18,
+    fontSize: 16,
+    fontFamily: 'System',
     paddingBottom: 10,
   },
 })

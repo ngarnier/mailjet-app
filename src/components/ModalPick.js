@@ -93,12 +93,13 @@ const style = StyleSheet.create({
     alignItems: 'center',
   },
   icon: {
-    fontSize: 20,
+    fontSize: 17,
     color: '#444',
   },
   filter: {
     marginLeft: 10,
-    fontSize: 18,
+    fontSize: 17,
+    fontFamily: 'System',
     color: '#222',
   },
   active: {

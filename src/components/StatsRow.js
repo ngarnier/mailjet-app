@@ -45,12 +45,14 @@ const style = StyleSheet.create({
     justifyContent: 'space-between',
   },
   title: {
-    fontSize: 20,
+    fontSize: 17,
+    fontFamily: 'System',
     fontWeight: 'bold',
     color: '#222',
   },
   subtitle: {
-    fontSize: 18,
+    fontSize: 17,
+    fontFamily: 'System',
     fontWeight: 'bold',
     color: '#222',
     paddingTop: 10,

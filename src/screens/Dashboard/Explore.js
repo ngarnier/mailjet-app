@@ -33,7 +33,7 @@ export default class Explore extends React.Component {
           <LoadingState />
         ) : typeof articles === 'object' ? (
           <ScrollView>
-            <View style={{ paddingTop: 20, paddingBottom: 10 }}>
+            <View style={{ paddingTop: 10, paddingBottom: 10 }}>
               {articles.map((article, index) => (
                 <Article
                   key={index.toString()}
