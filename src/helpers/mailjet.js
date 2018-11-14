@@ -108,8 +108,8 @@ export const getAllCampaigns = async (apikeys, filter, offset = 0) => {
       id: e.ID,
       date,
       delivered: e.DeliveredCount,
-      opened: `${Math.floor((e.OpenedCount / e.DeliveredCount) * 100) || 0}%`,
-      clicked: `${Math.floor((e.ClickedCount / e.OpenedCount) * 100) || 0}%`,
+      opened: `${Math.floor((e.OpenedCount / e.DeliveredCount) * 100) === Infinity ? 0 : Math.floor((e.OpenedCount / e.DeliveredCount) * 100)}%`,
+      clicked: `${Math.floor((e.ClickedCount / e.OpenedCount) * 100) === Infinity ? 0 : Math.floor((e.ClickedCount / e.OpenedCount) * 100)}%`,
     })
   })
   /* eslint-enable */
@@ -190,8 +190,8 @@ export const getListStats = async (apikey, id) => {
   return {
     sent: MessageSentCount,
     unsub: MessageUnsubscribedCount,
-    opened: `${Math.floor((MessageOpenedCount / MessageSentCount) * 100) || 0}%`,
-    clicked: `${Math.floor((MessageClickedCount / MessageOpenedCount) * 100) || 0}%`,
+    opened: `${Math.floor((MessageOpenedCount / MessageSentCount) * 100) === Infinity ? 0 : Math.floor((MessageOpenedCount / MessageSentCount) * 100)}%`,
+    clicked: `${Math.floor((MessageClickedCount / MessageOpenedCount) * 100) === Infinity ? 0 : Math.floor((MessageClickedCount / MessageOpenedCount) * 100)}%`,
   }
 }
 
@@ -295,9 +295,13 @@ export const getLastCampaign = async (apikeys) => {
   }
 
   return {
+    id: lastCampaign[0].ID,
     subject: lastCampaign[0].Subject,
+    title: lastCampaign[0].Title,
+    delivered: lastCampaign[0].DeliveredCount,
+    status: lastCampaign[0].ProcessedCount > 0 ? 'Sent' : 'Draft',
     sent: lastCampaign[0].DeliveredCount,
-    opened: `${Math.floor((lastCampaign[0].OpenedCount / lastCampaign[0].DeliveredCount) * 100) || 0}%`,
-    clicked: `${Math.floor((lastCampaign[0].ClickedCount / lastCampaign[0].OpenedCount) * 100) || 0}%`,
+    opened: `${Math.floor((lastCampaign[0].OpenedCount / lastCampaign[0].DeliveredCount) * 100) === Infinity ? 0 : Math.floor((lastCampaign[0].OpenedCount / lastCampaign[0].DeliveredCount) * 100)}%`,
+    clicked: `${Math.floor((lastCampaign[0].ClickedCount / lastCampaign[0].OpenedCount) * 100) === Infinity ? 0 : Math.floor((lastCampaign[0].ClickedCount / lastCampaign[0].OpenedCount) * 100)}%`,
   }
 }

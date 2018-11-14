@@ -138,7 +138,7 @@ export default class ListContact extends React.Component {
 const style = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
   },
   row: {
     backgroundColor: '#fff',

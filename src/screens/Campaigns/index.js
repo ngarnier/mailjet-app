@@ -15,7 +15,6 @@ const CampaignsNavigator = createStackNavigator({
     screen: Campaign,
   },
 }, {
-  headerMode: 'screen',
   navigationOptions: {
     headerRight: (<LogOut />),
     headerForceInset: { top: 'never' },
@@ -31,6 +30,17 @@ const CampaignsNavigator = createStackNavigator({
     headerTintColor: '#1FBE9F',
   },
 })
+
+CampaignsNavigator.navigationOptions = ({ navigation }) => {
+  let tabBarVisible = true
+  if (navigation.state.index > 0) {
+    tabBarVisible = false
+  }
+
+  return {
+    tabBarVisible,
+  }
+}
 
 export default CampaignsNavigator
 

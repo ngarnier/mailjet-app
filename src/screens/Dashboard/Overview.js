@@ -1,22 +1,29 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import { ScrollView, View, StyleSheet } from 'react-native'
 import OverviewCard from '../../components/OverviewCard'
 import SubjectCard from '../../components/SubjectCard'
 
-export default function Explore() {
-  return (
-    <ScrollView style={{ flex: 1 }}>
-      <View>
-        <View style={style.overview}>
-          <OverviewCard source="emails" />
-          <OverviewCard source="contacts" />
+@connect(state => ({
+  apikeys: state.apikeys,
+}))
+
+export default class Overview extends React.Component {
+  render() {
+    return (
+      <ScrollView style={{ flex: 1 }}>
+        <View>
+          <View style={style.overview}>
+            <OverviewCard source="emails" navigation={this.props.navigation} />
+            <OverviewCard source="contacts" navigation={this.props.navigation} />
+          </View>
+          <View style={style.subject}>
+            <SubjectCard navigation={this.props.navigation} />
+          </View>
         </View>
-        <View style={style.subject}>
-          <SubjectCard />
-        </View>
-      </View>
-    </ScrollView>
-  )
+      </ScrollView>
+    )
+  }
 }
 
 const style = StyleSheet.create({

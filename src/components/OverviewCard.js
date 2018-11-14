@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
-import { StyleSheet, View, Text } from 'react-native'
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native'
 import { getTotalSent, getTotalContacts } from '../helpers/mailjet'
 
 @connect(state => ({
@@ -26,19 +26,25 @@ export default class OverviewCard extends React.Component {
   }
 
   render() {
-    const { source } = this.props
+    const { source, navigation } = this.props
     const { isLoading, data } = this.state
     return (
       <View style={style.card}>
-        <View>
-          <Text style={style.title}>
-            {source === 'emails' ? 'Emails Sent' : 'Contacts'}
-          </Text>
-          <Text style={style.figure} >
-            {isLoading ?
-              'Loading...' : data || `No ${source}`}
-          </Text>
-        </View>
+        <TouchableOpacity
+          onPress={source === 'emails' && !isLoading ? () => navigation.navigate('Campaigns') :
+            !isLoading ? () => navigation.navigate('Contacts') :
+              () => console.log('source')}
+        >
+          <View>
+            <Text style={style.title}>
+              {source === 'emails' ? 'Emails Sent' : 'Contacts'}
+            </Text>
+            <Text style={style.figure} >
+              {isLoading ?
+                'Loading...' : data || `No ${source}`}
+            </Text>
+          </View>
+        </TouchableOpacity>
       </View>
     )
   }

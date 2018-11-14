@@ -1,8 +1,10 @@
+import React from 'react'
 import { createStackNavigator } from 'react-navigation'
 import Lists from './Lists'
 import ContactList from './ContactList'
 import ListContacts from './ContactList/ListContacts'
 import ContactCard from './ContactList/ContactCard'
+import LogOut from '../../components/LogOut'
 
 const ContactsNavigator = createStackNavigator({
   Lists: {
@@ -32,6 +34,7 @@ const ContactsNavigator = createStackNavigator({
   },
 }, {
   navigationOptions: {
+    headerRight: (<LogOut />),
     headerForceInset: { top: 'never' },
     headerStyle: {
       backgroundColor: '#fff',
@@ -45,5 +48,16 @@ const ContactsNavigator = createStackNavigator({
     headerTintColor: '#1FBE9F',
   },
 })
+
+ContactsNavigator.navigationOptions = ({ navigation }) => {
+  let tabBarVisible = true
+  if (navigation.state.index > 0) {
+    tabBarVisible = false
+  }
+
+  return {
+    tabBarVisible,
+  }
+}
 
 export default ContactsNavigator

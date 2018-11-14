@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { StyleSheet, View, Text } from 'react-native'
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native'
 import StatsBar from './StatsBar'
 import EmptyState from './EmptyState'
 import { getLastCampaign } from '../helpers/mailjet'
@@ -29,6 +29,7 @@ export default class SubjectCard extends React.Component {
     const {
       lastCampaign, isLoading,
     } = this.state
+    const { navigation } = this.props
 
     return (
       <View style={style.card}>
@@ -36,27 +37,41 @@ export default class SubjectCard extends React.Component {
           <EmptyState context="campaign" state="network-issue" />
           ) : (
             <View>
-              <View>
-                <Text style={style.title}>Last campaign</Text>
-                <Text style={style.subject}>
-                  {isLoading ? 'Loading...' : lastCampaign.subject}
-                </Text>
-              </View>
-              <View style={style.columns}>
-                <View style={{ flex: 1, marginRight: 5 }}>
-                  <StatsBar
-                    label="Opens"
-                    figure={isLoading ? '0%' : lastCampaign.opened}
-                  />
+              <TouchableOpacity
+                onPress={() => navigation.navigate('Campaign', {
+                  id: lastCampaign.id,
+                  title: lastCampaign.title,
+                  delivered: lastCampaign.delivered,
+                  opened: lastCampaign.opened,
+                  clicked: lastCampaign.clicked,
+                  status: lastCampaign.status,
+                })}
+              >
+                <View>
+                  <View>
+                    <Text style={style.title}>Last campaign</Text>
+                    <Text style={style.subject}>
+                      {isLoading ? 'Loading...' : lastCampaign.subject}
+                    </Text>
+                  </View>
+                  <View style={style.columns}>
+                    <View style={{ flex: 1, marginRight: 5 }}>
+                      <StatsBar
+                        label="Opens"
+                        figure={isLoading ? '0%' : lastCampaign.opened}
+                      />
+                    </View>
+                    <View style={{ flex: 1, marginLeft: 5 }}>
+                      <StatsBar
+                        label="Clicks"
+                        figure={isLoading ? '0%' : lastCampaign.clicked}
+                      />
+                    </View>
+                  </View>
                 </View>
-                <View style={{ flex: 1, marginLeft: 5 }}>
-                  <StatsBar
-                    label="Clicks"
-                    figure={isLoading ? '0%' : lastCampaign.clicked}
-                  />
-                </View>
-              </View>
-            </View>)}
+              </TouchableOpacity>
+            </View>
+            )}
       </View>
     )
   }
