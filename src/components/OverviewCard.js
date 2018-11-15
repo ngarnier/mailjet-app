@@ -25,15 +25,33 @@ export default class OverviewCard extends React.Component {
     })
   }
 
+  refresh = async () => {
+    const { apikeys, source } = this.props
+
+    this.setState({
+      isLoading: true,
+    })
+
+    const data = source === 'emails' ?
+      await getTotalSent(apikeys.get(0)) : await getTotalContacts(apikeys.get(0))
+
+    this.setState({
+      data,
+      isLoading: false,
+    })
+  }
+
   render() {
     const { source, navigation } = this.props
     const { isLoading, data } = this.state
     return (
       <View style={style.card}>
         <TouchableOpacity
-          onPress={source === 'emails' && !isLoading ? () => navigation.navigate('Campaigns') :
-            !isLoading ? () => navigation.navigate('Contacts') :
-              () => console.log('source')}
+          onPress={source === 'emails' && !isLoading && data !== 'The request timed out' ?
+            () => navigation.navigate('Campaigns') :
+            source === 'contacts' && !isLoading && data !== 'The request timed out' ?
+              () => navigation.navigate('Contacts') :
+                () => { this.refresh() }}
         >
           <View>
             <Text style={style.title}>
