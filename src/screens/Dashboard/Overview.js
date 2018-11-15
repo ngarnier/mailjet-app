@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { ScrollView, View, StyleSheet } from 'react-native'
 import OverviewCard from '../../components/OverviewCard'
 import SubjectCard from '../../components/SubjectCard'
+import StatsChart from '../../components/StatsChart'
 
 @connect(state => ({
   apikeys: state.apikeys,
@@ -20,6 +21,9 @@ export default class Overview extends React.Component {
           <View style={style.subject}>
             <SubjectCard navigation={this.props.navigation} />
           </View>
+          <View style={style.chart}>
+            <StatsChart />
+          </View>
         </View>
       </ScrollView>
     )
@@ -34,6 +38,11 @@ const style = StyleSheet.create({
   },
   subject: {
     marginTop: 0,
+    paddingRight: 10,
+    paddingLeft: 10,
+  },
+  chart: {
+    marginTop: 10,
     paddingRight: 10,
     paddingLeft: 10,
   },
