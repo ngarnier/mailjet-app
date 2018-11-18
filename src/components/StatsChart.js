@@ -169,6 +169,7 @@ export default class SubjectCard extends React.Component {
                 >
                   <CustomGrid />
                 </LineChart>
+                {/* eslint-disable */}
                 {Object.keys(events).map((event, index) => {
                   if (event !== 'sent') {
                     return (
@@ -181,6 +182,7 @@ export default class SubjectCard extends React.Component {
                     )
                   }
                 })}
+                {/* eslint-enable */}
               </View>
             </View>
             <View style={style.selectors}>
