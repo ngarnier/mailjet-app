@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { ScrollView, View, StyleSheet } from 'react-native'
 import OverviewCard from '../../components/OverviewCard'
 import SubjectCard from '../../components/SubjectCard'
-import StatsChart from '../../components/StatsChart'
+import StatsChart from '../../components/StatsCard'
 
 @connect(state => ({
   apikeys: state.apikeys,

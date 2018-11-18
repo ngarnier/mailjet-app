@@ -1,27 +1,32 @@
 import React from 'react'
+import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import { StyleSheet, TouchableOpacity, View, Text } from 'react-native'
+import setSelector from '../actions/selectors'
+
+@connect(state => ({
+  selectors: state.selectors,
+}), {
+  setSelectorConnected: setSelector,
+})
 
 export default class EventSelector extends React.Component {
-  state = { isSelected: true }
-
-  toggle = () => {
-    const { isSelected } = this.state
-    this.setState({
-      isSelected: !isSelected,
-    })
+  static propTypes = {
+    event: PropTypes.string.isRequired,
+    selectors: PropTypes.objectOf(PropTypes.bool).isRequired,
+    setSelectorConnected: PropTypes.func.isRequired,
   }
 
   render() {
-    const { isSelected } = this.state
-    const { event } = this.props
+    const { event, selectors, setSelectorConnected } = this.props
 
     return (
       <TouchableOpacity
         activeOpacity={0.8}
-        onPress={() => this.toggle()}
+        onPress={() => setSelectorConnected(event, !selectors[event])}
         style={style.eventRow}
       >
-        <View style={[style.eventBox, isSelected ? style[event] : style.inactive]} />
+        <View style={[style.eventBox, selectors[event] ? style[event] : style.inactive]} />
         <Text style={style.label}>{event}</Text>
       </TouchableOpacity>
     )
