@@ -1,13 +1,15 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { StyleSheet, View, Text } from 'react-native'
-import { LineChart } from 'react-native-svg-charts'
+import { LineChart, YAxis } from 'react-native-svg-charts'
 /* eslint-disable import/no-extraneous-dependencies */
 import { G, Line } from 'react-native-svg'
 /* eslint-enable */
 import EmptyState from './EmptyState'
 import { getApiKeyStats } from '../helpers/mailjet'
-import { getWeekTS } from '../helpers/util'
+import { getWeekTS, formatNumber } from '../helpers/util'
+import EventSelector from './EventSelector'
+import EventChart from './EventChart'
 
 @connect(state => ({
   apikeys: state.apikeys,
@@ -17,15 +19,16 @@ export default class SubjectCard extends React.Component {
   state = {
     isLoading: true,
     requestFailed: false,
-    sent: [],
-    opened: [],
-    clicked: [],
-    hardBounced: [],
-    softBounced: [],
-    queued: [],
-    blocked: [],
-    spam: [],
-    unsub: [],
+    events: {
+      sent: [],
+      opened: [],
+      clicked: [],
+      hardBounced: [],
+      softBounced: [],
+      blocked: [],
+      spam: [],
+      unsub: [],
+    },
   }
 
   componentDidMount = async () => {
@@ -36,11 +39,10 @@ export default class SubjectCard extends React.Component {
       clicked,
       hardBounced,
       softBounced,
-      queued,
       blocked,
       spam,
       unsub,
-    } = this.state
+    } = this.state.events
 
     const stats = await getApiKeyStats(apikeys.get(0))
 
@@ -51,14 +53,12 @@ export default class SubjectCard extends React.Component {
       })
     }
 
-    // Fill the arrays with 30 values equal to 0
     for (let i = 0; i < 7; i += 1) {
       sent.push(0)
       opened.push(0)
       clicked.push(0)
       hardBounced.push(0)
       softBounced.push(0)
-      queued.push(0)
       blocked.push(0)
       spam.push(0)
       unsub.push(0)
@@ -71,50 +71,49 @@ export default class SubjectCard extends React.Component {
         stats[i].MessageSentCount
       opened[((Date.parse(new Date(stats[i].Timeslice)) / 1000) - initialTS) / 86400] =
         stats[i].MessageOpenedCount
-      // clicked[((Date.parse(new Date(stats[i].Timeslice)) / 1000) - initialTS) / 86400] =
-      //   stats[i].MessageClickedCount
-      // hardBounced[((Date.parse(new Date(stats[i].Timeslice)) / 1000) - initialTS) / 86400] =
-      //   stats[i].MessageHardBouncedCount
-      // softBounced[((Date.parse(new Date(stats[i].Timeslice)) / 1000) - initialTS) / 86400] =
-      //   stats[i].MessageSoftBouncedCount
-      // queued[((Date.parse(new Date(stats[i].Timeslice)) / 1000) - initialTS) / 86400] =
-      //   stats[i].MessageQueuedCount
-      // blocked[((Date.parse(new Date(stats[i].Timeslice)) / 1000) - initialTS) / 86400] =
-      //   stats[i].MessageBlockedCount
-      // spam[((Date.parse(new Date(stats[i].Timeslice)) / 1000) - initialTS) / 86400] =
-      //   stats[i].MessageSpamCount
-      // unsub[((Date.parse(new Date(stats[i].Timeslice)) / 1000) - initialTS) / 86400] =
-      //   stats[i].MessageUnsubscribedCount
+      clicked[((Date.parse(new Date(stats[i].Timeslice)) / 1000) - initialTS) / 86400] =
+        stats[i].MessageClickedCount
+      hardBounced[((Date.parse(new Date(stats[i].Timeslice)) / 1000) - initialTS) / 86400] =
+        stats[i].MessageHardBouncedCount
+      softBounced[((Date.parse(new Date(stats[i].Timeslice)) / 1000) - initialTS) / 86400] =
+        stats[i].MessageSoftBouncedCount
+      blocked[((Date.parse(new Date(stats[i].Timeslice)) / 1000) - initialTS) / 86400] =
+        stats[i].MessageBlockedCount
+      spam[((Date.parse(new Date(stats[i].Timeslice)) / 1000) - initialTS) / 86400] =
+        stats[i].MessageSpamCount
+      unsub[((Date.parse(new Date(stats[i].Timeslice)) / 1000) - initialTS) / 86400] =
+        stats[i].MessageUnsubscribedCount
     }
 
+    const sentMax = Math.max(...sent)
+    const openedMax = Math.max(...opened)
+    const clickedMax = Math.max(...clicked)
+    const hardBouncedMax = Math.max(...hardBounced)
+    const softBouncedMax = Math.max(...softBounced)
+    const blockedMax = Math.max(...blocked)
+    const spamMax = Math.max(...spam)
+    const unsubMax = Math.max(...unsub)
+    const overallMax = Math.max(sentMax, openedMax, clickedMax, hardBouncedMax, softBouncedMax, blockedMax, spamMax, unsubMax) * 1.2
+
     this.setState({
-      sent,
-      opened,
-      clicked,
-      // hardBounced,
-      // softBounced,
-      // queued,
-      // blocked,
-      // spam,
-      // unsub,
+      events: {
+        sent,
+        opened,
+        clicked,
+        hardBounced,
+        softBounced,
+        blocked,
+        spam,
+        unsub,
+      },
+      overallMax,
       isLoading: false,
     })
   }
 
   render() {
-    const {
-      sent,
-      opened,
-      clicked,
-      hardBounced,
-      softBounced,
-      queued,
-      blocked,
-      spam,
-      unsub,
-      isLoading,
-      requestFailed,
-    } = this.state
+    const { events } = this.state
+    const { overallMax, isLoading, requestFailed } = this.state
 
     const CustomGrid = ({ y, ticks }) => (
       <G>
@@ -140,72 +139,55 @@ export default class SubjectCard extends React.Component {
         ) : requestFailed ? (
           <EmptyState context="stats" state="network-issue" />
         ) : (
-          <View style={{ height: 200 }}>
-            <LineChart
-              style={{ flex: 1 }}
-              data={sent}
-              svg={{
-                stroke: '#C6C6C6',
-              }}
-            >
-              <CustomGrid />
-            </LineChart>
-            <LineChart
-              style={StyleSheet.absoluteFill}
-              data={opened}
-              svg={{
-                stroke: '#80D034',
-              }}
-            />
-            <LineChart
-              style={StyleSheet.absoluteFill}
-              data={clicked}
-              svg={{
-                stroke: '#589F1B',
-              }}
-            />
-            {/* <LineChart
-              style={StyleSheet.absoluteFill}
-              data={hardBounced}
-              svg={{
-                stroke: '#FD8A6F',
-              }}
-            />
-            <LineChart
-              style={StyleSheet.absoluteFill}
-              data={softBounced}
-              svg={{
-                stroke: '#FEBC9A',
-              }}
-            />
-            <LineChart
-              style={StyleSheet.absoluteFill}
-              data={queued}
-              svg={{
-                stroke: 'blue',
-              }}
-            />
-            <LineChart
-              style={StyleSheet.absoluteFill}
-              data={blocked}
-              svg={{
-                stroke: '#000001',
-              }}
-            />
-            <LineChart
-              style={StyleSheet.absoluteFill}
-              data={spam}
-              svg={{
-                stroke: '#CC0B24',
-              }}
-            />
-            <LineChart
-              style={StyleSheet.absoluteFill}
-              data={unsub}
-              svg={{
-                stroke: '#23B2FB',
-              }}
-            /> */}
+          <View>
+            <Text style={style.title}>
+              Statistics
+            </Text>
+            <View style={{ height: 200, flexDirection: 'row' }}>
+              <View style={{ height: '100%', width: 50, paddingRight: 10 }}>
+                <YAxis
+                  data={[0, overallMax]}
+                  svg={{
+                    fill: 'grey',
+                    fontSize: 14,
+                  }}
+                  contentInset={{ top: 10, bottom: 10 }}
+                  style={{ height: '100%', paddingLeft: 0 }}
+                  formatLabel={value => formatNumber(value)}
+                />
+              </View>
+              <View style={{ flex: 1 }}>
+                <LineChart
+                  style={{ flex: 1 }}
+                  data={events.sent}
+                  svg={{
+                    stroke: '#C6C6C6',
+                  }}
+                  yMin={0}
+                  yMax={overallMax}
+                  contentInset={{ top: 10, bottom: 10 }}
+                >
+                  <CustomGrid />
+                </LineChart>
+                {Object.keys(events).map((event, index) => {
+                  if (event !== 'sent') {
+                    return (
+                      <EventChart
+                        key={index.toString()}
+                        event={event}
+                        data={events[event]}
+                        overallMax={overallMax}
+                      />
+                    )
+                  }
+                })}
+              </View>
+            </View>
+            <View style={style.selectors}>
+              {Object.keys(events).map((event, index) => (
+                <EventSelector key={index.toString()} event={event} />
+              ))}
+            </View>
           </View>
           )}
       </View>
@@ -239,5 +221,9 @@ const style = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     fontFamily: 'System',
+  },
+  selectors: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
   },
 })

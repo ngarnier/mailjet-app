@@ -14,7 +14,7 @@ const mailjetGetRequest = (route, formattedFilters, encodedKeys) =>
     },
   })
 
-export const mailjetGet = async (route, publicKey, secretKey, filters) => {
+export const mailjetGet = async (route, publicKey, secretKey, filters, request = 'Data') => {
   const encodedKeys = await Buffer.from(`${publicKey}:${secretKey}`).toString('base64')
   let formattedFilters = ''
 
@@ -40,7 +40,7 @@ export const mailjetGet = async (route, publicKey, secretKey, filters) => {
   } else if (res.ErrorMessage) {
     return res.ErrorMessage
   }
-  return res.Data
+  return res[request]
 }
 
 export const checkAuth = async (publicKey, secretKey) => {
@@ -275,26 +275,13 @@ export const getApiKeyStats = async (apikeys) => {
 
 export const getTotalContacts = async (apikeys) => {
   const { publicKey, secretKey } = apikeys
-  let offset = 0
-  let total = 0
-  let length = 1000
 
-  while (length === 1000) {
-    /* eslint-disable no-await-in-loop */
-    const currentPage = await mailjetGet('contact', publicKey, secretKey, {
-      Offset: offset,
-      Limit: 1000,
-    })
+  const total = await mailjetGet('contact', publicKey, secretKey, {
+    countOnly: 1,
+  }, 'Total')
 
-    if (typeof currentPage !== 'object') {
-      return 'The request timed out'
-    }
-    /* eslint-enable */
-    /* eslint-disable prefer-destructuring */
-    length = currentPage.length
-    /* *eslint-enable */
-    offset += length
-    total += length
+  if (typeof total !== 'number') {
+    return 'The request timed out'
   }
 
   return total

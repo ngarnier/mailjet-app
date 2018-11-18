@@ -33,20 +33,6 @@ export const getWeekTS = () => {
   return d / 1000 || 0
 }
 
-export const getTodayTS = () => {
-  const now = new Date(Date.now())
-  const day = now.getUTCDate()
-  const month = now.getUTCMonth()
-  const year = now.getUTCFullYear()
-  const d = new Date(year, month, day, 0, 0, 0)
-  // console.log(d)
-  // console.log(Date.parse(d) / 1000)
-  // const d2 = new Date(2018, 11 - 1, 15, 0, 0, 0)
-  // console.log(d2)
-  // console.log(Date.parse(d2) / 1000)
-  return d / 1000 || 0
-}
-
 export const formatTime = (time) => {
   if (time.toString().length < 2) {
     return `0${time}`
@@ -60,4 +46,13 @@ export const convertTimestamp = (timestamp, format) => {
     return `${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`
   }
   return `${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()} at ${formatTime(date.getHours())}h${formatTime(date.getMinutes())} UTC`
+}
+
+export const formatNumber = (number) => {
+  if (number >= 1000000) {
+    return `${number / 1000000}M`
+  } else if (number >= 10000) {
+    return `${number / 1000}K`
+  }
+  return number
 }
