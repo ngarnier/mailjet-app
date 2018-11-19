@@ -1,35 +1,22 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet } from 'react-native'
 import { LineChart } from 'react-native-svg-charts'
-/* eslint-disable import/no-extraneous-dependencies */
-import { G, Line } from 'react-native-svg'
-/* eslint-enable */
 
 @connect(state => ({
   apikeys: state.apikeys,
 }))
 
 export default class SubjectCard extends React.Component {
+  static propTypes = {
+    event: PropTypes.string.isRequired,
+    data: PropTypes.arrayOf(PropTypes.number).isRequired,
+    overallMax: PropTypes.number.isRequired,
+  }
+
   render() {
     const { event, data, overallMax } = this.props
-
-    const CustomGrid = ({ y, ticks }) => (
-      <G>
-        {
-          ticks.map(tick => (
-            <Line
-              key={tick}
-              x1="0%"
-              x2="100%"
-              y1={y(tick)}
-              y2={y(tick)}
-              stroke="rgba(0,0,0,0.2)"
-            />
-          ))
-        }
-      </G>
-    )
 
     return (
       <LineChart

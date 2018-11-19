@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { StyleSheet, View, Text } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { LineChart, YAxis } from 'react-native-svg-charts'
 /* eslint-disable import/no-extraneous-dependencies */
 import { G, Line } from 'react-native-svg'
@@ -43,9 +43,6 @@ export default class StatsChart extends React.Component {
 
     return (
       <View>
-        <Text style={style.title}>
-          Statistics
-        </Text>
         <View style={{ height: 200, flexDirection: 'row' }}>
           <View style={{ height: '100%', width: 50, paddingRight: 10 }}>
             <YAxis
@@ -110,11 +107,6 @@ const style = StyleSheet.create({
   columns: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-  },
-  title: {
-    fontSize: 17,
-    fontWeight: 'bold',
-    fontFamily: 'System',
   },
   subject: {
     color: '#777',

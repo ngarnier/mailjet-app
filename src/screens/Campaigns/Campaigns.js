@@ -1,8 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
-import { SafeAreaView, ActivityIndicator, StyleSheet } from 'react-native'
-import Picker from '../../components/Picker'
+import { SafeAreaView, ActivityIndicator, View, StyleSheet } from 'react-native'
 import Pick from '../../components/Pick'
 import CampaignsList from './CampaignsList'
 import { getAllCampaigns } from '../../helpers/mailjet'
@@ -99,7 +98,9 @@ export default class Campaigns extends React.Component {
 
     return (
       <SafeAreaView style={style.container}>
-        <Pick pick={() => this.fetchMessages('update')} />
+        <View style={style.row}>
+          <Pick pick={() => this.fetchMessages('update')} context="campaigns" />
+        </View>
         <CampaignsList
           refresh={method => this.fetchMessages(method)}
           campaigns={campaigns}
@@ -110,8 +111,6 @@ export default class Campaigns extends React.Component {
         {isLoadingMore && (
           <ActivityIndicator style={style.loader} size="large" />
         )}
-        <Picker pick={() => this.fetchMessages('update')} context="campaigns" />
-        <Picker pick={() => undefined} context="settings" />
       </SafeAreaView>
     )
   }
@@ -121,6 +120,14 @@ const style = StyleSheet.create({
   container: {
     height: '100%',
     backgroundColor: '#f6f6f6',
+  },
+  row: {
+    paddingLeft: 15,
+    backgroundColor: '#fff',
+    height: 52,
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee',
+    justifyContent: 'center',
   },
   loader: {
     paddingBottom: 10,

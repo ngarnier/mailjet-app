@@ -1,5 +1,5 @@
 import { Buffer } from 'buffer'
-import { convertTimestamp, getMonthTS, getWeekTS } from './util'
+import { convertTimestamp, getMonthTS, getWeekTS, getDayTS } from './util'
 
 export const timeOutCheck = delay =>
   new Promise(resolve => setTimeout(resolve, delay, 'The request timed out'))
@@ -255,16 +255,23 @@ export const getTotalSent = async (apikeys) => {
   return total
 }
 
-export const getApiKeyStats = async (apikeys) => {
+export const getApiKeyStats = async (apikeys, period) => {
   const { id, publicKey, secretKey } = apikeys
 
-  const stats = await mailjetGet('statcounters', publicKey, secretKey, {
+  const stats = period === 'Day' ? await mailjetGet('statcounters', publicKey, secretKey, {
     SourceID: id,
     CounterSource: 'APIKey',
-    CounterResolution: 'Day',
+    CounterResolution: 'Hour',
     CounterTiming: 'Event',
-    FromTS: getWeekTS(),
-  })
+    FromTS: getDayTS(),
+  }) :
+    await mailjetGet('statcounters', publicKey, secretKey, {
+      SourceID: id,
+      CounterSource: 'APIKey',
+      CounterResolution: 'Day',
+      CounterTiming: 'Event',
+      FromTS: period === 'Week' ? getWeekTS() : getMonthTS(),
+    })
 
   if (!stats || typeof stats === 'string') {
     return 'The request timed out'

@@ -1,13 +1,15 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { StyleSheet, View, Text } from 'react-native'
+import { StyleSheet, View, Text, ActivityIndicator } from 'react-native'
 import EmptyState from './EmptyState'
 import { getApiKeyStats } from '../helpers/mailjet'
-import { getWeekTS } from '../helpers/util'
+import { getWeekTS, getMonthTS, getDayTS } from '../helpers/util'
 import StatsChart from './StatsChart'
+import Pick from './Pick'
 
 @connect(state => ({
   apikeys: state.apikeys,
+  period: state.filters.period,
 }))
 
 export default class StatsCard extends React.Component {
@@ -27,7 +29,25 @@ export default class StatsCard extends React.Component {
   }
 
   componentDidMount = async () => {
-    const { apikeys } = this.props
+    this.getStats()
+  }
+
+  getStats = async () => {
+    this.setState({
+      isLoading: true,
+      requestFailed: false,
+      events: {
+        sent: [],
+        opened: [],
+        clicked: [],
+        hardBounced: [],
+        softBounced: [],
+        blocked: [],
+        spam: [],
+        unsub: [],
+      },
+    })
+    const { apikeys, period } = this.props
     const {
       sent,
       opened,
@@ -39,16 +59,20 @@ export default class StatsCard extends React.Component {
       unsub,
     } = this.state.events
 
-    const stats = await getApiKeyStats(apikeys.get(0))
+    const stats = await getApiKeyStats(apikeys.get(0), period)
 
     if (typeof stats !== 'object') {
       this.setState({
         isLoading: false,
         requestFailed: true,
       })
+    } else if (stats.length === 0) {
+      this.setState({
+        isLoading: false,
+      })
     }
 
-    for (let i = 0; i < 7; i += 1) {
+    for (let i = 0; i < stats.length; i += 1) {
       sent.push(0)
       opened.push(0)
       clicked.push(0)
@@ -59,24 +83,27 @@ export default class StatsCard extends React.Component {
       unsub.push(0)
     }
 
-    const initialTS = getWeekTS()
+    const initialTS = period === 'Week' ? getWeekTS() :
+      period === 'Month' ? getMonthTS() : getDayTS()
+
+    const divider = period === 'Day' ? 3600 : 86400
 
     for (let i = 0; i < stats.length; i += 1) {
-      sent[((Date.parse(new Date(stats[i].Timeslice)) / 1000) - initialTS) / 86400] =
+      sent[((Date.parse(new Date(stats[i].Timeslice)) / 1000) - initialTS) / divider] =
         stats[i].MessageSentCount
-      opened[((Date.parse(new Date(stats[i].Timeslice)) / 1000) - initialTS) / 86400] =
+      opened[((Date.parse(new Date(stats[i].Timeslice)) / 1000) - initialTS) / divider] =
         stats[i].MessageOpenedCount
-      clicked[((Date.parse(new Date(stats[i].Timeslice)) / 1000) - initialTS) / 86400] =
+      clicked[((Date.parse(new Date(stats[i].Timeslice)) / 1000) - initialTS) / divider] =
         stats[i].MessageClickedCount
-      hardBounced[((Date.parse(new Date(stats[i].Timeslice)) / 1000) - initialTS) / 86400] =
+      hardBounced[((Date.parse(new Date(stats[i].Timeslice)) / 1000) - initialTS) / divider] =
         stats[i].MessageHardBouncedCount
-      softBounced[((Date.parse(new Date(stats[i].Timeslice)) / 1000) - initialTS) / 86400] =
+      softBounced[((Date.parse(new Date(stats[i].Timeslice)) / 1000) - initialTS) / divider] =
         stats[i].MessageSoftBouncedCount
-      blocked[((Date.parse(new Date(stats[i].Timeslice)) / 1000) - initialTS) / 86400] =
+      blocked[((Date.parse(new Date(stats[i].Timeslice)) / 1000) - initialTS) / divider] =
         stats[i].MessageBlockedCount
-      spam[((Date.parse(new Date(stats[i].Timeslice)) / 1000) - initialTS) / 86400] =
+      spam[((Date.parse(new Date(stats[i].Timeslice)) / 1000) - initialTS) / divider] =
         stats[i].MessageSpamCount
-      unsub[((Date.parse(new Date(stats[i].Timeslice)) / 1000) - initialTS) / 86400] =
+      unsub[((Date.parse(new Date(stats[i].Timeslice)) / 1000) - initialTS) / divider] =
         stats[i].MessageUnsubscribedCount
     }
 
@@ -88,7 +115,13 @@ export default class StatsCard extends React.Component {
     const blockedMax = Math.max(...blocked)
     const spamMax = Math.max(...spam)
     const unsubMax = Math.max(...unsub)
-    const overallMax = Math.max(sentMax, openedMax, clickedMax, hardBouncedMax, softBouncedMax, blockedMax, spamMax, unsubMax) * 1.2
+    /* eslint-disable max-len */
+    let overallMax = Math.max(sentMax, openedMax, clickedMax, hardBouncedMax, softBouncedMax, blockedMax, spamMax, unsubMax) * 1.2
+    /* eslint-enable max-len */
+
+    if (!overallMax || Math.abs(overallMax) === Infinity) {
+      overallMax = 0
+    }
 
     this.setState({
       events: {
@@ -107,15 +140,30 @@ export default class StatsCard extends React.Component {
   }
 
   render() {
-    const { events } = this.state
-    const { overallMax, isLoading, requestFailed } = this.state
+    const {
+      overallMax, isLoading, requestFailed, events,
+    } = this.state
 
     return (
       <View style={style.card}>
+        <View style={style.header}>
+          <Text style={style.title}>
+            Statistics
+          </Text>
+          <View style={{ width: 80, alignItems: 'flex-start' }}>
+            <Pick pick={() => this.getStats()} context="period" />
+          </View>
+        </View>
         {isLoading ? (
-          <Text>Loading to be improved</Text>
+          <View>
+            <View style={{ height: 200, justifyContent: 'center' }}>
+              <ActivityIndicator style={{ paddingTop: 10 }} size="large" />
+            </View>
+          </View>
+        ) : !overallMax || overallMax === 0 ? (
+          <EmptyState state="no-data" context="statistics" />
         ) : requestFailed ? (
-          <EmptyState context="stats" state="network-issue" />
+          <EmptyState tryAgain={() => this.getStats()} context="stats" state="network-issue" />
         ) : (
           <StatsChart events={events} overallMax={overallMax} />
           )}
@@ -135,5 +183,15 @@ const style = StyleSheet.create({
     paddingLeft: 15,
     marginLeft: 5,
     marginRight: 5,
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  title: {
+    fontSize: 17,
+    fontWeight: 'bold',
+    fontFamily: 'System',
   },
 })

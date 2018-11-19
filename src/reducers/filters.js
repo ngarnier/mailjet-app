@@ -1,5 +1,6 @@
 export default function filters(state = {
   campaigns: 'Sent',
+  period: 'Day',
 }, action) {
   switch (action.type) {
     case 'FILTER_SET': {

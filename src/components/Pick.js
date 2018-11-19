@@ -11,47 +11,52 @@ import setFilter from '../actions/filters'
   setFilterConnect: setFilter,
 })
 
-export default class ModalPick extends React.Component {
+export default class Pick extends React.Component {
   static propTypes = {
     setFilterConnect: PropTypes.func.isRequired,
     filters: PropTypes.objectOf(PropTypes.string).isRequired,
     pick: PropTypes.func.isRequired,
+    context: PropTypes.string.isRequired,
   }
 
-  toggleFilter = async () => {
-    const { setFilterConnect, filters } = this.props
-    const filter = filters.campaigns === 'Drafts' ? 'Sent' : 'Drafts'
-    await setFilterConnect('campaigns', filter)
+  toggleFilter = async (array) => {
+    const { setFilterConnect, filters, context } = this.props
+    let newFilter
+    for (let i = 0; i < array.length; i += 1) {
+      if (filters[context] === array[i]) {
+        newFilter = array[i + 1] || array[0]
+      }
+    }
+    await setFilterConnect(context, newFilter)
     this.props.pick()
   }
 
   render() {
-    const { filters } = this.props
+    const { filters, context } = this.props
+    const array = context === 'campaigns' ? ['Sent', 'Drafts'] :
+      context === 'period' ? ['Day', 'Week', 'Month'] :
+        []
+
     return (
-      <View style={{
-        backgroundColor: '#fff', borderBottomWidth: 1, borderBottomColor: '#eee',
-      }}
-      >
+      <View>
         <TouchableHighlight
           style={style.pick}
           underlayColor="#fff"
-          onPress={() => this.toggleFilter()}
+          onPress={() => this.toggleFilter(array)}
         >
           <View style={style.row}>
-            <View>
-              <Icon
-                style={{ fontSize: 10, color: filters.campaigns === 'Sent' ? '#1FBE9F' : '#ddd' }}
-                name="circle"
-                type="FontAwesome"
-              />
-              <Icon
-                style={{ fontSize: 10, color: filters.campaigns === 'Drafts' ? '#1FBE9F' : '#ddd' }}
-                name="circle"
-                type="FontAwesome"
-              />
+            <View style={{ flexDirection: 'column' }}>
+              {array.map((filter, index) => (
+                <Icon
+                  key={index.toString()}
+                  style={[style.icon, filter === filters[context] ? style.active : style.inactive]}
+                  name="circle"
+                  type="FontAwesome"
+                />
+              ))}
             </View>
             <Text style={style.filter}>
-              {filters.campaigns}
+              {filters[context]}
             </Text>
           </View>
         </TouchableHighlight>
@@ -64,17 +69,24 @@ const style = StyleSheet.create({
   pick: {
     padding: 5,
     alignSelf: 'flex-start',
-    marginLeft: 15,
   },
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    height: 42,
   },
   filter: {
     marginLeft: 5,
     fontSize: 18,
     color: '#1FBE9F',
     fontWeight: '600',
+  },
+  icon: {
+    fontSize: 10,
+  },
+  active: {
+    color: '#1FBE9F',
+  },
+  inactive: {
+    color: '#ddd',
   },
 })
