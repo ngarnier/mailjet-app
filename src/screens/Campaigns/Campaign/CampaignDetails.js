@@ -27,11 +27,11 @@ export default class CampaignDetails extends React.Component {
     } = this.props
     return (
       <ScrollView style={style.container}>
-        <View style={{ height: previewIsFullSize ? Dimensions.get('window').height - 80 : Dimensions.get('window').height / 2 }}>
-          {permalink && (
+        {permalink && (
+          <View style={{ height: previewIsFullSize ? Dimensions.get('window').height - 80 : Dimensions.get('window').height / 2 }}>
             <Preview permalink={permalink} />
-          )}
-        </View>
+          </View>
+        )}
         <LabelRow title="CAMPAIGN NAME" subtitle={title || 'Untitled Campaign'} />
         <LabelRow title="SUBJECT" subtitle={subject || 'No subject specified'} />
         <LabelRow title="RECIPIENTS" subtitle={listName || 'No list specified'} />
@@ -54,7 +54,7 @@ CampaignDetails.propTypes = {
   fromName: PropTypes.string.isRequired,
   fromEmail: PropTypes.string.isRequired,
   listName: PropTypes.string,
-  permalink: PropTypes.string.isRequired,
+  permalink: PropTypes.string,
   delivered: PropTypes.number.isRequired,
   opened: PropTypes.string.isRequired,
   clicked: PropTypes.string.isRequired,
@@ -65,6 +65,7 @@ CampaignDetails.propTypes = {
 CampaignDetails.defaultProps = {
   listName: null,
   previewIsFullSize: false,
+  permalink: undefined,
 }
 
 const style = StyleSheet.create({

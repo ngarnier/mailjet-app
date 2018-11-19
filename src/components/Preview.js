@@ -14,8 +14,12 @@ import changePreviewSize from '../actions/preview'
 
 export default class Preview extends React.Component {
   static propTypes = {
-    permalink: PropTypes.string.isRequired,
+    permalink: PropTypes.string,
     previewIsFullSize: PropTypes.bool.isRequired,
+  }
+
+  static defaultProps = {
+    permalink: undefined,
   }
 
   state = {

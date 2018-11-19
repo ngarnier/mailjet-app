@@ -243,6 +243,7 @@ export const getTotalSent = async (apikeys) => {
     CounterResolution: 'Day',
     CounterTiming: 'Message',
     FromTS: getMonthTS(),
+    CountOnly: 1,
   })
 
   if (!stats || typeof stats === 'string') {
