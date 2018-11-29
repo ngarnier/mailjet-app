@@ -35,16 +35,7 @@ export default class LoadingState extends React.Component {
 
     return (
       <View>
-        {type === 'login' ? (
-          <View>
-            <Image
-              style={{ height: 180, resizeMode: 'contain' }}
-              /* eslint-disable global-require */
-              source={noResult}
-              /* eslint-enable */
-            />
-          </View>
-        ) : [0, 1, 2, 3, 4, 5, 6].map(e => (
+        {[0, 1, 2, 3, 4, 5, 6].map(e => (
           <View style={style.row} key={e}>
             <Animated.View style={[style.line, style.title, { opacity: this.state.fadeAnim }]} />
             <Animated.View style={[style.line, style.subtitle, { opacity: this.state.fadeAnim }]} />

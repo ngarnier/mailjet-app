@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { View } from 'react-native'
+import { Asset, AppLoading } from 'expo'
 import { createBottomTabNavigator } from 'react-navigation-tabs'
 import { Icon } from 'native-base'
 import DashboardNavigator from '../Dashboard'
@@ -19,15 +20,36 @@ export default class Home extends React.Component {
     apikeys: PropTypes.objectOf(PropTypes.any).isRequired,
   }
 
+  state = {
+    isReady: false,
+  }
+
+  cacheResourcesAsync = async () => {
+    const images = [
+      /* eslint-disable global-require */
+      require('../../img/jet.png'),
+      /* eslint-enable */
+    ]
+
+    const cacheImages = images.map(image => Asset.fromModule(image).downloadAsync())
+    return Promise.all(cacheImages)
+  }
+
   render() {
     const { apikeys } = this.props
 
+    if (!this.state.isReady || apikeys === 'undefined') {
+      return (
+        <AppLoading
+          startAsync={this.cacheResourcesAsync}
+          onFinish={() => this.setState({ isReady: true })}
+        />
+      )
+    }
+
     return (
       <View style={{ flex: 1 }} >
-        {apikeys === 'undefined' ? (<LoadingState type="login" />) :
-          apikeys.size === 0 ? (<Login />) : (
-            <CustomTabs />
-        )}
+        {apikeys.size === 0 ? (<Login />) : (<CustomTabs />)}
       </View>
     )
   }
