@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Animated, View, Image, StyleSheet } from 'react-native'
-import noResult from '../img/splash.png'
+import { Animated, View, StyleSheet } from 'react-native'
 
 export default class LoadingState extends React.Component {
   static propTypes = {

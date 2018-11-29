@@ -9,7 +9,6 @@ import DashboardNavigator from '../Dashboard'
 import CampaignsNavigator from '../Campaigns/'
 import ContactsNavigator from '../ContactLists'
 import Login from '../Login'
-import LoadingState from '../../components/LoadingState'
 
 @connect(state => ({
   apikeys: state.apikeys,
