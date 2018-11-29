@@ -6,6 +6,8 @@ iOS            |  Android
 :-------------------------:|:-------------------------:
 <img src="https://i.imgur.com/8ha3JJl.png" height="600" />  |  <img src="https://i.imgur.com/UBcp3Ac.jpg" height="600" />
 
+You can run the app on your phone using Expo. For more information, go to https://expo.io/@ngarnier/mailjet-stats.
+
 *Disclaimer: While I do work at Mailjet, this app is a personal project and not an official app.*
 
 ## Features
