@@ -4,11 +4,11 @@ import thunk from 'redux-thunk'
 import { createStore, applyMiddleware } from 'redux'
 import { StyleProvider } from 'native-base'
 import { SafeAreaView } from 'react-native'
-import Home from './src/screens/Home'
-import reducer from './src/reducers/index'
-import { loadApiKeys } from './src/actions/apikeys'
-import getTheme from './src/native-base-theme/components'
-import commonColor from './src/native-base-theme/variables/commonColor'
+import Home from './screens/Home'
+import reducer from './reducers/index'
+import { loadApiKeys } from './actions/apikeys'
+import getTheme from './native-base-theme/components'
+import commonColor from './native-base-theme/variables/commonColor'
 
 const store = createStore(reducer, applyMiddleware(thunk))
 async function boot() {

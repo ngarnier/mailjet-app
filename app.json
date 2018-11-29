@@ -8,7 +8,7 @@
       "barStyle": "light-content"
     },
     "splash": {
-      "image": "./src/img/splash.png",
+      "image": "./img/splash.png",
       "backgroundColor": "#fafafa"
     }
   }

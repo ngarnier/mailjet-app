@@ -89,25 +89,25 @@ export default class Login extends React.Component {
           <Text style={style.subtitle}>Please sign in with your API Keys</Text>
         </View>
         <Form style={{ width: '100%', alignSelf: 'center' }}>
-          <Item style={{ borderColor: publicBorder, marginBottom: 10 }} floatingLabel>
-            <Label style={{ color: publicBorder, fontSize: 22 }}>Public key</Label>
+          <Item style={{ borderColor: publicBorder, marginBottom: 5 }} floatingLabel>
+            <Label style={{ color: publicBorder, fontSize: 17 }}>Public key</Label>
             <Input
               autofocus
               onBlur={() => { this.setState({ publicBorder: commonColor.textColor }) }}
               onFocus={() => { this.setState({ publicBorder: commonColor.brandPrimary }) }}
               onChangeText={input => this.handlePublicInput(input)}
               clearButtonMode="while-editing"
-              style={{ fontSize: 22 }}
+              style={{ fontSize: 17 }}
             />
           </Item>
           <Item style={{ borderColor: secretBorder }} floatingLabel>
-            <Label style={{ color: secretBorder, fontSize: 22 }}>Secret key</Label>
+            <Label style={{ color: secretBorder, fontSize: 17 }}>Secret key</Label>
             <Input
               onBlur={() => { this.setState({ secretBorder: commonColor.textColor }) }}
               onFocus={() => { this.setState({ secretBorder: commonColor.brandPrimary }) }}
               onChangeText={input => this.handleSecretInput(input)}
               clearButtonMode="while-editing"
-              style={{ fontSize: 22 }}
+              style={{ fontSize: 17 }}
             />
           </Item>
         </Form>
@@ -132,16 +132,16 @@ export default class Login extends React.Component {
 const style = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 30,
+    paddingTop: 20,
     backgroundColor: '#fefefe',
   },
   logoContainer: {
     alignItems: 'center',
   },
   logo: {
-    width: 100,
-    height: 100,
-    marginBottom: 10,
+    width: 80,
+    height: 80,
+    marginBottom: 5,
     resizeMode: 'contain',
   },
   titleView: {
@@ -157,8 +157,8 @@ const style = StyleSheet.create({
   subtitle: {
     fontSize: 22,
     fontFamily: 'System',
-    marginTop: 10,
-    marginBottom: 20,
+    marginTop: 5,
+    marginBottom: 10,
     marginLeft: 15,
     color: '#777',
   },
@@ -183,7 +183,7 @@ const style = StyleSheet.create({
   },
   buttonText: {
     alignSelf: 'center',
-    fontSize: 22,
+    fontSize: 17,
     fontFamily: 'System',
     color: '#fff',
   },
