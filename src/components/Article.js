@@ -5,6 +5,9 @@ import { StyleSheet, View, Text, Linking } from 'react-native'
 export default function Article({
   title, link, categories,
 }) {
+  if (categories.length > 3) {
+    categories.splice(3, categories.length - 1)
+  }
   return (
     <View style={style.card}>
       <Text style={style.title}>{title}</Text>

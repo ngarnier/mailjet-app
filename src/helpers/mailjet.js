@@ -303,7 +303,7 @@ export const getLastCampaign = async (apikeys) => {
     IDType: 'Campaign',
   })
 
-  if (typeof lastCampaign !== 'object') {
+  if (typeof lastCampaign !== 'object' || lastCampaign.length === 0) {
     return 'The request timed out'
   }
 

@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
-import { SafeAreaView, ActivityIndicator, View, StyleSheet } from 'react-native'
+import { SafeAreaView, View, StyleSheet } from 'react-native'
 import Pick from '../../components/Pick'
 import CampaignsList from './CampaignsList'
 import { getAllCampaigns } from '../../helpers/mailjet'
@@ -19,7 +19,6 @@ export default class Campaigns extends React.Component {
   state = {
     campaigns: [],
     isLoading: false,
-    isLoadingMore: false,
     isRefreshing: false,
     offset: 0,
     canLoadMore: true,
@@ -56,14 +55,9 @@ export default class Campaigns extends React.Component {
       this.setState({
         campaigns: updatedCampaigns,
         isLoading: false,
-        isLoadingMore: false,
         canLoadMore: typeof updatedCampaigns === 'object' ? updatedCampaigns.length === 20 : false,
       })
     } else if (method === 'load more' && canLoadMore) {
-      this.setState({
-        isLoadingMore: true,
-      })
-
       const newCampaigns = await getAllCampaigns(apikeys.get(0), filter, offset + 20)
 
       if (typeof newCampaigns === 'object') {
@@ -71,7 +65,6 @@ export default class Campaigns extends React.Component {
           campaigns: [...campaigns, ...newCampaigns],
           offset: offset + 20,
           canLoadMore: typeof newCampaigns === 'object' ? newCampaigns.length === 20 : false,
-          isLoadingMore: false,
         })
       }
     } else if (method === 'refresh') {
@@ -84,7 +77,6 @@ export default class Campaigns extends React.Component {
       this.setState({
         campaigns: refreshedCampaigns,
         isRefreshing: false,
-        isLoadingMore: false,
         canLoadMore: typeof refreshedCampaigns === 'object' ? refreshedCampaigns.length === 20 : false,
       })
     }
@@ -93,7 +85,7 @@ export default class Campaigns extends React.Component {
   render() {
     const { navigation } = this.props
     const {
-      campaigns, isLoading, isLoadingMore, isRefreshing,
+      campaigns, isLoading, isRefreshing,
     } = this.state
 
     return (
@@ -108,9 +100,6 @@ export default class Campaigns extends React.Component {
           isLoading={isLoading}
           isRefreshing={isRefreshing}
         />
-        {isLoadingMore && (
-          <ActivityIndicator style={style.loader} size="large" />
-        )}
       </SafeAreaView>
     )
   }

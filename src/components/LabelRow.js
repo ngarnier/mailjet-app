@@ -6,7 +6,7 @@ export default function LabelRow({ title, subtitle }) {
   return (
     <View style={style.row}>
       <Text style={style.title}>{title}</Text>
-      {subtitle && (<Text style={style.subtitle}>{subtitle}</Text>)}
+      {subtitle !== undefined && (<Text style={style.subtitle}>{subtitle}</Text>)}
     </View>
   )
 }

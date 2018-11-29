@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { FlatList, View, Text, TouchableOpacity, ActivityIndicator, StyleSheet } from 'react-native'
+import { FlatList, View, Text, TouchableOpacity, StyleSheet } from 'react-native'
 import EmptyState from '../../../components/EmptyState'
 import { getListContacts } from '../../../helpers/mailjet'
 import LoadingState from '../../../components/LoadingState'
@@ -13,7 +13,6 @@ export default class ListContact extends React.Component {
   state = {
     contacts: [],
     isLoading: false,
-    isLoadingMore: false,
     isRefreshing: false,
     offset: 0,
     canLoadMore: true,
@@ -53,14 +52,9 @@ export default class ListContact extends React.Component {
       this.setState({
         contacts: updatedContacts,
         isLoading: false,
-        isLoadingMore: false,
         canLoadMore: typeof updatedContacts === 'object' ? updatedContacts.length === 20 : false,
       })
     } else if (method === 'load more' && canLoadMore) {
-      this.setState({
-        isLoadingMore: true,
-      })
-
       const newContacts = await getListContacts(apikeys.get(0), name, offset + 20)
 
       if (typeof newContacts === 'object') {
@@ -68,7 +62,6 @@ export default class ListContact extends React.Component {
           contacts: [...contacts, ...newContacts],
           offset: offset + 20,
           canLoadMore: typeof newContacts === 'object' ? newContacts.length === 20 : false,
-          isLoadingMore: false,
         })
       }
     } else if (method === 'refresh') {
@@ -81,7 +74,6 @@ export default class ListContact extends React.Component {
       this.setState({
         contacts: refreshedContacts,
         isRefreshing: false,
-        isLoadingMore: false,
         canLoadMore: typeof refreshedContacts === 'object' ? refreshedContacts.length === 20 : false,
       })
     }
@@ -89,7 +81,7 @@ export default class ListContact extends React.Component {
 
   render() {
     const {
-      contacts, isLoading, isLoadingMore, isRefreshing,
+      contacts, isLoading, isRefreshing,
     } = this.state
     const { navigation } = this.props
 
@@ -107,7 +99,7 @@ export default class ListContact extends React.Component {
             keyExtractor={(item, index) => index.toString()}
             refreshing={isRefreshing}
             onRefresh={() => this.loadMore('refresh')}
-            onEndReachedThreshold={0.1}
+            onEndReachedThreshold={0.9}
             onEndReached={() => this.loadMore('load more')}
             renderItem={({ item }) => (
               <TouchableOpacity
@@ -125,11 +117,6 @@ export default class ListContact extends React.Component {
               </TouchableOpacity>
               )}
           />)}
-        {isLoadingMore && (
-          <View style={style.loader}>
-            <ActivityIndicator size="large" />
-          </View>
-        )}
       </View>
     )
   }

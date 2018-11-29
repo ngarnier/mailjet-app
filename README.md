@@ -4,14 +4,33 @@ A fully working proof of concept mobile app using Mailjet's API.
 
 iOS            |  Android
 :-------------------------:|:-------------------------:
-<img src="https://image.ibb.co/n5q9JJ/iOS2.gif" width="230" />  |  <img src="https://image.ibb.co/eAQqsd/android2.gif" width="220" />
+<img src="https://i.imgur.com/8ha3JJl.png" height="600" />  |  <img src="https://i.imgur.com/UBcp3Ac.jpg" height="600" />
 
 *Disclaimer: While I do work at Mailjet, this app is a personal project and not an official app.*
+
+## Features
+
+This app enables you to:
+* See on the dashboard all the important information about your account
+  * Number of contacts
+  * Number of emails sent
+  * Stats of the last campaign
+  * Daily/weekly/montly stats
+* Read the last blogposts from the Mailjet blog
+* Browse campaigns (draft and sent) and see their information, content and stats
+* Browse contact lists, contacts and contact properties
+
+## Tech stack
+
+* [React-Native](https://facebook.github.io/react-native/)
+* [React-Navigation](https://reactnavigation.org/)
+* [React-Redux](https://redux.js.org/)
+* [Expo](https://expo.io/)
 
 ## Development
 
 If you want to contribute:
 
 `git clone` this repo  
-`npm install` to install dependencies  
-`npm start` to start the development server
+`yarn` to install dependencies  
+`expo start` to start the development server

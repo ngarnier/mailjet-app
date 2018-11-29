@@ -13,14 +13,14 @@ export default class MessageRow extends React.PureComponent {
     return (
       <View style={style.row}>
         <Text style={style.title}>{title || 'Untitled'}</Text>
-        {subtitle && (<Text style={style.subtitle}>{subtitle}</Text>)}
+        {subtitle !== undefined && (<Text style={style.subtitle}>{subtitle}</Text>)}
         <View style={style.date}>
           <Badge style={[style.badge, style[safeStatus]]}>
             <Text style={[{ fontSize: 16 }, style[`${safeStatus}Text`]]}>
               {safeStatus}
             </Text>
           </Badge>
-          {date && (<Text style={style.dateText}>on {date}</Text>)}
+          {date !== undefined && (<Text style={style.dateText}>on {date}</Text>)}
         </View>
       </View>
     )

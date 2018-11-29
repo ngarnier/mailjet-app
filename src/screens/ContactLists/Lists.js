@@ -1,5 +1,5 @@
 import React from 'react'
-import { SafeAreaView, View, ActivityIndicator, StyleSheet } from 'react-native'
+import { SafeAreaView, StyleSheet } from 'react-native'
 import { connect } from 'react-redux'
 import ContactLists from './ContactLists'
 import { getLists } from '../../helpers/mailjet'
@@ -12,7 +12,6 @@ export default class Lists extends React.Component {
   state = {
     lists: [],
     isLoading: false,
-    isLoadingMore: false,
     isRefreshing: false,
     offset: 0,
     canLoadMore: true,
@@ -50,14 +49,9 @@ export default class Lists extends React.Component {
       this.setState({
         lists: updatedLists,
         isLoading: false,
-        isLoadingMore: false,
         canLoadMore: typeof updatedLists === 'object' ? updatedLists.length === 40 : false,
       })
     } else if (method === 'load more' && canLoadMore) {
-      this.setState({
-        isLoadingMore: true,
-      })
-
       const newLists = await getLists(apikeys.get(0), offset + 40)
 
       if (typeof newLists === 'object') {
@@ -65,7 +59,6 @@ export default class Lists extends React.Component {
           lists: [...lists, ...newLists],
           offset: offset + 40,
           canLoadMore: typeof newLists === 'object' ? newLists.length === 40 : false,
-          isLoadingMore: false,
         })
       }
     } else if (method === 'refresh') {
@@ -78,7 +71,6 @@ export default class Lists extends React.Component {
       this.setState({
         lists: refreshedLists,
         isRefreshing: false,
-        isLoadingMore: false,
         canLoadMore: typeof refreshedLists === 'object' ? refreshedLists.length === 40 : false,
       })
     }
@@ -87,7 +79,7 @@ export default class Lists extends React.Component {
   render() {
     const { navigation } = this.props
     const {
-      lists, isLoading, isLoadingMore, isRefreshing,
+      lists, isLoading, isRefreshing,
     } = this.state
 
     return (
@@ -99,11 +91,6 @@ export default class Lists extends React.Component {
           isLoading={isLoading}
           isRefreshing={isRefreshing}
         />
-        {isLoadingMore && (
-          <View style={style.loader}>
-            <ActivityIndicator size="large" />
-          </View>
-        )}
       </SafeAreaView>
     )
   }

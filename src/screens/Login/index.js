@@ -88,32 +88,34 @@ export default class Login extends React.Component {
           <Text style={style.title}>Welcome,</Text>
           <Text style={style.subtitle}>Please sign in with your API Keys</Text>
         </View>
-        <Form style={{ width: '100%' }}>
-          <Item style={{ borderColor: publicBorder }} floatingLabel>
-            <Label style={{ color: publicBorder }}>Public key</Label>
+        <Form style={{ width: '100%', alignSelf: 'center' }}>
+          <Item style={{ borderColor: publicBorder, marginBottom: 10 }} floatingLabel>
+            <Label style={{ color: publicBorder, fontSize: 22 }}>Public key</Label>
             <Input
               autofocus
               onBlur={() => { this.setState({ publicBorder: commonColor.textColor }) }}
               onFocus={() => { this.setState({ publicBorder: commonColor.brandPrimary }) }}
               onChangeText={input => this.handlePublicInput(input)}
               clearButtonMode="while-editing"
+              style={{ fontSize: 22 }}
             />
           </Item>
           <Item style={{ borderColor: secretBorder }} floatingLabel>
-            <Label style={{ color: secretBorder }}>Secret key</Label>
+            <Label style={{ color: secretBorder, fontSize: 22 }}>Secret key</Label>
             <Input
               onBlur={() => { this.setState({ secretBorder: commonColor.textColor }) }}
               onFocus={() => { this.setState({ secretBorder: commonColor.brandPrimary }) }}
               onChangeText={input => this.handleSecretInput(input)}
               clearButtonMode="while-editing"
+              style={{ fontSize: 22 }}
             />
           </Item>
         </Form>
+        {failureMessage && (
         <View style={style.warning}>
-          {failureMessage && (
-            <Text style={style.warningText}>Failed to login because of {failureMessage}</Text>
-          )}
+          <Text style={style.warningText}>Failed to login because of {failureMessage}</Text>
         </View>
+        )}
         <TouchableOpacity
           activeOpacity={0.8}
           onPress={() => this.handleSave()}
@@ -130,7 +132,7 @@ export default class Login extends React.Component {
 const style = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 50,
+    paddingTop: 30,
     backgroundColor: '#fefefe',
   },
   logoContainer: {
@@ -141,6 +143,9 @@ const style = StyleSheet.create({
     height: 100,
     marginBottom: 10,
     resizeMode: 'contain',
+  },
+  titleView: {
+    alignItems: 'center',
   },
   title: {
     fontSize: 28,
@@ -153,16 +158,15 @@ const style = StyleSheet.create({
     fontSize: 22,
     fontFamily: 'System',
     marginTop: 10,
-    marginBottom: 10,
+    marginBottom: 20,
     marginLeft: 15,
     color: '#777',
   },
   warning: {
-    height: 60,
-    width: '100%',
     justifyContent: 'center',
     paddingLeft: 18,
     paddingRight: 18,
+    marginTop: 10,
   },
   warningText: {
     fontSize: 14,
@@ -172,6 +176,7 @@ const style = StyleSheet.create({
     justifyContent: 'center',
     alignSelf: 'center',
     backgroundColor: '#FD9D29',
+    marginTop: 30,
     height: 52,
     borderRadius: 2,
     width: '80%',

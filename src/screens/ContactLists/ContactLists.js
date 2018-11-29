@@ -33,7 +33,7 @@ export default class ContactLists extends React.PureComponent {
             keyExtractor={(item, index) => index.toString()}
             refreshing={isRefreshing}
             onRefresh={() => refresh('refresh')}
-            onEndReachedThreshold={0.1}
+            onEndReachedThreshold={0.9}
             onEndReached={() => refresh('load more')}
             renderItem={({ item }) => (
               <ContactListItem
