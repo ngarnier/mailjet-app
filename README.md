@@ -1,5 +1,7 @@
 # Mailjet App
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/3287af45492a4f5885cb811f0a7a5a66)](https://app.codacy.com/app/ngarnier/mailjet-app?utm_source=github.com&utm_medium=referral&utm_content=ngarnier/mailjet-app&utm_campaign=Badge_Grade_Dashboard)
+
 A fully working proof of concept mobile app using Mailjet's API.
 
 iOS            |  Android
