@@ -50,30 +50,8 @@ const style = StyleSheet.create({
     fontWeight: 'bold',
     color: '#222',
   },
-  subtitle: {
-    fontSize: 17,
-    fontFamily: 'System',
-    fontWeight: 'bold',
-    color: '#222',
-    paddingTop: 10,
-  },
   label: {
     fontSize: 18,
     color: '#444',
-  },
-  figure: {
-    color: '#222',
-    fontWeight: 'bold',
-  },
-  emptyBar: {
-    backgroundColor: '#eee',
-    height: 4,
-    width: '100%',
-    marginBottom: 5,
-    marginTop: 5,
-  },
-  filledBar: {
-    backgroundColor: '#1FBE9F',
-    height: '100%',
   },
 })
