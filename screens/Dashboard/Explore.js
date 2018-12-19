@@ -37,6 +37,7 @@ export default class Explore extends React.Component {
               {articles.map((article, index) => (
                 <Article
                   key={index.toString()}
+                  image={article.image}
                   title={article.title}
                   description={article.description}
                   categories={article.categories}

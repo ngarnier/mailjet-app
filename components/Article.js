@@ -1,32 +1,47 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { StyleSheet, View, Text, Linking } from 'react-native'
+import { Image, Linking, StyleSheet, Text, View } from 'react-native'
 
 export default function Article({
-  title, link, categories,
+  image, title, link, categories,
 }) {
   if (categories.length > 3) {
     categories.splice(3, categories.length - 1)
   }
+
   return (
     <View style={style.card}>
-      <Text style={style.title}>{title}</Text>
-      <View style={style.categories}>
-        {categories.map((category, index) => (
-          <Text key={index.toString()} style={style.category}>{category}</Text>
-        ))}
+      {image !== null && (<Image style={style.image} source={{ uri: image[1] }} />)}
+      <View style={style.contentContainer}>
+        <Text style={style.title} onPress={() => { Linking.openURL(link) }}>{title}</Text>
+        <View style={style.categories}>
+          {categories.map((category, index) => (
+            <Text
+              key={index.toString()}
+              style={style.category}
+              onPress={() => { Linking.openURL(`https://www.mailjet.com/blog/?tag=${category}`) }}
+            >
+              {category}
+            </Text>
+          ))}
+        </View>
+        <Text style={style.link} onPress={() => { Linking.openURL(link) }}>
+          Learn more
+        </Text>
       </View>
-      <Text style={style.link} onPress={() => { Linking.openURL(link) }}>
-        Learn more
-      </Text>
     </View>
   )
 }
 
 Article.propTypes = {
+  image: PropTypes.arrayOf(PropTypes.string),
   title: PropTypes.string.isRequired,
   link: PropTypes.string.isRequired,
   categories: PropTypes.arrayOf(PropTypes.string).isRequired,
+}
+
+Article.defaultProps = {
+  image: null,
 }
 
 const style = StyleSheet.create({
@@ -37,6 +52,9 @@ const style = StyleSheet.create({
     marginLeft: 20,
     marginRight: 20,
     marginBottom: 10,
+    overflow: 'hidden',
+  },
+  contentContainer: {
     paddingTop: 10,
     paddingRight: 15,
     paddingBottom: 10,
@@ -61,16 +79,19 @@ const style = StyleSheet.create({
     fontSize: 15,
     color: '#777',
   },
+  image: {
+    height: 150,
+  },
+  link: {
+    color: '#1FBE9F',
+    fontSize: 16,
+    fontWeight: '600',
+  },
   title: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     fontSize: 17,
     fontWeight: 'bold',
     fontFamily: 'System',
-  },
-  link: {
-    color: '#1FBE9F',
-    fontSize: 16,
-    fontWeight: '600',
   },
 })
