@@ -28,7 +28,8 @@ export default class ContactList extends React.PureComponent {
           </View>
           <View style={[style.bordered, { borderTopWidth: 0 }]}>
             <StatsRow
-              sent={navigation.state.params.deliveredCount}
+              source="Contact"
+              extraData={{ sent: navigation.state.params.deliveredCount }}
             />
           </View>
           <View style={{ paddingTop: 10, paddingBottom: 10, backgroundColor: '#fff' }}>

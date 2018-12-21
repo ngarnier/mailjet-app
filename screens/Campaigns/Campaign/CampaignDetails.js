@@ -13,15 +13,13 @@ import Preview from '../../../components/Preview'
 export default class CampaignDetails extends React.Component {
   render() {
     const {
+      id,
       title,
       subject,
       fromName,
       fromEmail,
       listName,
       permalink,
-      delivered,
-      opened,
-      clicked,
       status,
       previewIsFullSize,
     } = this.props
@@ -38,9 +36,8 @@ export default class CampaignDetails extends React.Component {
         <LabelRow title="FROM" subtitle={fromEmail ? `${fromName} (${fromEmail})` : 'No sender specified'} />
         {status === 'Sent' && (
         <StatsRow
-          sent={delivered}
-          opened={opened}
-          clicked={clicked}
+          source="Campaign"
+          id={id}
         />
         )}
       </ScrollView>
@@ -49,15 +46,13 @@ export default class CampaignDetails extends React.Component {
 }
 
 CampaignDetails.propTypes = {
+  id: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
   subject: PropTypes.string.isRequired,
   fromName: PropTypes.string.isRequired,
   fromEmail: PropTypes.string.isRequired,
   listName: PropTypes.string,
   permalink: PropTypes.string,
-  delivered: PropTypes.number.isRequired,
-  opened: PropTypes.string.isRequired,
-  clicked: PropTypes.string.isRequired,
   status: PropTypes.string.isRequired,
   previewIsFullSize: PropTypes.bool,
 }

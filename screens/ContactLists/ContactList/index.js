@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { StyleSheet, View, Text } from 'react-native'
 import { Icon } from 'native-base'
 import StatsRow from '../../../components/StatsRow'
-import { getListStats } from '../../../helpers/mailjet'
+import { getObjectStats } from '../../../helpers/mailjet'
 import LoadingState from '../../../components/LoadingState'
 
 @connect(state => ({
@@ -20,7 +20,7 @@ export default class ContactList extends React.Component {
       isLoading: true,
     })
 
-    const listStats = await getListStats(apikeys.get(0), id)
+    const listStats = await getObjectStats(apikeys.get(0), 'List', id)
     this.setState({
       listStats,
       isLoading: false,
@@ -28,7 +28,7 @@ export default class ContactList extends React.Component {
   }
 
   render() {
-    const { name, subscribers } = this.props.navigation.state.params
+    const { id, name, subscribers } = this.props.navigation.state.params
     const { listStats, isLoading } = this.state
 
     return (
@@ -53,9 +53,8 @@ export default class ContactList extends React.Component {
             {listStats && (
               <View>
                 <StatsRow
-                  sent={listStats.sent}
-                  opened={listStats.opened}
-                  clicked={listStats.clicked}
+                  source="List"
+                  id={id}
                 />
                 <View style={[style.row, { borderTopColor: '#ddd', borderTopWidth: 1 }]}>
                   <View style={[style.columns, { paddingBottom: 5 }]}>

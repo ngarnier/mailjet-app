@@ -1,36 +1,53 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import { StyleSheet, View, Text } from 'react-native'
 import StatsBar from './StatsBar'
+import { getObjectStats } from '../helpers/mailjet'
 
-export default function StatsRow({ sent, opened, clicked }) {
-  return (
-    <View style={style.row}>
-      <Text style={style.label}>Emails sent</Text>
-      <Text style={style.title}>{sent}</Text>
-      {opened && clicked && (
-        <View style={style.columns}>
-          <View style={{ width: '48%' }}>
-            <StatsBar label="Opens" figure={opened} />
+@connect(state => ({
+  apikeys: state.apikeys,
+}))
+
+export default class StatsRow extends React.Component {
+  state = {
+    isLoading: true,
+    stats: {},
+  }
+  componentDidMount = async () => {
+    const {
+      apikeys, extraData, id, source,
+    } = this.props
+    const stats = source === 'Contact' ? extraData
+      : await getObjectStats(apikeys.get(0), source, id)
+    this.setState({
+      isLoading: false,
+      stats,
+    })
+  }
+
+  render() {
+    const { isLoading, stats } = this.state
+    return (
+      <View style={style.row}>
+        {isLoading ? <Text>Loading</Text> : (
+          <View>
+            <Text style={style.label}>Emails sent</Text>
+            <Text style={style.title}>{stats.sent}</Text>
+            {stats.opened && stats.clicked && (
+              <View style={style.columns}>
+                <View style={{ width: '48%' }}>
+                  <StatsBar label="Opens" figure={stats.opened} />
+                </View>
+                <View style={{ width: '48%' }}>
+                  <StatsBar label="Clicks" figure={stats.clicked} />
+                </View>
+              </View>
+            )}
           </View>
-          <View style={{ width: '48%' }}>
-            <StatsBar label="Clicks" figure={clicked} />
-          </View>
-        </View>
-      )}
-    </View>
-  )
-}
-
-StatsRow.propTypes = {
-  sent: PropTypes.number.isRequired,
-  opened: PropTypes.string,
-  clicked: PropTypes.string,
-}
-
-StatsRow.defaultProps = {
-  opened: null,
-  clicked: null,
+        )}
+      </View>
+    )
+  }
 }
 
 const style = StyleSheet.create({

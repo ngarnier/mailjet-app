@@ -58,18 +58,19 @@ export default class Campaign extends React.Component {
 
   render() {
     const { campaignDetails, isLoading } = this.state
+    const { id } = this.props.navigation.state.params
 
     return (
       <View style={{ flex: 1 }}>
         {campaignDetails ? (
           <CampaignDetails
+            id={id}
             campaignDetails={campaignDetails}
             title={campaignDetails.title}
             subject={campaignDetails.Subject}
             fromName={campaignDetails.FromName}
             fromEmail={campaignDetails.FromEmail}
             listName={campaignDetails.ListName}
-            permalink={campaignDetails.Permalink}
             delivered={campaignDetails.delivered}
             opened={campaignDetails.opened}
             clicked={campaignDetails.clicked}

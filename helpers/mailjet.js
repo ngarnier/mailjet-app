@@ -120,7 +120,6 @@ export const getCampaignDetails = async (apikeys, id, status) => {
   const { publicKey, secretKey } = apikeys
   if (status === 'Sent') {
     const details = await mailjetGet(`campaign/${id}`, publicKey, secretKey)
-    const content = await mailjetGet(`campaigndraft/${details[0].NewsLetterID}`, publicKey, secretKey)
     const listDetails = await mailjetGet(`contactslist/${details[0].ListID}`, publicKey, secretKey)
     return {
       title: details[0].Title,
@@ -128,7 +127,6 @@ export const getCampaignDetails = async (apikeys, id, status) => {
       FromEmail: details[0].FromEmail,
       Subject: details[0].Subject,
       ListName: listDetails[0].Name,
-      Permalink: content[0].Url,
     }
   }
   const content = await mailjetGet(`campaigndraft/${id}`, publicKey, secretKey)
@@ -139,18 +137,43 @@ export const getCampaignDetails = async (apikeys, id, status) => {
     FromEmail: content[0].SenderEmail,
     Subject: content[0].Subject,
     ListName: listDetails[0].Name,
-    Permalink: content[0].Url,
   }
 }
 
-export const getDraftCampaignDetails = async (apikeys, id) => {
+export const getObjectStats = async (apikeys, source, id) => {
   const { publicKey, secretKey } = apikeys
-  const details = await mailjetGet(`campaign/${id}`, publicKey, secretKey)
-  const content = await mailjetGet(`campaigndraft/${details[0].NewsLetterID}`, publicKey, secretKey)
-  const listDetails = await mailjetGet(`contactslist/${details[0].ListID}`, publicKey, secretKey)
-  details[0].ListName = listDetails[0].Name
-  details[0].Permalink = content[0].Url
-  return details[0]
+  const stats = await mailjetGet('statcounters', publicKey, secretKey, {
+    SourceID: id,
+    CounterSource: source,
+    CounterResolution: 'Lifetime',
+    CounterTiming: 'Message',
+  })
+
+  if (!stats || !stats[0]) {
+    return undefined
+  }
+
+  const {
+    MessageBlockedCount,
+    MessageClickedCount,
+    MessageHardBouncedCount,
+    MessageOpenedCount,
+    MessageSentCount,
+    MessageSoftBouncedCount,
+    MessageUnsubscribedCount,
+    MessageSpamCount,
+  } = stats[0]
+
+  return {
+    blocked: MessageBlockedCount,
+    clicked: `${MessageOpenedCount === 0 ? 0 : Math.floor((MessageClickedCount / MessageOpenedCount) * 100)}%`,
+    hardBounced: MessageHardBouncedCount,
+    opened: `${MessageSentCount === 0 ? 0 : Math.floor((MessageOpenedCount / MessageSentCount) * 100)}%`,
+    sent: MessageSentCount,
+    softBounced: MessageSoftBouncedCount,
+    unsub: MessageUnsubscribedCount,
+    spam: MessageSpamCount,
+  }
 }
 
 export const getLists = async (apikey, offset = 0) => {
@@ -165,34 +188,6 @@ export const getLists = async (apikey, offset = 0) => {
     return 'The request timed out'
   }
   return response
-}
-
-export const getListStats = async (apikey, id) => {
-  const { publicKey, secretKey } = apikey
-  const stats = await mailjetGet('statcounters', publicKey, secretKey, {
-    SourceID: id,
-    CounterSource: 'List',
-    CounterResolution: 'Lifetime',
-    CounterTiming: 'Message',
-  })
-
-  if (!stats || !stats[0]) {
-    return undefined
-  }
-
-  const {
-    MessageClickedCount,
-    MessageOpenedCount,
-    MessageSentCount,
-    MessageUnsubscribedCount,
-  } = stats[0]
-
-  return {
-    sent: MessageSentCount,
-    unsub: MessageUnsubscribedCount,
-    opened: `${MessageSentCount === 0 ? 0 : Math.floor((MessageOpenedCount / MessageSentCount) * 100)}%`,
-    clicked: `${MessageOpenedCount === 0 ? 0 : Math.floor((MessageClickedCount / MessageOpenedCount) * 100)}%`,
-  }
 }
 
 export const getListContactIDs = async (apikeys, listName, offset) => {
