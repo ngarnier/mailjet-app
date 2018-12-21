@@ -46,7 +46,7 @@ export default class StatsChart extends React.Component {
               x2="100%"
               y1={y(tick)}
               y2={y(tick)}
-              stroke="rgba(0,0,0,0.2)"
+              stroke="rgba(0,0,0,0.1)"
             />
           ))
         }

@@ -27,19 +27,38 @@ export default class StatsRow extends React.Component {
 
   render() {
     const { isLoading, stats } = this.state
+
     return (
       <View style={style.row}>
         {isLoading ? <Text>Loading</Text> : (
           <View>
             <Text style={style.label}>Emails sent</Text>
             <Text style={style.title}>{stats.sent}</Text>
-            {stats.opened && stats.clicked && (
-              <View style={style.columns}>
-                <View style={{ width: '48%' }}>
-                  <StatsBar label="Opens" figure={stats.opened} />
+            {stats.opened && (
+              <View>
+                <View style={style.columns}>
+                  <View style={{ width: '48%' }}>
+                    <StatsBar label="Opens" figure={stats.opened} />
+                  </View>
+                  <View style={{ width: '48%' }}>
+                    <StatsBar label="Clicks" figure={stats.clicked} />
+                  </View>
                 </View>
-                <View style={{ width: '48%' }}>
-                  <StatsBar label="Clicks" figure={stats.clicked} />
+                <View style={[style.columns, { paddingTop: 15 }]}>
+                  <Text style={style.label}>Soft bounce</Text>
+                  <Text style={style.title}>{stats.softBounced}</Text>
+                </View>
+                <View style={[style.columns, { paddingTop: 10 }]}>
+                  <Text style={style.label}>Hard bounce</Text>
+                  <Text style={style.title}>{stats.hardBounced}</Text>
+                </View>
+                <View style={[style.columns, { paddingTop: 10 }]}>
+                  <Text style={style.label}>Blocked</Text>
+                  <Text style={style.title}>{stats.blocked}</Text>
+                </View>
+                <View style={[style.columns, { paddingTop: 10 }]}>
+                  <Text style={style.label}>Spam</Text>
+                  <Text style={style.title}>{stats.spam}</Text>
                 </View>
               </View>
             )}
