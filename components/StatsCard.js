@@ -58,21 +58,12 @@ export default class StatsCard extends React.Component {
       spam,
       unsub,
     } = this.state.events
+    const periodLength = period === 'Month' ? 31
+      : period === 'Week' ? 8 : 25
 
     const stats = await getApiKeyStats(apikeys.get(0), period)
 
-    if (typeof stats !== 'object') {
-      this.setState({
-        isLoading: false,
-        requestFailed: true,
-      })
-    } else if (stats.length === 0) {
-      this.setState({
-        isLoading: false,
-      })
-    }
-
-    for (let i = 0; i < stats.length; i += 1) {
+    for (let i = 0; i < periodLength; i += 1) {
       sent.push(0)
       opened.push(0)
       clicked.push(0)
@@ -81,6 +72,29 @@ export default class StatsCard extends React.Component {
       blocked.push(0)
       spam.push(0)
       unsub.push(0)
+    }
+
+    if (typeof stats !== 'object') {
+      this.setState({
+        isLoading: false,
+        requestFailed: true,
+      })
+      return
+    } else if (stats.length === 0) {
+      this.setState({
+        isLoading: false,
+        events: {
+          sent,
+          opened,
+          clicked,
+          hardBounced,
+          softBounced,
+          blocked,
+          spam,
+          unsub,
+        },
+      })
+      return
     }
 
     const initialTS = period === 'Week' ? getWeekTS() :
@@ -107,22 +121,6 @@ export default class StatsCard extends React.Component {
         stats[i].MessageUnsubscribedCount
     }
 
-    const sentMax = Math.max(...sent)
-    const openedMax = Math.max(...opened)
-    const clickedMax = Math.max(...clicked)
-    const hardBouncedMax = Math.max(...hardBounced)
-    const softBouncedMax = Math.max(...softBounced)
-    const blockedMax = Math.max(...blocked)
-    const spamMax = Math.max(...spam)
-    const unsubMax = Math.max(...unsub)
-    /* eslint-disable max-len */
-    let overallMax = Math.max(sentMax, openedMax, clickedMax, hardBouncedMax, softBouncedMax, blockedMax, spamMax, unsubMax) * 1.2
-    /* eslint-enable max-len */
-
-    if (!overallMax || Math.abs(overallMax) === Infinity) {
-      overallMax = 0
-    }
-
     this.setState({
       events: {
         sent,
@@ -134,14 +132,13 @@ export default class StatsCard extends React.Component {
         spam,
         unsub,
       },
-      overallMax,
       isLoading: false,
     })
   }
 
   render() {
     const {
-      overallMax, isLoading, requestFailed, events,
+      isLoading, requestFailed, events,
     } = this.state
 
     return (
@@ -160,12 +157,10 @@ export default class StatsCard extends React.Component {
               <ActivityIndicator style={{ paddingTop: 10 }} size="large" />
             </View>
           </View>
-        ) : !overallMax || overallMax === 0 ? (
-          <EmptyState state="no-data" context="statistics" />
         ) : requestFailed ? (
           <EmptyState tryAgain={() => this.getStats()} context="stats" state="network-issue" />
         ) : (
-          <StatsChart events={events} overallMax={overallMax} />
+          <StatsChart events={events} />
           )}
       </View>
     )

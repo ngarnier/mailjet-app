@@ -17,12 +17,24 @@ import EventChart from './EventChart'
 export default class StatsChart extends React.Component {
   static propTypes = {
     events: PropTypes.objectOf(PropTypes.arrayOf(PropTypes.number)).isRequired,
-    overallMax: PropTypes.number.isRequired,
     selectors: PropTypes.objectOf(PropTypes.bool).isRequired,
   }
 
   render() {
-    const { events, overallMax, selectors } = this.props
+    const { events, selectors } = this.props
+    const maxValues = []
+    for (let i = 0; i < Object.keys(selectors).length; i += 1) {
+      if (Object.values(selectors)[i]) {
+        maxValues.push(Math.max(...events[Object.keys(selectors)[i]]))
+      }
+    }
+    /* eslint-disable max-len */
+    let overallMax = Math.max(...maxValues) * 1.2
+    /* eslint-enable max-len */
+
+    if (!overallMax || Math.abs(overallMax) === Infinity) {
+      overallMax = 100
+    }
 
     const CustomGrid = ({ y, ticks }) => (
       <G>
