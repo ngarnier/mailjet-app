@@ -34,7 +34,7 @@ export default class Pick extends React.Component {
   render() {
     const { filters, context } = this.props
     const array = context === 'campaigns' ? ['Sent', 'Drafts'] :
-      context === 'period' ? ['Day', 'Week', 'Month'] :
+      context === 'period' ? ['Month', 'Week', 'Day'] :
         []
 
     return (
