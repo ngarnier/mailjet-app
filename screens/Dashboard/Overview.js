@@ -12,7 +12,7 @@ import StatsChart from '../../components/StatsCard'
 export default class Overview extends React.Component {
   render() {
     return (
-      <ScrollView style={{ flex: 1 }}>
+      <ScrollView style={{ flex: 1, backgroundColor: '#F3F3F3' }}>
         <View>
           <View style={style.overview}>
             <OverviewCard source="emails" navigation={this.props.navigation} />

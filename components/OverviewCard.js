@@ -74,12 +74,15 @@ OverviewCard.propTypes = {
 
 const style = StyleSheet.create({
   card: {
+    backgroundColor: '#fff',
     borderColor: '#eee',
+    borderBottomColor: '#FCAC2D',
+    borderBottomWidth: 2,
     borderWidth: 1,
     borderRadius: 5,
-    paddingTop: 10,
+    paddingTop: 20,
     paddingRight: 15,
-    paddingBottom: 10,
+    paddingBottom: 20,
     paddingLeft: 15,
     flex: 1,
     marginLeft: 5,
@@ -91,9 +94,9 @@ const style = StyleSheet.create({
     fontFamily: 'System',
   },
   figure: {
-    color: '#1FBE9F',
     fontSize: 17,
-    fontWeight: '600',
+    fontWeight: '400',
     fontFamily: 'System',
+    marginTop: 10,
   },
 })
