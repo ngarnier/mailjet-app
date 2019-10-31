@@ -1,4 +1,4 @@
-import { createMaterialTopTabNavigator } from 'react-navigation'
+import { createMaterialTopTabNavigator } from 'react-navigation-tabs'
 import Explore from './Explore'
 import Overview from './Overview'
 

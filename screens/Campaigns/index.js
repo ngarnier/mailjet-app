@@ -1,5 +1,5 @@
 import React from 'react'
-import { createStackNavigator } from 'react-navigation'
+import { createStackNavigator } from 'react-navigation-stack'
 import LogOut from '../../components/LogOut'
 import Campaigns from './Campaigns'
 import Campaign from './Campaign'

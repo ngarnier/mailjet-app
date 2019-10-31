@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { View } from 'react-native'
 import { Asset, AppLoading } from 'expo'
+import { createAppContainer } from 'react-navigation'
 import { createBottomTabNavigator } from 'react-navigation-tabs'
 import { Icon } from 'native-base'
 import DashboardNavigator from '../Dashboard'
@@ -48,7 +49,7 @@ export default class Home extends React.Component {
 
     return (
       <View style={{ flex: 1 }} >
-        {apikeys.size === 0 ? (<Login />) : (<CustomTabs />)}
+        {apikeys.size === 0 ? (<Login />) : (<AppNavigator />)}
       </View>
     )
   }
@@ -92,3 +93,4 @@ const CustomTabs = createBottomTabNavigator({
   },
 })
 
+const AppNavigator = createAppContainer(CustomTabs)
