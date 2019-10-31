@@ -2,7 +2,7 @@
   "expo": {
     "name":"mailjet-app",
     "description": "An app to manage your Mailjet account and follow your stats on the go.",
-    "sdkVersion": "33.0.0",
+    "sdkVersion": "34.0.0",
     "orientation": "portrait",
     "androidStatusBar": {
       "barStyle": "light-content"
