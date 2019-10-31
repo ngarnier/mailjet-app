@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name":"mailjet-app",
+    "name": "mailjet-app",
     "description": "An app to manage your Mailjet account and follow your stats on the go.",
-    "sdkVersion": "34.0.0",
+    "sdkVersion": "35.0.0",
     "orientation": "portrait",
     "androidStatusBar": {
       "barStyle": "light-content"
@@ -10,6 +10,12 @@
     "splash": {
       "image": "./img/splash.png",
       "backgroundColor": "#fafafa"
-    }
+    },
+    "slug": "mailjet-app",
+    "version": "0.3.0",
+    "platforms": [
+      "android",
+      "ios"
+    ]
   }
 }

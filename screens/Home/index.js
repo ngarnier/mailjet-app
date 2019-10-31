@@ -2,7 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { View } from 'react-native'
-import { Asset, AppLoading } from 'expo'
+import { Asset } from 'expo-asset'
+import { AppLoading } from 'expo'
 import { createAppContainer } from 'react-navigation'
 import { createBottomTabNavigator } from 'react-navigation-tabs'
 import { Icon } from 'native-base'
@@ -43,6 +44,7 @@ export default class Home extends React.Component {
         <AppLoading
           startAsync={this.cacheResourcesAsync}
           onFinish={() => this.setState({ isReady: true })}
+          onError={console.warn}
         />
       )
     }
